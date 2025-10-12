@@ -1,0 +1,72 @@
+import { Button } from "@/components/ui/button";
+import { Mail, MapPin, ArrowRight } from "lucide-react";
+
+const Contact = () => {
+  return (
+    <section id="contact" className="py-24 gradient-bg">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="space-y-8">
+            <div>
+              <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                Get in Touch
+              </p>
+              <h2 className="text-5xl font-bold mb-6">Let's work together</h2>
+              <p className="text-lg text-muted-foreground">
+                I'm currently available for freelance work and collaborations. If you
+                have a project you'd like to discuss, please get in touch!
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-md">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <p className="font-medium">your.email@gmail.com</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-md">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Location</p>
+                  <p className="font-medium">Your City, Country</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Content - CTA Card */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl text-center space-y-6">
+            <div className="w-20 h-20 rounded-full bg-black flex items-center justify-center mx-auto">
+              <Mail className="w-10 h-10 text-white" />
+            </div>
+
+            <div>
+              <h3 className="text-3xl font-bold mb-3">Ready to start a project?</h3>
+              <p className="text-muted-foreground">
+                Fill out our contact form and I'll get back to you within 24 hours to
+                discuss your project.
+              </p>
+            </div>
+
+            <Button size="lg" className="rounded-full gap-2 px-8 py-6 text-base font-medium">
+              Get in Touch
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+
+            <p className="text-sm text-muted-foreground">Opens in a new tab</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
