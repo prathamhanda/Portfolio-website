@@ -44,10 +44,13 @@ const FAQ = () => {
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="bg-white/60 backdrop-blur-sm rounded-2xl border-none overflow-hidden"
+              className="bg-card/60 dark:bg-card/40 backdrop-blur-sm rounded-2xl border-none overflow-hidden"
             >
-              <AccordionTrigger className="px-6 py-5 text-left text-lg font-medium hover:no-underline hover:bg-white/40 transition-colors">
-                {faq.question}
+              <AccordionTrigger className="px-6 py-5 text-left text-lg font-medium hover:no-underline hover:bg-card/40 dark:hover:bg-card/20 transition-colors group relative">
+                <span className="relative inline-block">
+                  {faq.question}
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                </span>
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-5 text-muted-foreground">
                 {faq.answer}

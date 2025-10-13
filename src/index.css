@@ -8,7 +8,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 220 40% 97%;
+    --background: 220 40% 98%;
     --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
@@ -24,19 +24,19 @@ All colors MUST be HSL.
     --secondary-foreground: 0 0% 0%;
 
     --muted: 220 20% 94%;
-    --muted-foreground: 0 0% 40%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 220 60% 50%;
+    --accent: 220 60% 55%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 90%;
-    --input: 220 20% 90%;
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
     --ring: 0 0% 0%;
 
-    --radius: 1.5rem;
+    --radius: 1rem;
 
     /* Gradient colors */
     --gradient-start: 210 100% 95%;
@@ -47,36 +47,49 @@ All colors MUST be HSL.
     --dot-primary: 210 100% 70%;
     --dot-secondary: 280 60% 70%;
     --dot-accent: 45 100% 70%;
+    
+    /* Glass effect */
+    --glass-bg: 0 0% 100% / 0.6;
+    --glass-border: 0 0% 100% / 0.2;
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 100%;
+    --background: 222 20% 8%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 100%;
+    --card: 222 18% 12%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 222 18% 12%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 10%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 222 15% 18%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 0 0% 15%;
+    --muted: 222 15% 18%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 220 60% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 220 70% 60%;
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 95%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 100%;
+    --border: 222 15% 20%;
+    --input: 222 15% 20%;
+    --ring: 0 0% 95%;
+    
+    /* Dark gradient colors */
+    --gradient-start: 222 25% 10%;
+    --gradient-mid: 230 20% 12%;
+    --gradient-end: 222 25% 10%;
+    
+    /* Glass effect for dark mode */
+    --glass-bg: 222 18% 12% / 0.6;
+    --glass-border: 0 0% 100% / 0.1;
   }
 }
 
