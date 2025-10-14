@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Hero = () => {
+  const { ref: heroRef, isVisible: heroVisible } = useScrollAnimation();
+  
   return (
-    <section className="min-h-screen gradient-bg relative overflow-hidden pt-32 pb-20">
+    <section ref={heroRef} className="min-h-screen gradient-bg relative overflow-hidden pt-32 pb-20">
       {/* Decorative floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-blue-200/30 blur-xl animate-float" />
@@ -14,7 +17,7 @@ const Hero = () => {
 
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left Content */}
-        <div className="space-y-8 animate-fade-in-up">
+        <div className={`space-y-8 ${heroVisible ? 'scroll-animate' : ''}`}>
           <div className="inline-block">
             <span className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium uppercase tracking-wide">
               Product Designer & Developer
@@ -46,15 +49,15 @@ const Hero = () => {
         </div>
 
         {/* Right Content - Profile Image */}
-        <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+        <div className={`relative ${heroVisible ? 'scroll-animate scroll-animate-delay-2' : ''}`}>
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl glass-card group">
             <img
               src="https://images.unsplash.com/photo-1622675272083-44c36a2c7ff3?w=800&h=1000&fit=crop"
               alt="Profile"
-              className="w-full h-[600px] object-cover"
+              className="w-full h-[600px] object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute bottom-6 left-6 right-6 bg-black/80 backdrop-blur-sm rounded-2xl p-6 text-white">
-              <p className="text-xs uppercase tracking-wider mb-2 text-white/70">Available for work</p>
+            <div className="absolute bottom-6 left-6 right-6 glass-card rounded-2xl p-6 text-foreground dark:text-white border-white/30">
+              <p className="text-xs uppercase tracking-wider mb-2 text-muted-foreground dark:text-white/70">Available for work</p>
               <p className="text-lg font-semibold">Let's collaborate on your next project</p>
             </div>
           </div>

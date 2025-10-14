@@ -1,4 +1,8 @@
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+
 const About = () => {
+  const { ref: aboutRef, isVisible: aboutVisible } = useScrollAnimation();
+  
   const skills = {
     development: [
       "JavaScript",
@@ -13,11 +17,11 @@ const About = () => {
   };
 
   return (
-    <section id="about" className="py-24 gradient-bg">
+    <section id="about" ref={aboutRef} className="py-24 gradient-bg">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left Content */}
-          <div className="space-y-8">
+          <div className={`space-y-8 ${aboutVisible ? 'scroll-animate' : ''}`}>
             <div>
               <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
                 About Me
@@ -55,7 +59,7 @@ const About = () => {
           </div>
 
           {/* Right Content - Skills Card */}
-          <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+          <div className={`glass-card rounded-3xl p-8 shadow-xl ${aboutVisible ? 'scroll-animate scroll-animate-delay-2' : ''}`}>
             <h3 className="text-2xl font-bold mb-8">Skills & Expertise</h3>
 
             <div className="space-y-8">

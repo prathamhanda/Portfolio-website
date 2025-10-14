@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { ExternalLink } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Projects = () => {
+  const { ref: projectsRef, isVisible: projectsVisible } = useScrollAnimation();
   const [filter, setFilter] = useState("all");
 
   const projects = [
@@ -73,9 +75,9 @@ const Projects = () => {
       : projects.filter((p) => p.category === filter);
 
   return (
-    <section id="projects" className="py-24 gradient-bg">
+    <section id="projects" ref={projectsRef} className="py-24 gradient-bg">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="mb-12">
+        <div className={`mb-12 ${projectsVisible ? 'scroll-animate' : ''}`}>
           <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
             Projects
           </p>
@@ -87,8 +89,8 @@ const Projects = () => {
               onClick={() => setFilter("all")}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === "all"
-                  ? "bg-black text-white"
-                  : "bg-white/60 text-foreground hover:bg-white"
+                  ? "bg-foreground text-background"
+                  : "glass-card hover:bg-muted/50"
               }`}
             >
               All
@@ -97,8 +99,8 @@ const Projects = () => {
               onClick={() => setFilter("web")}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === "web"
-                  ? "bg-black text-white"
-                  : "bg-white/60 text-foreground hover:bg-white"
+                  ? "bg-foreground text-background"
+                  : "glass-card hover:bg-muted/50"
               }`}
             >
               Web
@@ -108,10 +110,12 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, index) => (
             <div
               key={project.id}
-              className="group bg-white/60 backdrop-blur-sm rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              className={`group glass-card rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ${
+                projectsVisible ? `scroll-animate scroll-animate-delay-${Math.min(index % 3 + 1, 3)}` : ''
+              }`}
             >
               <div className="relative overflow-hidden">
                 <span className="absolute top-4 left-4 z-10 bg-white px-3 py-1 rounded-full text-xs font-medium">

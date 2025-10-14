@@ -1,13 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Mail, MapPin, ArrowRight } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Contact = () => {
+  const { ref: contactRef, isVisible: contactVisible } = useScrollAnimation();
+  
   return (
-    <section id="contact" className="py-24 gradient-bg">
+    <section id="contact" ref={contactRef} className="py-24 gradient-bg">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div className="space-y-8">
+          <div className={`space-y-8 ${contactVisible ? 'scroll-animate' : ''}`}>
             <div>
               <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
                 Get in Touch
@@ -43,9 +46,9 @@ const Contact = () => {
           </div>
 
           {/* Right Content - CTA Card */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-black flex items-center justify-center mx-auto">
-              <Mail className="w-10 h-10 text-white" />
+          <div className={`glass-card rounded-3xl p-8 md:p-12 shadow-2xl text-center space-y-6 ${contactVisible ? 'scroll-animate scroll-animate-delay-2' : ''}`}>
+            <div className="w-20 h-20 rounded-full bg-foreground flex items-center justify-center mx-auto">
+              <Mail className="w-10 h-10 text-background" />
             </div>
 
             <div>
