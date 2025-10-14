@@ -6,7 +6,14 @@ const Hero = () => {
   const { ref: heroRef, isVisible: heroVisible } = useScrollAnimation();
   
   return (
-    <section ref={heroRef} className="min-h-screen gradient-bg relative overflow-hidden pt-32 pb-20">
+    <section ref={heroRef} className="min-h-screen bg-background relative overflow-hidden pt-32 pb-20">
+      {/* Command Palette Hint */}
+      <div className="absolute top-20 right-6 z-20">
+        <div className="bg-gradient-to-r from-gray-100/95 to-gray-200/90 dark:from-gray-900/95 dark:to-black/90 backdrop-blur-sm text-gray-900 dark:text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg border border-black/20 dark:border-white/10">
+          Press <kbd className="px-2 py-0.5 mx-1 bg-gray-300/60 dark:bg-gray-800/60 border border-black/20 dark:border-white/20 rounded text-xs font-mono font-semibold">Ctrl+K</kbd> to open the command palette
+        </div>
+      </div>
+
       {/* Decorative floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-blue-200/30 blur-xl animate-float" />
@@ -50,14 +57,19 @@ const Hero = () => {
 
         {/* Right Content - Profile Image */}
         <div className={`relative ${heroVisible ? 'scroll-animate scroll-animate-delay-2' : ''}`}>
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl glass-card group">
-            <img
-              src="https://images.unsplash.com/photo-1622675272083-44c36a2c7ff3?w=800&h=1000&fit=crop"
-              alt="Profile"
-              className="w-full h-[600px] object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute bottom-6 left-6 right-6 glass-card rounded-2xl p-6 text-foreground dark:text-white border-white/30">
-              <p className="text-xs uppercase tracking-wider mb-2 text-muted-foreground dark:text-white/70">Available for work</p>
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl group">
+            {/* subtle framed border */}
+            <div className="rounded-3xl p-1 bg-white/60 dark:bg-black/30">
+              <img
+                src="/Pratham-PFP.jpg"
+                alt="Profile"
+                className="w-full h-[420px] sm:h-[500px] md:h-[550px] object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+
+            {/* bottom overlay */}
+            <div className="absolute bottom-4 left-4 right-4  rounded-2xl p-6 text-white  border-white/10 ">
+              <p className="text-s uppercase tracking-wider mb-2 text-white/80">Available for work</p>
               <p className="text-lg font-semibold">Let's collaborate on your next project</p>
             </div>
           </div>

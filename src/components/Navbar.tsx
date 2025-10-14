@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -9,6 +9,7 @@ const Navbar = () => {
   const location = useLocation();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const leftEyeRef = useRef<HTMLDivElement>(null);
   const rightEyeRef = useRef<HTMLDivElement>(null);
@@ -20,10 +21,33 @@ const Navbar = () => {
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      
+      // Detect active section based on scroll position
+      const sections = ['hero', 'about', 'projects', 'products', 'faq'];
+      const scrollPosition = window.scrollY + 100; // Offset for better detection
+      
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId) || document.querySelector(`[data-section="${sectionId}"]`);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(sectionId === 'hero' ? 'home' : sectionId);
+            break;
+          }
+        }
+      }
+      
+      // Default to home if we're at the top
+      if (window.scrollY < 100) {
+        setActiveSection('home');
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", handleScroll);
+    
+    // Initial check
+    handleScroll();
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
@@ -48,16 +72,16 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "#about" },
-    { name: "Projects", path: "#projects" },
-    { name: "Products", path: "#products" },
-    { name: "FAQ", path: "#faq" },
+    { name: "Home", path: "/", section: "home" },
+    { name: "About", path: "#about", section: "about" },
+    { name: "Projects", path: "#projects", section: "projects" },
+    { name: "Products", path: "#products", section: "products" },
+    { name: "FAQ", path: "#faq", section: "faq" },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50  transition-all duration-300 ${
         isScrolled 
           ? "bg-background/80 dark:bg-background/90 backdrop-blur-lg shadow-sm" 
           : "bg-transparent"
@@ -66,18 +90,18 @@ const Navbar = () => {
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Left - Logo/Name */}
         <Link to="/" className="text-xl font-bold">
-          <span className="text-foreground">yourname</span>
+          <span className="text-foreground">pratham</span>
           <span className="text-muted-foreground">.dev</span>
         </Link>
 
-        {/* Center - Eyeballs (Desktop only) */}
-        <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2">
+        {/* Center - Eyeballs */}
+        <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-1">
           <div 
             ref={leftEyeRef}
-            className="w-10 h-10 rounded-full bg-background dark:bg-card border-2 border-foreground dark:border-muted-foreground flex items-center justify-center relative overflow-hidden"
+            className="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center relative overflow-hidden"
           >
             <div
-              className="w-2.5 h-2.5 bg-foreground dark:bg-foreground rounded-full absolute transition-transform duration-100 ease-out"
+              className="w-1.5 h-1.5 bg-black rounded-full absolute transition-transform duration-100 ease-out"
               style={{
                 transform: `translate(${calculateEyePosition(leftEyeRef.current).x}px, ${
                   calculateEyePosition(leftEyeRef.current).y
@@ -87,10 +111,10 @@ const Navbar = () => {
           </div>
           <div 
             ref={rightEyeRef}
-            className="w-10 h-10 rounded-full bg-background dark:bg-card border-2 border-foreground dark:border-muted-foreground flex items-center justify-center relative overflow-hidden"
+            className="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center relative overflow-hidden"
           >
             <div
-              className="w-2.5 h-2.5 bg-foreground dark:bg-foreground rounded-full absolute transition-transform duration-100 ease-out"
+              className="w-1.5 h-1.5 bg-black rounded-full absolute transition-transform duration-100 ease-out"
               style={{
                 transform: `translate(${calculateEyePosition(rightEyeRef.current).x}px, ${
                   calculateEyePosition(rightEyeRef.current).y
@@ -100,23 +124,23 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Right - Desktop Navigation */}
+        {/* Right - All Navigation & Actions */}
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.path}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                location.pathname === link.path || location.hash === link.path
-                  ? "bg-foreground text-background"
-                  : "text-foreground hover:bg-secondary"
+                activeSection === link.section
+                  ? "bg-black text-white dark:bg-white dark:text-black"
+                  : "text-foreground hover:bg-gray-100 dark:hover:bg-gray-800"
               }`}
             >
               {link.name}
             </a>
           ))}
           <ThemeToggle />
-          <Button className="rounded-full gap-2 px-6 py-2.5 text-sm font-medium">
+          <Button className="rounded-full gap-2 px-6 py-2.5 text-sm font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
             Let's talk
             <ArrowRight className="w-4 h-4" />
           </Button>
@@ -139,7 +163,7 @@ const Navbar = () => {
                     href={link.path}
                     onClick={() => setMobileMenuOpen(false)}
                     className={`px-4 py-3 rounded-lg text-base font-medium transition-all ${
-                      location.pathname === link.path || location.hash === link.path
+                      activeSection === link.section
                         ? "bg-foreground text-background"
                         : "text-foreground hover:bg-secondary"
                     }`}

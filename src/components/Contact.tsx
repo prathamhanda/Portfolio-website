@@ -6,7 +6,7 @@ const Contact = () => {
   const { ref: contactRef, isVisible: contactVisible } = useScrollAnimation();
   
   return (
-    <section id="contact" ref={contactRef} className="py-24 gradient-bg">
+    <section id="contact" ref={contactRef} className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}

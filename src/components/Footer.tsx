@@ -19,7 +19,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Left Column */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-white">yourname.dev</h3>
+            <h3 className="text-2xl font-bold text-white">pratham.dev</h3>
             <p className="text-gray-400">
               Building digital products, brands, and experiences that people love.
             </p>

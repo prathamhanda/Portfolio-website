@@ -47,7 +47,10 @@ const CommandPalette = () => {
             <Briefcase className="mr-2 h-4 w-4" />
             <span>Projects</span>
           </CommandItem>
-          <CommandItem onSelect={() => setTheme(theme === "dark" ? "light" : "dark")}>
+          <CommandItem onSelect={() => {
+            setTheme(theme === "dark" ? "light" : "dark");
+            setOpen(false);
+          }}>
             {theme === "dark" ? (
               <Sun className="mr-2 h-4 w-4" />
             ) : (
@@ -77,15 +80,24 @@ const CommandPalette = () => {
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Actions">
-          <CommandItem>
+          <CommandItem onSelect={() => {
+            // Add download resume functionality here
+            setOpen(false);
+          }}>
             <Download className="mr-2 h-4 w-4" />
             <span>Download Resume</span>
           </CommandItem>
-          <CommandItem onSelect={() => window.open("https://github.com", "_blank")}>
+          <CommandItem onSelect={() => {
+            window.open("https://github.com", "_blank");
+            setOpen(false);
+          }}>
             <Github className="mr-2 h-4 w-4" />
             <span>View GitHub</span>
           </CommandItem>
-          <CommandItem onSelect={() => window.open("https://linkedin.com", "_blank")}>
+          <CommandItem onSelect={() => {
+            window.open("https://linkedin.com", "_blank");
+            setOpen(false);
+          }}>
             <Linkedin className="mr-2 h-4 w-4" />
             <span>View LinkedIn</span>
           </CommandItem>

@@ -75,7 +75,7 @@ const Projects = () => {
       : projects.filter((p) => p.category === filter);
 
   return (
-    <section id="projects" ref={projectsRef} className="py-24 gradient-bg">
+    <section id="projects" ref={projectsRef} className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className={`mb-12 ${projectsVisible ? 'scroll-animate' : ''}`}>
           <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">

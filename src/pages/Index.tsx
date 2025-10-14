@@ -11,17 +11,22 @@ import CommandPalette from "@/components/CommandPalette";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background transition-colors duration-300">
-      <Navbar />
-      <Hero />
-      <TechStackScroller />
-      <About />
-      <Projects />
-      <FAQ />
-      <Contact />
-      <Footer />
-      <ScrollToTop />
-      <CommandPalette />
+    <div className="min-h-screen bg-background transition-colors duration-300 relative">
+
+      
+      {/* Main content with higher z-index */}
+      <div className="relative z-10">
+        <Navbar />
+        <Hero />
+        <TechStackScroller />
+        <About />
+        <Projects />
+        <FAQ />
+        <Contact />
+        <Footer />
+        <ScrollToTop />
+        <CommandPalette />
+      </div>
     </div>
   );
 };
