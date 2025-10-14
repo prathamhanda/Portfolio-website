@@ -9,63 +9,69 @@ const Projects = () => {
   const projects = [
     {
       id: 1,
-      title: "RestOS",
+      title: "Brain Tumor Detector",
       description:
-        "A modern Restaurant POS (Point Of Sale) system designed to streamline restaurant operations...",
-      image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop",
-      tags: ["React", "Tailwind CSS", "Vanilla JavaScript", "Node.js"],
+        "A three-stage deep learning pipeline achieving 99.3% accuracy and 97.2% IoU in brain tumor detection and segmentation. Built with PyTorch, YOLO, and SAM to provide real-time diagnostic assistance and quantitative tumor analysis for surgical planning. Deployed on Streamlit.",
+      image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&h=600&fit=crop",
+      tags: ["Python", "PyTorch", "YOLO", "SAM", "Streamlit"],
       category: "web",
       featured: true,
+      link: "https://github.com/prathamhanda/BrainTumor-Detector"
     },
     {
       id: 2,
-      title: "Food Data Browser",
+      title: "AI-RoadIntelligence",
       description:
-        "A modern web application for browsing and searching food product data, built...",
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=600&fit=crop",
-      tags: ["React", "React Query", "Tailwind CSS", "Open Food Facts API"],
+        "Real-time traffic optimization system using YOLOv8 for vehicle detection at 45 FPS with under 50ms latency. Integrated SUMO traffic simulator for emergency vehicle routing and alert systems with response times under 3 seconds.",
+      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
+      tags: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine"],
       category: "web",
       featured: true,
+      link: "https://github.com/prathamhanda/AI-RoadIntelligence"
     },
     {
       id: 3,
-      title: "Carbon Credits Dash",
+      title: "RoomsOnRent",
       description:
-        "This is a frontend application built with React, TypeScript, Vite, and shadcn/ui to...",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-      tags: ["React", "Node.js", "Tailwind CSS", "shadcn/ui"],
+        "A containerized dual-portal platform for student housing with separate interfaces for students and landlords. Features Cloudinary media management and JWT authentication. Successfully deployed serving real users with 75% reduction in response times.",
+      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop",
+      tags: ["React", "Node.js", "MongoDB", "Docker", "Cloudinary"],
       category: "web",
       featured: true,
+      link: "https://github.com/prathamhanda/roomsonrent"
     },
     {
       id: 4,
-      title: "E-Commerce Platform",
+      title: "LEAD Society Website",
       description:
-        "A full-featured e-commerce platform with payment integration and inventory management...",
-      image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=600&fit=crop",
-      tags: ["Next.js", "Stripe", "PostgreSQL", "Prisma"],
+        "Official website for LEAD Society at TIET featuring smooth UI/UX design, event management system, and member portal. Built as Joint Secretary to showcase society activities and facilitate student engagement with responsive design.",
+      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop",
+      tags: ["React", "Tailwind", "Netlify"],
       category: "web",
       featured: false,
+      link: "https://leadtiet.netlify.app/"
     },
     {
       id: 5,
-      title: "AI Dashboard",
+      title: "INSDAG Steel Seminar Landing",
       description:
-        "An analytics dashboard powered by AI for real-time data insights and predictions...",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-      tags: ["React", "TypeScript", "D3.js", "Python"],
+        "High converting landing page for technical seminar achieving 102.7% CTR with 500+ users. Designed for the Civil Department's INSDAG Steel Seminar event. Successfully hosted presentations for 6 industry speakers.",
+      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
+      tags: ["HTML", "CSS", "JavaScript"],
       category: "web",
       featured: false,
+      link: "https://github.com/prathamhanda"
     },
     {
       id: 6,
-      title: "Social Network App",
+      title: "DBuck Student Housing Platform",
       description:
-        "A modern social networking platform with real-time messaging and content sharing...",
-      image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=600&fit=crop",
-      tags: ["React Native", "Firebase", "Node.js", "Socket.io"],
+        "Full stack web application for student housing startup enabling interactive property listings, location-based search, and comprehensive landlord portal. Built to serve 10K+ students at TIET with real-time updates and secure data management.",
+      image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=800&h=600&fit=crop",
+      tags: ["React", "Express.js", "MongoDB", "REST APIs"],
       category: "web",
       featured: false,
+      link: "https://github.com/prathamhanda"
     },
   ];
 

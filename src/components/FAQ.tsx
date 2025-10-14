@@ -10,24 +10,24 @@ const FAQ = () => {
   const { ref: faqRef, isVisible: faqVisible } = useScrollAnimation();
   const faqs = [
     {
-      question: "How do I contact you for inquiries or collaborations?",
+      question: "What's your technical background?",
       answer:
-        "You can directly drop me a message through the contact form on this website or simply email me at your.email@gmail.com. I typically respond within 24-48 hours.",
+        "I'm a third year CSE student at Thapar Institute with a 9.75 CGPA, specializing in full stack development with React, Node.js, and MongoDB alongside deep learning using PyTorch and TensorFlow. With 600+ DSA problems solved and a Knight Badge on LeetCode (top 3.5% globally, contest rating 1939), I combine strong algorithmic thinking with practical development skills.",
     },
     {
-      question: "What services do you offer as a freelancer?",
+      question: "What kind of projects have you built?",
       answer:
-        "I offer full-stack web development, UI/UX design, product design, and technical consulting. I specialize in React, Next.js, Node.js, and modern web technologies. I can help with everything from building MVPs to scaling existing applications.",
+        "I've built AI-powered systems like a Brain Tumor Detector with 99.3% accuracy, real-time traffic optimization using YOLOv8 at 45 FPS, and production-ready web applications like RoomsOnRent serving 10K+ students. My work spans from deep learning pipelines to containerized full stack platforms, always focusing on solving real-world problems with measurable impact.",
     },
     {
-      question: "How long does it take to complete a project?",
+      question: "Are you open to internship opportunities?",
       answer:
-        "Project timelines vary depending on scope and complexity. A simple landing page might take 1-2 weeks, while a full web application could take 2-3 months. I provide detailed timelines during our initial consultation and keep you updated throughout the process.",
+        "Absolutely! I'm actively seeking SDE and AI/ML internship opportunities for Summer 2026. Currently interning as a Full Stack Developer at DBuck, I'm looking for roles where I can work on challenging problems at the intersection of AI and scalable web development. Reach out at prathamhanda10@gmail.com to discuss opportunities.",
     },
     {
-      question: "What is your approach to freelancing projects?",
+      question: "What makes your approach different?",
       answer:
-        "I believe in close collaboration and transparent communication. I start with understanding your goals and requirements, then move through design, development, and testing phases. You'll have regular check-ins and opportunities to provide feedback throughout the process.",
+        "I don't just code, I solve problems with precision. Every project I build has a clear metric of success, whether it's 99.3% accuracy, 45 FPS performance, or 75% response time reduction. With leadership roles like Joint Secretary at LEAD Society and experience conducting DSA workshops for 50+ students, I bring both technical excellence and the ability to collaborate effectively.",
     },
   ];
 

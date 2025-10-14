@@ -27,16 +27,16 @@ const Hero = () => {
         <div className={`space-y-8 ${heroVisible ? 'scroll-animate' : ''}`}>
           <div className="inline-block">
             <span className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium uppercase tracking-wide">
-              Product Designer & Developer
+              Full Stack Developer & AI Engineer
             </span>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            Building digital experiences that make an impact
+            Building intelligent systems where AI meets full stack development
           </h1>
 
           <p className="text-lg text-muted-foreground max-w-lg">
-            I'm a full-stack developer and designer creating AI-enhanced solutions and crafting thoughtful user experiences.
+            Third year CSE student at Thapar Institute with a 9.75 CGPA. I specialize in creating AI-powered applications and scalable web platforms, combining deep learning expertise with full stack development. Knight Badge holder on LeetCode, ranking in the top 3.5% globally.
           </p>
 
           <div className="flex flex-wrap gap-4">

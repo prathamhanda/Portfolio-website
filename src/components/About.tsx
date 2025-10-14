@@ -5,15 +5,19 @@ const About = () => {
   
   const skills = {
     development: [
+      "C++",
+      "Python",
       "JavaScript",
       "React",
       "Node.js",
-      "TypeScript",
-      "Next.js",
-      "TanStack",
+      "Express",
+      "MongoDB",
+      "PyTorch",
+      "TensorFlow",
+      "OpenCV"
     ],
-    design: ["UI/UX", "Figma", "Adobe Suite", "Prototyping", "Motion Design"],
-    tools: ["Git", "AWS", "Firebase", "Docker", "Vercel", "Linux"],
+    design: ["Deep Learning", "Computer Vision", "YOLO", "Data Structures", "Algorithms"],
+    tools: ["Git", "Docker", "POSTMAN", "VS Code", "SUMO", "Streamlit"],
   };
 
   return (
@@ -31,22 +35,15 @@ const About = () => {
 
             <div className="space-y-6 text-lg text-muted-foreground">
               <p>
-                I'm a creative, independent, and passionate developer with extensive
-                experience creating impactful digital experiences and solutions.
+                I'm a third year Computer Science Engineering student at Thapar Institute of Engineering & Technology with a CGPA of 9.75. Currently working as a Full Stack Developer Intern at DBuck, where I built a web platform serving 10K+ students for housing solutions using the MERN stack.
               </p>
 
               <p>
-                With a strong background in both development and design, I bring a
-                unique perspective to every project I work on. I believe in creating
-                solutions that not only look great but also solve real problems for
-                users.
+                My journey spans from building deep learning pipelines that achieve 99.3% accuracy in medical diagnostics to creating containerized web applications with 75% response time reductions. I've solved 600+ DSA problems on competitive coding platforms and earned a Knight Badge on LeetCode, ranking in the top 3.5% globally with a contest rating of 1939.
               </p>
 
               <p>
-                My journey in tech started with UI design, which naturally evolved
-                into frontend development, and eventually full-stack skills. Today, I
-                specialize in building modern web applications with a focus on
-                performance, accessibility, and user experience.
+                What drives me is solving real-world problems with measurable impact. Whether it's optimizing traffic systems at 45 FPS, architecting scalable platforms, or building AI models that aid surgical planning, I approach each challenge with precision and a focus on delivering quantifiable results.
               </p>
             </div>
 

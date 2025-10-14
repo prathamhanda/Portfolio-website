@@ -17,8 +17,7 @@ const Contact = () => {
               </p>
               <h2 className="text-5xl font-bold mb-6">Let's work together</h2>
               <p className="text-lg text-muted-foreground">
-                I'm currently available for freelance work and collaborations. If you
-                have a project you'd like to discuss, please get in touch!
+                I'm actively seeking SDE and AI/ML internship opportunities for Summer 2026. Whether you need a full stack developer, want to discuss intelligent systems, or have an interesting problem to solve, I'd love to connect.
               </p>
             </div>
 
@@ -29,7 +28,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium">your.email@gmail.com</p>
+                  <p className="font-medium">prathamhanda10@gmail.com</p>
                 </div>
               </div>
 
@@ -39,7 +38,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-medium">Your City, Country</p>
+                  <p className="font-medium">Patiala, Punjab, India</p>
                 </div>
               </div>
             </div>
@@ -54,8 +53,7 @@ const Contact = () => {
             <div>
               <h3 className="text-3xl font-bold mb-3">Ready to start a project?</h3>
               <p className="text-muted-foreground">
-                Fill out our contact form and I'll get back to you within 24 hours to
-                discuss your project.
+                Drop me an email and I'll get back to you within 24 hours to discuss your ideas and requirements.
               </p>
             </div>
 

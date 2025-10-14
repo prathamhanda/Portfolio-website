@@ -21,11 +21,11 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-white">pratham.dev</h3>
             <p className="text-gray-400">
-              Building digital products, brands, and experiences that people love.
+              Building intelligent systems where AI meets full stack development. Third year CSE student at Thapar Institute.
             </p>
             <div className="flex gap-3">
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/prathamh"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
@@ -33,7 +33,7 @@ const Footer = () => {
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/prathamhanda"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
@@ -75,13 +75,13 @@ const Footer = () => {
             <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl p-6 space-y-4 border border-white/10">
               <h4 className="text-xl font-semibold text-white">Let's talk</h4>
               <p className="text-gray-400 text-sm">
-                Have a project in mind? Let's create something amazing together.
+                Open to SDE and AI/ML internship opportunities. Let's build something impactful together.
               </p>
               <a
-                href="mailto:your.email@gmail.com"
+                href="mailto:prathamhanda10@gmail.com"
                 className="text-sm text-white hover:text-blue-400 flex items-center gap-2 transition-colors"
               >
-                your.email@gmail.com
+                prathamhanda10@gmail.com
                 <ArrowUp className="w-4 h-4 rotate-45" />
               </a>
               <Button
@@ -99,24 +99,24 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400">
-              © 2025 Your Name. All rights reserved.
+              © 2025 Pratham Handa. All rights reserved.
             </p>
             <div className="flex gap-6 text-xs text-gray-400">
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                Performance: 98
+                LeetCode: Knight
               </span>
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                Security: A+
+                Rating: 1939
               </span>
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                Uptime: 99.9%
+                CGPA: 9.75
               </span>
             </div>
             <p className="text-sm text-gray-400">
-              Made with ❤️ in Your City
+              Made with ❤️ in Patiala
             </p>
           </div>
           
