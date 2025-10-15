@@ -80,28 +80,28 @@ const Navbar = () => {
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50  transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? "px-6 pt-6" : "px-0 pt-0"
+    }`}>
+      <nav className={`mx-auto px-8 py-4 grid grid-cols-3 items-center relative transition-all duration-300 ${
         isScrolled 
-          ? "bg-background/80 dark:bg-background/90 backdrop-blur-lg shadow-sm" 
-          : "bg-transparent"
-      }`}
-    >
-      <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          ? "max-w-[85em] rounded-full backdrop-blur-xl bg-white/70 dark:bg-black/70 border border-gray-200/50 dark:border-gray-700/50 shadow-lg" 
+          : "max-w-full rounded-none backdrop-blur-xl bg-white/70 dark:bg-black/70 border-b border-gray-200/30 dark:border-gray-700/30 shadow-none"
+      }`}>
         {/* Left - Logo/Name */}
-        <Link to="/" className="text-xl font-bold">
+        <Link to="/" className="text-xl font-bold z-10 justify-self-start">
           <span className="text-foreground">pratham</span>
           <span className="text-muted-foreground">.dev</span>
         </Link>
 
         {/* Center - Eyeballs */}
-        <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-1">
+        <div className="hidden md:flex items-center gap-1.5 z-10 justify-self-center">
           <div 
             ref={leftEyeRef}
-            className="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center relative overflow-hidden"
+            className="w-6 h-6 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 flex items-center justify-center relative overflow-hidden"
           >
             <div
-              className="w-1.5 h-1.5 bg-black rounded-full absolute transition-transform duration-100 ease-out"
+              className="w-1.5 h-1.5 bg-black dark:bg-white rounded-full absolute transition-transform duration-100 ease-out"
               style={{
                 transform: `translate(${calculateEyePosition(leftEyeRef.current).x}px, ${
                   calculateEyePosition(leftEyeRef.current).y
@@ -111,10 +111,10 @@ const Navbar = () => {
           </div>
           <div 
             ref={rightEyeRef}
-            className="w-6 h-6 rounded-full bg-white border border-gray-300 flex items-center justify-center relative overflow-hidden"
+            className="w-6 h-6 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 flex items-center justify-center relative overflow-hidden"
           >
             <div
-              className="w-1.5 h-1.5 bg-black rounded-full absolute transition-transform duration-100 ease-out"
+              className="w-1.5 h-1.5 bg-black dark:bg-white rounded-full absolute transition-transform duration-100 ease-out"
               style={{
                 transform: `translate(${calculateEyePosition(rightEyeRef.current).x}px, ${
                   calculateEyePosition(rightEyeRef.current).y
@@ -125,7 +125,7 @@ const Navbar = () => {
         </div>
 
         {/* Right - All Navigation & Actions */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden md:flex items-center gap-2 z-10 justify-self-end">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -133,14 +133,14 @@ const Navbar = () => {
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 activeSection === link.section
                   ? "bg-black text-white dark:bg-white dark:text-black"
-                  : "text-foreground hover:bg-gray-100 dark:hover:bg-gray-800"
+                  : "text-foreground hover:bg-black/5 dark:hover:bg-white/10"
               }`}
             >
               {link.name}
             </a>
           ))}
           <ThemeToggle />
-          <Button className="rounded-full gap-2 px-6 py-2.5 text-sm font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+          <Button className="rounded-full gap-2 px-6 py-2.5 text-sm font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 ml-2">
             Let's talk
             <ArrowRight className="w-4 h-4" />
           </Button>

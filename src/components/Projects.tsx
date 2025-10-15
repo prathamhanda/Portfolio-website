@@ -124,11 +124,11 @@ const Projects = () => {
               }`}
             >
               <div className="relative overflow-hidden">
-                <span className="absolute top-4 left-4 z-10 bg-white px-3 py-1 rounded-full text-xs font-medium">
+                <span className="absolute top-4 left-4 z-10 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-3 py-1 rounded-full text-xs font-medium border border-gray-200 dark:border-gray-700">
                   {project.category}
                 </span>
                 {project.featured && (
-                  <span className="absolute top-4 right-4 z-10 bg-yellow-400 px-3 py-1 rounded-full text-xs font-medium">
+                  <span className="absolute top-4 right-4 z-10 bg-yellow-400 dark:bg-yellow-500 text-gray-900 dark:text-gray-900 px-3 py-1 rounded-full text-xs font-medium">
                     Featured
                   </span>
                 )}

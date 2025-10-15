@@ -69,7 +69,7 @@ const About = () => {
                   {skills.development.map((skill) => (
                     <span
                       key={skill}
-                      className="px-4 py-2 bg-white rounded-full text-sm font-medium border border-border hover:border-black transition-colors"
+                      className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
                     >
                       {skill}
                     </span>
@@ -86,7 +86,7 @@ const About = () => {
                   {skills.design.map((skill) => (
                     <span
                       key={skill}
-                      className="px-4 py-2 bg-white rounded-full text-sm font-medium border border-border hover:border-black transition-colors"
+                      className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
                     >
                       {skill}
                     </span>
@@ -103,7 +103,7 @@ const About = () => {
                   {skills.tools.map((skill) => (
                     <span
                       key={skill}
-                      className="px-4 py-2 bg-white rounded-full text-sm font-medium border border-border hover:border-black transition-colors"
+                      className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
                     >
                       {skill}
                     </span>
