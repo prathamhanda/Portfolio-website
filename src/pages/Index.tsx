@@ -7,7 +7,6 @@ import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import CommandPalette from "@/components/CommandPalette";
 
 const Index = () => {
   return (
@@ -25,7 +24,6 @@ const Index = () => {
         <Contact />
         <Footer />
         <ScrollToTop />
-        <CommandPalette />
       </div>
     </div>
   );
