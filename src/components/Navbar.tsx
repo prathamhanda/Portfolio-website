@@ -91,7 +91,7 @@ const Navbar = () => {
         {/* Left - Logo/Name */}
         <Link to="/" className="text-xl font-bold z-10 justify-self-start">
           <span className="text-foreground">pratham</span>
-          <span className="text-muted-foreground">.dev</span>
+          <span className="text-muted-foreground">.codes</span>
         </Link>
 
         {/* Center - Eyeballs */}
