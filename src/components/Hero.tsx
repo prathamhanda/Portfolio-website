@@ -1,18 +1,68 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useEffect, useState, useRef } from "react";
+import { useFastFloat } from "@/hooks/useFastFloat";
 
 const Hero = () => {
   const { ref: heroRef, isVisible: heroVisible } = useScrollAnimation();
+  const [isMobile, setIsMobile] = useState(false);
+  const blobA = useRef<HTMLDivElement | null>(null);
+  const blobB = useRef<HTMLDivElement | null>(null);
+  const blobC = useRef<HTMLDivElement | null>(null);
+  const blobD = useRef<HTMLDivElement | null>(null);
+  const { animate } = useFastFloat();
+
+  useEffect(() => {
+    const mq = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(max-width: 767px)') : null;
+    const update = () => {
+      const inner = typeof window !== 'undefined' ? window.innerWidth <= 767 : false;
+      setIsMobile((mq && mq.matches) || inner);
+    };
+    update();
+    mq?.addEventListener?.('change', update);
+    return () => mq?.removeEventListener?.('change', update);
+  }, []);
+
+  useEffect(() => {
+    // If mobile, attach RAF-based animation to blobs and return cleanup
+    if (isMobile) {
+      const stopA = animate(blobA.current);
+      const stopB = animate(blobB.current);
+      const stopC = animate(blobC.current);
+      const stopD = animate(blobD.current);
+      return () => {
+        stopA(); stopB(); stopC(); stopD();
+      };
+    }
+    // when not mobile, ensure blobs have no inline transform
+    [blobA, blobB, blobC, blobD].forEach((r) => { if (r.current) r.current.style.transform = ''; });
+    return;
+  }, [isMobile]);
   
   return (
     <section ref={heroRef} className="min-h-[85vh] bg-background relative overflow-hidden pt-24 pb-16">
       {/* Decorative floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-blue-200/30 blur-xl animate-float" />
-        <div className="absolute top-40 right-20 w-32 h-32 rounded-full bg-purple-200/20 blur-2xl animate-float" style={{ animationDelay: "1s" }} />
-        <div className="absolute bottom-40 left-1/4 w-24 h-24 rounded-full bg-pink-200/20 blur-xl animate-float" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-1/3 right-1/3 w-16 h-16 rounded-full bg-cyan-200/30 blur-lg animate-float" style={{ animationDelay: "0.5s" }} />
+        <div
+          ref={blobA}
+          className={`absolute top-20 left-10 w-20 h-20 rounded-full bg-blue-200/30 blur-xl ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+        />
+        <div
+          ref={blobB}
+          className={`absolute top-40 right-20 w-32 h-32 rounded-full bg-purple-200/20 blur-2xl ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+          style={isMobile ? { animationDelay: '1s' } : { animationDelay: '1s' }}
+        />
+        <div
+          ref={blobC}
+          className={`absolute bottom-40 left-1/4 w-24 h-24 rounded-full bg-pink-200/20 blur-xl ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+          style={isMobile ? { animationDelay: '2s' } : { animationDelay: '2s' }}
+        />
+        <div
+          ref={blobD}
+          className={`absolute top-1/3 right-1/3 w-16 h-16 rounded-full bg-cyan-200/30 blur-lg ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+          style={isMobile ? { animationDelay: '0.5s' } : { animationDelay: '0.5s' }}
+        />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 lg:gap-4 items-center relative z-10">

@@ -215,6 +215,19 @@ All colors MUST be HSL.
     animation: slideUp 260ms cubic-bezier(.2,.8,.2,1) both;
   }
 
+  /* Mobile-specific faster float animation (fallback/direct override) */
+  @keyframes floatMobile {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  /* Force a snappier float on narrow viewports regardless of Tailwind rebuild state */
+  @media (max-width: 767px) {
+    .animate-float-sm {
+      animation: floatMobile 0.9s ease-in-out infinite !important;
+    }
+  }
+
   /* Utility class for subtle grid background */
   .grid-bg {
     background-color: hsl(var(--background));

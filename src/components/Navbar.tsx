@@ -140,10 +140,12 @@ const Navbar = () => {
             </a>
           ))}
           <ThemeToggle />
-          <Button className="rounded-full gap-2 px-6 py-2.5 text-sm font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 ml-2">
-            Let's talk
-            <ArrowRight className="w-4 h-4" />
-          </Button>
+          <a href="https://tally.so/r/mYLgYq" target="_blank" rel="noopener noreferrer">
+            <Button className="rounded-full gap-2 px-6 py-2.5 text-sm font-medium bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 ml-2">
+              Let's talk
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </a>
         </div>
 
         {/* Mobile Menu */}

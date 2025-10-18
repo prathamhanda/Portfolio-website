@@ -1,10 +1,40 @@
 import { useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useFastFloat } from "@/hooks/useFastFloat";
 import { ArrowRight, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
   const location = useLocation();
+  const [isMobile, setIsMobile] = useState(false);
+  const blobA = useRef<HTMLDivElement | null>(null);
+  const blobB = useRef<HTMLDivElement | null>(null);
+  const blobC = useRef<HTMLDivElement | null>(null);
+  const blobD = useRef<HTMLDivElement | null>(null);
+  const { animate } = useFastFloat({ amplitude: 18, period: 900 });
+
+  useEffect(() => {
+    const mq = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(max-width: 767px)') : null;
+    const update = () => {
+      const inner = typeof window !== 'undefined' ? window.innerWidth <= 767 : false;
+      setIsMobile((mq && mq.matches) || inner);
+    };
+    update();
+    mq?.addEventListener?.('change', update);
+    return () => mq?.removeEventListener?.('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      const stopA = animate(blobA.current);
+      const stopB = animate(blobB.current);
+      const stopC = animate(blobC.current);
+      const stopD = animate(blobD.current);
+      return () => { stopA(); stopB(); stopC(); stopD(); };
+    }
+    [blobA, blobB, blobC, blobD].forEach((r) => { if (r.current) r.current.style.transform = ''; });
+    return;
+  }, [isMobile]);
 
   useEffect(() => {
     // 404 page accessed
@@ -16,10 +46,25 @@ const NotFound = () => {
       <div className="grid-overlay" aria-hidden />
       {/* Decorative floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-200/20 blur-3xl animate-float" />
-        <div className="absolute top-40 right-20 w-48 h-48 rounded-full bg-purple-200/15 blur-3xl animate-float" style={{ animationDelay: "1s" }} />
-        <div className="absolute bottom-40 left-1/4 w-40 h-40 rounded-full bg-pink-200/15 blur-3xl animate-float" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-1/3 right-1/3 w-24 h-24 rounded-full bg-cyan-200/20 blur-2xl animate-float" style={{ animationDelay: "0.5s" }} />
+        <div
+          ref={blobA}
+          className={`absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-200/20 blur-3xl ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+        />
+        <div
+          ref={blobB}
+          className={`absolute top-40 right-20 w-48 h-48 rounded-full bg-purple-200/15 blur-3xl ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+          style={{ animationDelay: '1s' }}
+        />
+        <div
+          ref={blobC}
+          className={`absolute bottom-40 left-1/4 w-40 h-40 rounded-full bg-pink-200/15 blur-3xl ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+          style={{ animationDelay: '2s' }}
+        />
+        <div
+          ref={blobD}
+          className={`absolute top-1/3 right-1/3 w-24 h-24 rounded-full bg-cyan-200/20 blur-2xl ${isMobile ? '' : 'animate-float-sm md:animate-float'}`}
+          style={{ animationDelay: '0.5s' }}
+        />
       </div>
 
       {/* Content */}
@@ -59,13 +104,6 @@ const NotFound = () => {
               Explore Projects
             </Button>
           </Link>
-        </div>
-
-        {/* Suggestion */}
-        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5 border border-blue-500/20 dark:border-blue-500/10 rounded-2xl p-6 backdrop-blur-sm">
-          <p className="text-sm text-muted-foreground mb-3">
-            💡 <span className="font-semibold">Pro tip:</span> Press <kbd className="px-2 py-1 mx-1 bg-gray-300/60 dark:bg-gray-800/60 border border-black/20 dark:border-white/20 rounded text-xs font-mono font-semibold">Ctrl+K</kbd> to open the command palette and navigate anywhere!
-          </p>
         </div>
       </div>
 

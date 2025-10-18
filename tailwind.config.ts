@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindAnimate from 'tailwindcss-animate';
 
 export default {
   darkMode: ["class"],
@@ -103,10 +104,12 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "float": "float 3s ease-in-out infinite",
+        // faster float for small screens (mobile)
+        "float-sm": "float 1.2s ease-in-out infinite",
         "scroll": "scroll 30s linear infinite",
         "fade-in-up": "fade-in-up 0.6s ease-out",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate],
 } satisfies Config;
