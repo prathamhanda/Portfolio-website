@@ -12,6 +12,8 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
+      {/* Grid overlay */}
+      <div className="grid-overlay" aria-hidden />
       {/* Decorative floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-blue-200/20 blur-3xl animate-float" />

@@ -71,6 +71,17 @@ const Hero = () => {
                   background: 'radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.2) 70%, rgba(0,0,0,0.5) 100%)'
                 }}
               ></div>
+
+              {/* Subtle eye highlight vignette - light mode only */}
+              <div
+                className="absolute inset-0 rounded-2xl pointer-events-none block dark:hidden"
+                aria-hidden
+                style={{
+                  background: 'radial-gradient(circle at 62% 34%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.35) 8%, rgba(255,255,255,0.05) 18%, transparent 28%)',
+                  mixBlendMode: 'screen',
+                  opacity: 0.22 
+                }}
+              />
             </div>
 
             {/* bottom overlay */}

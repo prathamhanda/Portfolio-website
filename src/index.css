@@ -100,29 +100,53 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    position: relative;
+    /* prevent accidental horizontal scrolling from background overlays */
+    overflow-x: hidden;
+  }
+
+  /* Grid overlay on elements that use the background color (shows above the bg but below content) */
+  .bg-background {
+    position: relative; /* ensure pseudo-element is positioned relative to this container */
+    overflow: visible;
+  }
+
+  .bg-background::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  z-index: 0; /* keep the pseudo BG behind content */
+    background-image: 
+      linear-gradient(rgba(100, 150, 200, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(100, 150, 200, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 1;
+    mix-blend-mode: normal;
+  }
+
+  .dark .bg-background::before {
+    background-image: 
+      linear-gradient(rgba(150, 200, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(150, 200, 255, 0.04) 1px, transparent 1px);
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    
-    /* Subtle grid pattern - increased visibility */
-    background-color: hsl(var(--background));
-    background-image: 
-      linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
-    background-size: 24px 24px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    /* ensure body doesn't produce horizontal scrollbar */
+    overflow-x: hidden;
   }
 
-  .dark body {
-    /* Subtle grid for dark mode */
-    background-color: hsl(var(--background));
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  html {
-    scroll-behavior: smooth;
+  /* Ensure root div sits above grid overlay but grid still shows through */
+  #root {
+    position: relative;
+    z-index: 100; /* Well above grid */
   }
 
   /* Gradient background */
@@ -185,17 +209,47 @@ All colors MUST be HSL.
   .grid-bg {
     background-color: hsl(var(--background));
     background-image: 
-      linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+      linear-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .dark .grid-bg {
     background-color: hsl(var(--background));
     background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
     background-size: 24px 24px;
+  }
+
+  /* Explicit overlay element used inside main background containers */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0; /* keep the grid visually behind UI elements */
+    background-image: 
+      linear-gradient(rgba(100,150,200,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(100,150,200,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 1;
+    /* prevent overlay from contributing to overflow */
+    background-clip: padding-box;
+    transform: translateZ(0);
+  }
+
+  .dark .grid-overlay {
+    background-image: 
+      linear-gradient(rgba(150,200,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(150,200,255,0.03) 1px, transparent 1px);
+    opacity: 0.75; /* slightly reduced opacity in dark so overlays don't compete visually */
+    z-index: 0;
+  }
+
+  /* Ensure glass-style cards render above the grid overlay */
+  .glass-card {
+    position: relative; /* create stacking context */
+    z-index: 20; /* above .grid-overlay (z-1) and below explicit overlays like tooltips (z-50) */
   }
 
 

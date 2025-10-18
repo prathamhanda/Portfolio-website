@@ -11,8 +11,9 @@ import ScrollToTop from "@/components/ScrollToTop";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background transition-colors duration-300 relative">
+      {/* Grid overlay */}
+      <div className="grid-overlay" aria-hidden />
 
-      
       {/* Main content with higher z-index */}
       <div className="relative z-10">
         <Navbar />
