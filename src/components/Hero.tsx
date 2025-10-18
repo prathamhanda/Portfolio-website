@@ -17,7 +17,7 @@ const Hero = () => {
 
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 lg:gap-4 items-center relative z-10">
         {/* Command Palette Hint - Overlaid on main content */}
-        <div className="absolute top-0.5 right-0 z-20">
+        <div className="absolute top-0.5 right-0 z-20 hidden sm:block">
           <div className="bg-gradient-to-r from-gray-100/95 to-gray-200/90 dark:from-gray-900/95 dark:to-black/90 backdrop-blur-sm text-gray-900 dark:text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg border border-black/20 dark:border-white/10">
             Press <kbd className="px-2 py-0.5 mx-1 bg-gray-300/60 dark:bg-gray-800/60 border border-black/20 dark:border-white/20 rounded text-xs font-mono font-semibold">Ctrl+K</kbd> to open the command palette
           </div>

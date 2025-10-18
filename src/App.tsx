@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import CommandPalette from "@/components/CommandPalette";
+import MobileFAB from "@/components/MobileFAB";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CommandPalette />
+        <MobileFAB />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

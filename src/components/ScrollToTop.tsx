@@ -32,7 +32,7 @@ const ScrollToTop = () => {
         <Button
           onClick={scrollToTop}
           size="icon"
-          className="fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full shadow-2xl"
+          className="fixed bottom-8 right-8 z-40 w-14 h-14 rounded-full shadow-2xl hidden sm:flex"
         >
           <ArrowUp className="w-6 h-6" />
         </Button>

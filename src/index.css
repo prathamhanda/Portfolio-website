@@ -205,6 +205,16 @@ All colors MUST be HSL.
     animation-delay: 0.6s;
   }
 
+  /* Slide-up animation used for mobile bottom-sheet */
+  @keyframes slideUp {
+    from { transform: translateY(18%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-slide-up {
+    animation: slideUp 260ms cubic-bezier(.2,.8,.2,1) both;
+  }
+
   /* Utility class for subtle grid background */
   .grid-bg {
     background-color: hsl(var(--background));

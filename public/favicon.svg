@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="P favicon">
+  <rect width="64" height="64" rx="32" fill="#111216" />
+
+  <!-- crisp white 'p' built from simple shapes for legibility at small sizes -->
+  <path d="M30 18
+           h6
+           a5 5 0 0 1 0 10
+           h-6
+           v6
+           a2 2 0 0 1 -2 2
+           h-2
+           a2 2 0 0 1 -2-2
+           v-18
+           a2 2 0 0 1 2-2
+           h6
+           z"
+        fill="#ffffff"/>
+
+  <!-- green dot separated from the 'p' for clarity -->
+  <circle cx="46" cy="42" r="3.5" fill="#24C36A" />
+</svg>

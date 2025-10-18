@@ -9,9 +9,19 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import MobileCommandDialog from "@/components/MobileCommandDialog";
 import { Briefcase, User, Mail, FileText, Github, Linkedin, Download, Moon, Sun, Sparkles, Loader } from "lucide-react";
 import { useTheme } from "next-themes";
-import { queryAI, isHardcodedQuery } from "@/lib/aiSearch";
+import { isHardcodedQuery } from "@/lib/aiSearch";
+
+// lazy wrapper for queryAI to avoid loading AI-related code on page load
+let _queryAILib: typeof import("@/lib/aiSearch") | null = null;
+const loadQueryAI = async () => {
+  if (!_queryAILib) {
+    _queryAILib = await import("@/lib/aiSearch");
+  }
+  return _queryAILib.queryAI;
+};
 
 interface SearchResult {
   id: string;
@@ -30,6 +40,7 @@ const CommandPalette = () => {
   const [aiResponse, setAiResponse] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const { setTheme, theme } = useTheme();
+  const [isMobile, setIsMobile] = useState(false);
 
   const projectsData = [
     {
@@ -74,6 +85,7 @@ const CommandPalette = () => {
 
     setAiLoading(true);
     try {
+      const queryAI = await loadQueryAI();
       const response = await queryAI(query);
       setAiResponse(response);
     } catch (error) {
@@ -113,6 +125,20 @@ const CommandPalette = () => {
   }, []);
 
   useEffect(() => {
+    const openHandler = () => setOpen(true);
+    window.addEventListener("open-command-palette", openHandler as EventListener);
+    return () => window.removeEventListener("open-command-palette", openHandler as EventListener);
+  }, []);
+
+  // return focus to FAB on mobile when dialog closes
+  useEffect(() => {
+    if (!open && isMobile) {
+      const fab = document.getElementById('mobile-fab') as HTMLButtonElement | null;
+      fab?.focus();
+    }
+  }, [open, isMobile]);
+
+  useEffect(() => {
     // Immediate fuzzy search (no debounce - instant results)
     if (searchQuery.trim()) {
       const results = fuzzySearch(searchQuery);
@@ -124,9 +150,10 @@ const CommandPalette = () => {
     }
 
     // Debounced AI search (300ms delay - reduces API calls)
+    const delay = isMobile ? 2000 : 1500;
     const timer = setTimeout(() => {
       handleAISearch(searchQuery);
-    }, 1500); // 🔧 ADJUST THIS VALUE TO CHANGE DEBOUNCE TIMING
+    }, delay); // 🔧 ADJUST THIS VALUE TO CHANGE DEBOUNCE TIMING
 
     // Cleanup: cancel previous timer if user types again
     return () => {
@@ -143,10 +170,22 @@ const CommandPalette = () => {
     }
   };
 
-  return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const onChange = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile(e.matches);
+    onChange(mq);
+    if (mq.addEventListener) mq.addEventListener("change", onChange as any);
+    else mq.addListener(onChange as any);
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", onChange as any);
+      else mq.removeListener(onChange as any);
+    };
+  }, []);
+
+  const commandContent = (
+    <>
       <CommandInput 
-        placeholder="Search projects, ask questions, or use commands... (AI-powered)" 
+        placeholder={isMobile ? "Search projects or commands" : "Search projects, ask questions, or use commands... (AI-powered)"} 
         value={searchQuery}
         onValueChange={setSearchQuery}
       />
@@ -175,7 +214,11 @@ const CommandPalette = () => {
                   <div className="text-xs font-semibold text-muted-foreground mb-2">🤖 AI ASSISTANT</div>
                   <div className="flex items-start gap-3">
                     <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0 text-blue-500" />
-                    <p className="text-sm text-foreground leading-relaxed">{aiResponse}</p>
+                        <p className="text-sm text-foreground leading-relaxed">{aiResponse}</p>
+                        {/* aria-live region for screen readers on mobile */}
+                        {isMobile && (
+                          <div className="sr-only" aria-live="polite">AI response: {aiResponse}</div>
+                        )}
                   </div>
                 </div>
                 <CommandSeparator />
@@ -259,7 +302,21 @@ const CommandPalette = () => {
           </CommandItem>
         </CommandGroup>
       </CommandList>
-    </CommandDialog>
+    </>
+  );
+
+  return (
+    <>
+      {isMobile ? (
+        <MobileCommandDialog open={open} onOpenChange={setOpen}>
+          {commandContent}
+        </MobileCommandDialog>
+      ) : (
+        <CommandDialog open={open} onOpenChange={setOpen}>
+          {commandContent}
+        </CommandDialog>
+      )}
+    </>
   );
 };
 
