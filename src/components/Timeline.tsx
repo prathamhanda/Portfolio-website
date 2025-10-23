@@ -68,6 +68,7 @@ const Timeline = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [visibleItems, setVisibleItems] = useState(1);
   const scrollAccumulator = useRef(0);
+  const [hasPassedProjects, setHasPassedProjects] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +85,19 @@ const Timeline = () => {
           Math.min(100, ((windowHeight - elementTop) / (windowHeight + elementHeight)) * 100)
         );
         setScrollProgress(progress);
+      }
+
+      // One-time check: if user has scrolled past the #projects section, mark flag
+      if (!hasPassedProjects) {
+        const projectsEl = document.getElementById('projects') || document.querySelector('[data-section="projects"]') as HTMLElement | null;
+        if (projectsEl) {
+          const projBottom = projectsEl.getBoundingClientRect().bottom + window.scrollY;
+          if (window.scrollY > projBottom) {
+            setHasPassedProjects(true);
+            setVisibleItems(timelineData.length);
+            setScrollProgress(100);
+          }
+        }
       }
     };
 
@@ -133,7 +147,7 @@ const Timeline = () => {
         {/* Title */}
         <div ref={ref} className={isVisible ? "scroll-animate" : "opacity-0"}>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-center mb-20">
-            Timeline
+           Tracing the Arc...
           </h2>
         </div>
 

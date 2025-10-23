@@ -10,11 +10,16 @@ const MobileFAB: React.FC = () => {
       aria-label="Open command palette"
       onClick={handleClick}
       id="mobile-fab"
-      className="fixed bottom-6 right-4 z-40 md:hidden flex items-center justify-center w-14 h-14 rounded-full bg-accent text-accent-foreground shadow-lg hover:scale-105 transform transition" 
+      className="fixed bottom-6 right-4 md:bottom-8 md:right-8 z-40 w-14 h-14 rounded-full bg-accent text-accent-foreground shadow-lg hover:scale-105 transform transition overflow-hidden p-0" 
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-        <path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
+      <div className="w-full h-full flex items-center justify-center">
+        <img 
+          src="/sparkles.gif" 
+          alt="" 
+          className="w-full h-full object-cover"
+          aria-hidden
+        />
+      </div>
     </button>
   );
 };

@@ -7,7 +7,7 @@ import Projects from "@/components/Projects";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import ScrollToTop from "@/components/ScrollToTop";
+import MobileFAB from "@/components/MobileFAB";
 
 const Index = () => {
   return (
@@ -21,12 +21,12 @@ const Index = () => {
         <Hero />
         <TechStackScroller />
         <About />
-  <Timeline />
+        <Timeline />
         <Projects />
         <FAQ />
         <Contact />
         <Footer />
-        <ScrollToTop />
+        <MobileFAB />
       </div>
     </div>
   );

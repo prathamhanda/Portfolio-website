@@ -121,7 +121,7 @@ const Footer = () => {
           </div>
           
           {/* Command Palette Hint */}
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 hidden sm:flex justify-center">
             <div className="inline-flex items-center gap-2 text-xs text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10">
               <span>Press</span>
               <kbd className="px-2 py-1 text-xs font-semibold bg-white/10 border border-white/20 rounded text-white">

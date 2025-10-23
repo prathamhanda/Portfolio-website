@@ -105,7 +105,7 @@ const Hero = () => {
         </div>
 
         {/* Right Content - Profile Image */}
-        <div className={`relative ${heroVisible ? 'scroll-animate scroll-animate-delay-2' : ''}`}>
+        <div className={`relative mt-12 lg:mt-0 ${heroVisible ? 'scroll-animate scroll-animate-delay-2' : ''}`}>
           <div className="relative rounded-3xl overflow-hidden shadow-2xl group">
             {/* subtle framed border */}
             <div className="rounded-3xl p-1 bg-white/60 dark:bg-black/30 relative">

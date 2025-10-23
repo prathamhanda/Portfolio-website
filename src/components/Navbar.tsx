@@ -22,13 +22,13 @@ const Navbar = () => {
   const leftEyeRef = useRef<HTMLDivElement>(null);
   const rightEyeRef = useRef<HTMLDivElement>(null);
   const [isDesktop, setIsDesktop] = useState<boolean>(
-    typeof window !== "undefined" ? window.innerWidth >= 768 : true
+    typeof window !== "undefined" ? window.innerWidth >= 915 : true
   );
 
   useEffect(() => {
     setIsMounted(true);
 
-    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    const handleResize = () => setIsDesktop(window.innerWidth >= 915);
     window.addEventListener("resize", handleResize);
     handleResize();
 
@@ -43,7 +43,7 @@ const Navbar = () => {
       setScrollProgress(progress);
       setIsScrolled(scrollTop > 20);
 
-      const sections = ["hero", "about", "projects", "products", "faq"];
+      const sections = ["hero", "about", "timeline", "projects", "faq"];
       const scrollPosition = scrollTop + 100;
       for (const sectionId of sections) {
         const element =
@@ -77,7 +77,7 @@ const Navbar = () => {
 
   const calculateEyePosition = (eyeElement: HTMLDivElement | null) => {
     if (!eyeElement) return { x: 0, y: 0 };
-    if (typeof window !== "undefined" && window.innerWidth < 768)
+    if (typeof window !== "undefined" && window.innerWidth < 915)
       return { x: 0, y: 0 };
 
     const rect = eyeElement.getBoundingClientRect();
@@ -99,8 +99,8 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/", section: "home" },
     { name: "About", path: "#about", section: "about" },
+    { name: "Timeline", path: "#timeline", section: "timeline" },
     { name: "Projects", path: "#projects", section: "projects" },
-    { name: "Products", path: "#products", section: "products" },
     { name: "FAQ", path: "#faq", section: "faq" },
   ];
 
@@ -141,19 +141,15 @@ const Navbar = () => {
 
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled ? "px-6 pt-6" : "px-0 pt-0"
+          isScrolled ? "px-4 sm:px-6 pt-6" : "px-0 pt-0"
         }`}
       >
         <nav
-          className={`mx-auto px-8 py-4 grid grid-cols-3 items-center relative transition-all duration-300 ${
+          className={`mx-auto px-4 sm:px-8 py-4 flex items-center relative transition-all duration-300 overflow-hidden ${
             isScrolled
               ? "max-w-[85em] rounded-full backdrop-blur-xl bg-white/70 dark:bg-black/70 border border-gray-200/50 dark:border-gray-700/50 shadow-lg"
               : "max-w-full rounded-none backdrop-blur-xl bg-white/70 dark:bg-black/70 border-b border-gray-200/30 dark:border-gray-700/30 shadow-none"
           }`}
-          style={{
-            position: "relative",
-            overflow: "hidden",
-          }}
         >
           {/* ✅ Scroll Underline */}
           <div
@@ -168,13 +164,13 @@ const Navbar = () => {
           />
 
           {/* Left - Logo */}
-          <Link to="/" className="text-xl font-bold z-10 justify-self-start">
-            <span className="text-foreground">pratham</span>
-            <span className="text-muted-foreground">.codes</span>
+          <Link to="/" className="text-xl font-bold z-10 flex-shrink-0">
+            <span className="text-foreground whitespace-nowrap">pratham</span>
+            <span className="text-muted-foreground whitespace-nowrap">.codes</span>
           </Link>
 
           {/* Center - Eyes */}
-          <div className="hidden md:flex items-center gap-1.5 z-10 justify-self-center">
+          <div className="hidden min-[915px]:flex items-center gap-1.5 z-10 flex-1 justify-center mx-4">
             <div
               ref={leftEyeRef}
               className="w-6 h-6 rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 flex items-center justify-center relative overflow-hidden"
@@ -208,8 +204,8 @@ const Navbar = () => {
           </div>
 
           {/* Right - Navigation */}
-          <div className="z-10 justify-self-end col-start-3 flex items-center gap-2">
-            <div className="hidden md:flex items-center gap-2">
+          <div className="z-10 flex items-center gap-2 flex-shrink-0 ml-auto">
+            <div className="hidden min-[915px]:flex items-center gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
@@ -237,7 +233,7 @@ const Navbar = () => {
             </div>
 
             {/* Mobile */}
-            <div className="flex md:hidden items-center gap-2">
+            <div className="flex min-[915px]:hidden items-center gap-2">
               <ThemeToggle />
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
@@ -262,62 +258,64 @@ const Navbar = () => {
                   />
 
                   <div
-                    className={
-                      "fixed inset-y-0 right-0 z-[9999] h-full w-[85vw] max-w-[400px] border-l bg-background shadow-2xl transform"
-                    }
+                    className="fixed inset-y-0 right-0 z-[9999] h-full border-l bg-background shadow-2xl transform overflow-y-auto"
                     aria-hidden={!mobileMenuOpen}
                     style={{
                       animation: mobileMenuOpen
                         ? "nav-slide-in 300ms forwards ease-out"
                         : "nav-slide-out 300ms forwards ease-in",
                       willChange: "transform",
+                      width: "min(85vw, 400px)",
+                      maxWidth: "400px",
                     }}
                   >
-                    <div className="p-6">
+                    <div className="p-6 h-full w-full">
                       <Button
                         type="button"
                         onClick={closeMenu}
-                        className="absolute right-4 top-4 w-8 h-8 rounded-full bg-foreground/10 hover:bg-foreground/20 border border-foreground/20 flex items-center justify-center p-0"
+                        className="absolute right-4 top-4 w-8 h-8 rounded-full bg-foreground/10 hover:bg-foreground/20 border border-foreground/20 flex items-center justify-center p-0 z-10"
                       >
                         <X className="h-5 w-5 text-foreground" />
                         <span className="sr-only">Close</span>
                       </Button>
 
-                      <SheetTitle className="text-xl font-bold mb-2">
-                        Menu
-                      </SheetTitle>
-                      <SheetDescription className="text-sm text-muted-foreground mb-6">
-                        Navigate to different sections
-                      </SheetDescription>
+                      <div className="pt-12 w-full">
+                        <SheetTitle className="text-xl font-bold mb-2">
+                          Menu
+                        </SheetTitle>
+                        <SheetDescription className="text-sm text-muted-foreground mb-6">
+                          Navigate to different sections
+                        </SheetDescription>
 
-                      <nav className="flex flex-col gap-2">
-                        {navLinks.map((link) => (
+                        <nav className="flex flex-col gap-2 w-full">
+                          {navLinks.map((link) => (
+                            <a
+                              key={link.name}
+                              href={link.path}
+                              onClick={closeMenu}
+                              className={`px-4 py-3 rounded-lg text-base font-medium transition-all ${
+                                activeSection === link.section
+                                  ? "bg-foreground text-background"
+                                  : "text-foreground hover:bg-secondary"
+                              }`}
+                            >
+                              {link.name}
+                            </a>
+                          ))}
                           <a
-                            key={link.name}
-                            href={link.path}
+                            href="https://tally.so/r/mYLgYq"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             onClick={closeMenu}
-                            className={`px-4 py-3 rounded-lg text-base font-medium transition-all ${
-                              activeSection === link.section
-                                ? "bg-foreground text-background"
-                                : "text-foreground hover:bg-secondary"
-                            }`}
+                            className="mt-4 w-full"
                           >
-                            {link.name}
+                            <Button className="w-full rounded-full gap-2 px-6 py-6 text-base font-medium bg-foreground text-background hover:bg-foreground/90">
+                              Let's talk
+                              <ArrowRight className="w-4 h-4" />
+                            </Button>
                           </a>
-                        ))}
-                        <a
-                          href="https://tally.so/r/mYLgYq"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={closeMenu}
-                          className="mt-4"
-                        >
-                          <Button className="w-full rounded-full gap-2 px-6 py-6 text-base font-medium bg-foreground text-background hover:bg-foreground/90">
-                            Let's talk
-                            <ArrowRight className="w-4 h-4" />
-                          </Button>
-                        </a>
-                      </nav>
+                        </nav>
+                      </div>
                     </div>
                   </div>
                 </SheetPortal>
