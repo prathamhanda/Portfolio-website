@@ -1,84 +1,26 @@
 import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import ProjectDetailModal from "@/components/ProjectDetailModal";
+import { projectsData } from "@/data/projects";
 
 const Projects = () => {
   const { ref: projectsRef, isVisible: projectsVisible } = useScrollAnimation();
   const [filter, setFilter] = useState("all");
+  const [selectedProject, setSelectedProject] = useState<any>(null);
 
-  const projects = [
-    {
-      id: 1,
-      title: "Brain Tumor Detector",
-      description:
-        "A three-stage deep learning pipeline achieving 99.3% accuracy and 97.2% IoU in brain tumor detection and segmentation. Built with PyTorch, YOLO, and SAM to provide real-time diagnostic assistance and quantitative tumor analysis for surgical planning. Deployed on Streamlit.",
-      image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&h=600&fit=crop",
-      tags: ["Python", "PyTorch", "YOLO", "SAM", "Streamlit"],
-      category: "web",
-      featured: true,
-      link: "https://github.com/prathamhanda/BrainTumor-Detector"
-    },
-    {
-      id: 2,
-      title: "AI-RoadIntelligence",
-      description:
-        "Real-time traffic optimization system using YOLOv8 for vehicle detection at 45 FPS with under 50ms latency. Integrated SUMO traffic simulator for emergency vehicle routing and alert systems with response times under 3 seconds.",
-      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
-      tags: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine"],
-      category: "web",
-      featured: true,
-      link: "https://github.com/prathamhanda/AI-RoadIntelligence"
-    },
-    {
-      id: 3,
-      title: "RoomsOnRent",
-      description:
-        "A containerized dual-portal platform for student housing with separate interfaces for students and landlords. Features Cloudinary media management and JWT authentication. Successfully deployed serving real users with 75% reduction in response times.",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop",
-      tags: ["React", "Node.js", "MongoDB", "Docker", "Cloudinary"],
-      category: "web",
-      featured: true,
-      link: "https://github.com/prathamhanda/roomsonrent"
-    },
-    {
-      id: 4,
-      title: "LEAD Society Website",
-      description:
-        "Official website for LEAD Society at TIET featuring smooth UI/UX design, event management system, and member portal. Built as Joint Secretary to showcase society activities and facilitate student engagement with responsive design.",
-      image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=600&fit=crop",
-      tags: ["React", "Tailwind", "Netlify"],
-      category: "web",
-      featured: false,
-      link: "https://leadtiet.netlify.app/"
-    },
-    {
-      id: 5,
-      title: "INSDAG Steel Seminar Landing",
-      description:
-        "High converting landing page for technical seminar achieving 102.7% CTR with 500+ users. Designed for the Civil Department's INSDAG Steel Seminar event. Successfully hosted presentations for 6 industry speakers.",
-      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
-      tags: ["HTML", "CSS", "JavaScript"],
-      category: "web",
-      featured: false,
-      link: "https://github.com/prathamhanda"
-    },
-    {
-      id: 6,
-      title: "DBuck Student Housing Platform",
-      description:
-        "Full stack web application for student housing startup enabling interactive property listings, location-based search, and comprehensive landlord portal. Built to serve 10K+ students at TIET with real-time updates and secure data management.",
-      image: "https://images.unsplash.com/photo-1556912173-3bb406ef7e77?w=800&h=600&fit=crop",
-      tags: ["React", "Express.js", "MongoDB", "REST APIs"],
-      category: "web",
-      featured: false,
-      link: "https://github.com/prathamhanda"
-    },
-  ];
+  const projects = projectsData;
 
   const filteredProjects =
     filter === "all"
       ? projects
       : projects.filter((p) => p.category === filter);
+
+  const openProject = (project: any) => {
+    setSelectedProject(project);
+  };
+
+  const closeProject = () => setSelectedProject(null);
 
   return (
     <section id="projects" ref={projectsRef} className="py-24 bg-background">
@@ -110,6 +52,16 @@ const Projects = () => {
               }`}
             >
               Web
+            </button>
+            <button
+              onClick={() => setFilter("ai-ml")}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+                filter === "ai-ml"
+                  ? "bg-foreground text-background"
+                  : "glass-card hover:bg-muted/50"
+              }`}
+            >
+              AI/ML
             </button>
           </div>
         </div>
@@ -167,19 +119,24 @@ const Projects = () => {
                     </div>
                   </div>
 
-                  <a
-                    href="#"
+                  <button
+                    onClick={() => openProject(project)}
                     className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:gap-3 transition-all"
                   >
                     View Project
                     <ExternalLink className="w-4 h-4" />
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Project Modal */}
+      {selectedProject && (
+        <ProjectDetailModal project={selectedProject} isOpen={Boolean(selectedProject)} onClose={closeProject} />
+      )}
     </section>
   );
 };

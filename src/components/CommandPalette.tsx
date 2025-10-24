@@ -33,6 +33,17 @@ interface SearchResult {
   content?: string;
 }
 
+const aiSuggestions = [
+  "What are your top skills",
+  "Tell me about your experience",
+  "What projects have you worked on",
+  "What technologies do you use",
+  "What is your education background",
+  "What are your career goals",
+  "What is your work style",
+  "Tell me about your achievements"
+];
+
 const CommandPalette = () => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +52,7 @@ const CommandPalette = () => {
   const [aiLoading, setAiLoading] = useState(false);
   const { setTheme, theme } = useTheme();
   const [isMobile, setIsMobile] = useState(false);
+  const [currentSuggestion, setCurrentSuggestion] = useState(0);
 
   const projectsData = [
     {
@@ -99,6 +111,22 @@ const CommandPalette = () => {
     if (!query.trim()) return [];
 
     const lowerQuery = query.toLowerCase();
+    
+    // Secret command to check Gemini API status
+    if (lowerQuery === "!status gemini" || lowerQuery === "!gemini") {
+      const checkAPI = async () => {
+        try {
+          const queryAI = await loadQueryAI();
+          await queryAI("test");
+          setAiResponse("✅ Gemini API is working correctly!");
+        } catch (error) {
+          setAiResponse("❌ Gemini API is not responding. Please check your configuration.");
+        }
+      };
+      checkAPI();
+      return [];
+    }
+
     const results = projectsData.filter(item => {
       const titleMatch = item.title.toLowerCase().includes(lowerQuery);
       const descMatch = item.description?.toLowerCase().includes(lowerQuery);
@@ -111,6 +139,15 @@ const CommandPalette = () => {
 
     return results;
   };
+
+  useEffect(() => {
+    // Rotate AI suggestions every 3 seconds
+    const rotationInterval = setInterval(() => {
+      setCurrentSuggestion((prev) => (prev + 1) % aiSuggestions.length);
+    }, 3000);
+
+    return () => clearInterval(rotationInterval);
+  }, []);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -252,11 +289,44 @@ const CommandPalette = () => {
         )}
 
         <CommandGroup heading="Suggestions">
-          <CommandItem onSelect={() => handleNavigation("#projects")}>
-            <Briefcase className="mr-2 h-4 w-4" />
-            <span>View Projects</span>
+          <CommandItem 
+            onSelect={() => setSearchQuery(aiSuggestions[currentSuggestion])}
+            className="group"
+          >
+            <Sparkles className="mr-2 h-4 w-4 text-foreground transition-colors" />
+            <div className="suggestion-flip-container overflow-hidden">
+              <span 
+                key={currentSuggestion}
+                className="text-foreground transition-colors inline-block animate-flip-text"
+              >
+                {aiSuggestions[currentSuggestion]}...
+              </span>
+            </div>
           </CommandItem>
-          
+
+          <style>{`
+            @keyframes flipIn {
+              0% {
+                transform: rotateX(90deg);
+                opacity: 0;
+              }
+              100% {
+                transform: rotateX(0deg);
+                opacity: 1;
+              }
+            }
+
+            .animate-flip-text {
+              animation: flipIn 0.6s ease-out;
+              transform-origin: top;
+            }
+
+            .suggestion-flip-container {
+              line-height: 1.2;
+              min-height: 1.2em;
+            }
+          `}</style>
+
           <CommandItem onSelect={() => {
             setTheme(theme === "dark" ? "light" : "dark");
             setOpen(false);
@@ -268,10 +338,12 @@ const CommandPalette = () => {
             )}
             <span>Toggle Theme</span>
           </CommandItem>
-          <CommandItem onSelect={() => handleNavigation("#about")}>
-            <User className="mr-2 h-4 w-4" />
-            <span>About Me</span>
-          </CommandItem>  
+
+          <CommandItem onSelect={() => handleNavigation("#projects")}>
+            <Briefcase className="mr-2 h-4 w-4" />
+            <span>View Projects</span>
+          </CommandItem>
+          
           <CommandItem onSelect={() => handleNavigation("#contact")}>
             <Mail className="mr-2 h-4 w-4" />
             <span>Contact Me</span>
