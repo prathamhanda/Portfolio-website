@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Code2, Trophy, Flame, Target, TrendingUp, Calendar } from "lucide-react";
+import { Code2, Trophy, Flame, Target, TrendingUp, Calendar, GithubIcon } from "lucide-react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Sector } from "recharts";
@@ -31,6 +31,8 @@ const CodingDashboard = () => {
     reputation: 0,
   });
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
+  const [gfgCount, setGfgCount] = useState<number>(0);
+  const [gfgError, setGfgError] = useState<string | null>(null);
   const heatmapRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [tooltip, setTooltip] = useState<{ visible: boolean; x: number; y: number; left: number; top: number; text: string }>({ visible: false, x: 0, y: 0, left: 0, top: 0, text: '' });
@@ -42,8 +44,9 @@ const CodingDashboard = () => {
   useEffect(() => { 
     // Allow configuring usernames through Vite env variables:
     // VITE_LEETCODE_USERNAME and VITE_GITHUB_USERNAME
-    const LEETCODE_USER = (import.meta as any).env?.VITE_LEETCODE_USERNAME || 'prathamhanda';
-    const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
+  const LEETCODE_USER = (import.meta as any).env?.VITE_LEETCODE_USERNAME || 'prathamhanda';
+  const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
+  const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'prathamh';
 
     // Fetch LeetCode stats
     const fetchLeetCodeStats = async () => {
@@ -163,66 +166,161 @@ const CodingDashboard = () => {
       fetchGitHubContributions();
     }
 
+    // Fetch GeeksforGeeks profile page and extract total_problems_solved from the __NEXT_DATA__ JSON
+    const fetchGFGCount = async () => {
+      try {
+        setGfgError(null);
+        const cacheKey = `gfgCount:${GFG_USER}`;
+        try {
+          const cached = localStorage.getItem(cacheKey);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            const age = Date.now() - (parsed.ts || 0);
+            const ttl = 1000 * 60 * 60; // 1 hour
+            if (age < ttl && typeof parsed.count === 'number') {
+              setGfgCount(parsed.count);
+              return;
+            }
+          }
+        } catch (e) {
+          // ignore cache errors
+        }
+
+        // First try a local serverless endpoint (avoids CORS). If not available, fall back to direct client fetch.
+        try {
+          const apiUrl = `/api/gfg-count?user=${encodeURIComponent(GFG_USER)}`;
+          const r = await fetch(apiUrl, { method: 'GET' });
+          if (r.ok) {
+            const j = await r.json();
+            if (typeof j?.count === 'number') {
+              setGfgCount(Number(j.count || 0));
+              try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), count: Number(j.count || 0) })); } catch (e) {}
+              return;
+            }
+          }
+        } catch (e) {
+          // endpoint not available or returned CORS/network error - fall back to client fetch
+          try { if ((window as any)?.console && (window as any).__toggleHeatmapTooltipDebug) (window as any).__toggleHeatmapTooltipDebug; } catch (er) {}
+          // debug logged elsewhere if enabled
+        }
+
+        // Fallback: attempt client-side fetch (may be blocked by CORS)
+        const url = `https://www.geeksforgeeks.org/user/${GFG_USER}/`;
+        const res = await fetch(url, { method: 'GET' });
+        if (!res.ok) throw new Error(`GfG status ${res.status}`);
+        const text = await res.text();
+
+        // Extract __NEXT_DATA__ JSON from the page
+        const m = text.match(/<script\s+id=\"__NEXT_DATA__\"[^>]*>([\s\S]*?)<\/script>/i);
+        if (!m) throw new Error('Could not find __NEXT_DATA__ on GfG page');
+        let json: any;
+        try {
+          json = JSON.parse(m[1]);
+        } catch (err) {
+          throw new Error('Failed to parse GfG JSON');
+        }
+
+        const possible = json?.props?.pageProps || json?.props || json;
+        const count = possible?.userInfo?.total_problems_solved
+          || possible?.initialState?.userProfileApi?.getUserInfo?.data?.total_problems_solved
+          || possible?.initialState?.userProfileApi?.getUserInfo?.data?.data?.total_problems_solved
+          || 0;
+
+        setGfgCount(Number(count || 0));
+        try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), count: Number(count || 0) })); } catch (e) {}
+      } catch (err: any) {
+        console.warn('GfG fetch failed', err);
+        setGfgError(String(err?.message || err));
+      }
+    };
+
+    // try GFG fetch but don't block main loads
+    fetchGFGCount();
+
     // Attach mouse handlers for custom tooltip (reads data- attributes set on rects)
     let container = heatmapRef.current;
+    // debug toggle: set VITE_HEATMAP_TOOLTIP_DEBUG=true or set localStorage 'heatmapTooltipDebug' = '1'
+    const envDebug = (import.meta as any).env?.VITE_HEATMAP_TOOLTIP_DEBUG === 'true';
+    let runtimeDebug = false;
+    try { runtimeDebug = typeof window !== 'undefined' && localStorage.getItem('heatmapTooltipDebug') === '1'; } catch (e) {}
+    const debug = envDebug || runtimeDebug;
+    // expose a quick toggle helper for local debugging
+    try {
+      if (typeof window !== 'undefined') {
+        (window as any).__toggleHeatmapTooltipDebug = (v?: boolean) => {
+          const val = v === undefined ? !(localStorage.getItem('heatmapTooltipDebug') === '1') : !!v;
+          localStorage.setItem('heatmapTooltipDebug', val ? '1' : '0');
+          // eslint-disable-next-line no-console
+          console.log('[heatmap-debug] set heatmapTooltipDebug =', val ? '1' : '0');
+        };
+      }
+    } catch (e) {}
     if (container) {
-      const onMove = (e: MouseEvent) => {
-        const target = e.target as HTMLElement | null;
-        const rect = target?.closest && (target.closest('rect') as SVGRectElement | null);
-        if (rect && rect.hasAttribute('data-date')) {
-          const date = rect.getAttribute('data-date') || '';
-          const count = rect.getAttribute('data-count') || '0';
-          const title = rect.getAttribute('data-title') || `${count} contributions on ${date}`;
-          const bounds = container!.getBoundingClientRect();
-          const anchorX = (e as MouseEvent).clientX - bounds.left;
-          const anchorY = (e as MouseEvent).clientY - bounds.top;
-          // initial guess for left/top; will be adjusted to avoid overflow
-          setTooltip({ visible: true, x: anchorX, y: anchorY, left: anchorX + 12, top: anchorY + 12, text: title });
-        } else {
-          setTooltip((t) => t.visible ? { ...t, visible: false } : t);
-        }
-      };
-      const onLeave = (e: MouseEvent) => setTooltip((t) => t.visible ? { ...t, visible: false } : t);
-
-      // adjust function will measure tooltip and container to prevent overflow
+      // Use pointer events for wider device support and more reliable targeting.
       const adjust = () => {
         if (!tooltipRef.current || !container) return;
         const tt = tooltipRef.current;
         const bounds = container.getBoundingClientRect();
         const ttW = tt.offsetWidth;
         const ttH = tt.offsetHeight;
+        if (debug) console.debug('[heatmap-debug] adjust - ttW,ttH,bounds', ttW, ttH, bounds.width, bounds.height);
         setTooltip((prev) => {
           if (!prev.visible) return prev;
           let left = prev.x + 12;
           let top = prev.y + 12;
           if (left + ttW > bounds.width) {
             left = Math.max(prev.x - ttW - 12, 8);
+            if (debug) console.debug('[heatmap-debug] flipped left to', left);
           }
           if (top + ttH > bounds.height) {
             top = Math.max(bounds.height - ttH - 8, 8);
+            if (debug) console.debug('[heatmap-debug] flipped top to', top);
           }
           return { ...prev, left, top };
         });
       };
 
-      let raf = 0;
-      const onMoveAdjust = (e: Event) => {
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => adjust());
+      const onPointerMove = (e: PointerEvent) => {
+        const target = e.target as HTMLElement | null;
+        const rectEl = target?.closest ? (target.closest('rect') as SVGRectElement | null) : null;
+        if (rectEl && rectEl.hasAttribute('data-date')) {
+          const date = rectEl.getAttribute('data-date') || '';
+          const count = rectEl.getAttribute('data-count') || '0';
+          const title = rectEl.getAttribute('data-title') || `${count} contributions on ${date}`;
+          const bounds = container!.getBoundingClientRect();
+          const anchorX = (e as PointerEvent).clientX - bounds.left;
+          const anchorY = (e as PointerEvent).clientY - bounds.top;
+          if (debug) console.debug('[heatmap-debug] pointermove rect', { date, count, title, anchorX, anchorY });
+          // initial guess for left/top; will be adjusted to avoid overflow
+          setTooltip({ visible: true, x: anchorX, y: anchorY, left: anchorX + 12, top: anchorY + 12, text: title });
+          // Ensure measurement runs after tooltip has been painted: double RAF
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            if (debug) {
+              const tt = tooltipRef.current;
+              console.debug('[heatmap-debug] after RAF tooltip exists?', !!tt, 'offsets', tt?.offsetWidth, tt?.offsetHeight);
+            }
+            adjust();
+          }));
+        } else {
+          if (debug) console.debug('[heatmap-debug] pointermove - no rect found, hiding');
+          setTooltip((t) => t.visible ? { ...t, visible: false } : t);
+        }
       };
 
-      container.addEventListener('mousemove', onMove);
-      container.addEventListener('mouseleave', onLeave);
-      container.addEventListener('mousemove', onMoveAdjust);
+  const onPointerOver = (e: PointerEvent) => { if (debug) console.debug('[heatmap-debug] pointerover'); onPointerMove(e); };
+  const onPointerOut = () => { if (debug) console.debug('[heatmap-debug] pointerout'); setTooltip((t) => t.visible ? { ...t, visible: false } : t); };
+
+      container.addEventListener('pointermove', onPointerMove);
+      container.addEventListener('pointerover', onPointerOver);
+      container.addEventListener('pointerout', onPointerOut);
       window.addEventListener('resize', adjust);
 
       // clean up on unmount
       return () => {
-        try { container?.removeEventListener('mousemove', onMove); } catch (e) {}
-        try { container?.removeEventListener('mouseleave', onLeave); } catch (e) {}
-        try { container?.removeEventListener('mousemove', onMoveAdjust); } catch (e) {}
+        try { container?.removeEventListener('pointermove', onPointerMove); } catch (e) {}
+        try { container?.removeEventListener('pointerover', onPointerOver); } catch (e) {}
+        try { container?.removeEventListener('pointerout', onPointerOut); } catch (e) {}
         try { window.removeEventListener('resize', adjust); } catch (e) {}
-        if (raf) cancelAnimationFrame(raf);
       };
     }
 
@@ -315,10 +413,12 @@ const CodingDashboard = () => {
     return null;
   };
 
+  const totalSolvedDisplayed = leetcodeStats.totalSolved + gfgCount;
+
   const statCards = [
     {
       title: "Total Solved",
-      value: leetcodeStats.totalSolved,
+      value: totalSolvedDisplayed,
       icon: Code2,
       color: "text-blue-500 dark:text-blue-400",
     },
@@ -494,8 +594,8 @@ const CodingDashboard = () => {
           <Card className="border-muted/40 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-primary" />
-              Development Contributions
+              <GithubIcon className="w-5 h-5 text-primary" />
+              GitHub Contributions
             </CardTitle>
           </CardHeader>
           <CardContent>
