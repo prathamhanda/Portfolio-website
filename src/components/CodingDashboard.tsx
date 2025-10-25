@@ -66,21 +66,56 @@ const CodingDashboard = () => {
           reputation: data.reputation || 0,
         });
 
-        // Mock rating data - replace with actual API data if available
-        const mockRatingData = [
-          { date: 'Jan', rating: 1400 },
-          { date: 'Feb', rating: 1450 },
-          { date: 'Mar', rating: 1520 },
-          { date: 'Apr', rating: 1580 },
-          { date: 'May', rating: 1650 },
-          { date: 'Jun', rating: 1700 },
-        ];
-        setRatingData(mockRatingData);
-      } catch (error) {
+        // Try to fetch contest rating history from LeetCode GraphQL (best-effort).
+        // If that fails, fall back to a small mock dataset.
+        try {
+          const gqlUrl = 'https://leetcode.com/graphql';
+          const query = `query getUserContestHistory($username: String!) {\n  userContestRankingHistory(username: $username) {\n    contest {\n      title\n      start_time\n      startTime\n    }\n    rating\n    ranking\n    attended\n  }\n}`;
+          const resp = await fetch(gqlUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, variables: { username: LEETCODE_USER } }),
+          });
+          if (resp.ok) {
+            const jr = await resp.json();
+            const hist = jr?.data?.userContestRankingHistory;
+            if (Array.isArray(hist) && hist.length > 0) {
+              // Map to monthly points for chart: use contest title or index as x and rating as y
+              const mapped = hist.map((h: any, i: number) => {
+                const ts = h?.contest?.start_time || h?.contest?.startTime || null;
+                const dateLabel = ts ? new Date(ts * 1000).toLocaleString(undefined, { month: 'short', year: 'numeric' }) : `C${i + 1}`;
+                return { date: dateLabel, rating: Number(h?.rating || 0) };
+              });
+              // keep last 12 entries
+              setRatingData(mapped.slice(-12));
+            } else {
+              throw new Error('no contest history');
+            }
+          } else {
+            throw new Error(`LeetCode GraphQL returned ${resp.status}`);
+          }
+        } catch (err) {
+          console.debug('LeetCode contest history fetch failed, using mock rating data', err);
+          const mockRatingData = [
+            { date: 'Jan', rating: 1400 },
+            { date: 'Feb', rating: 1450 },
+            { date: 'Mar', rating: 1350 },
+            { date: 'Apr', rating: 1580 },
+            { date: 'May', rating: 1650 },
+            { date: 'Jun', rating: 1575 },
+            { date: 'Jul', rating: 1694 },
+            { date: 'Aug', rating: 1871 },
+            { date: 'Sep', rating: 1939 },
+            { date: 'Oct', rating: 1931 },
+          ];
+          setRatingData(mockRatingData);
+        }
+      } catch (error: any) {
         console.error('Error fetching LeetCode stats:', error);
       }
     };
 
+    // Fetch GitHub contributions
     // Fetch GitHub contributions
     const fetchGitHubContributions = async () => {
       try {
@@ -257,70 +292,184 @@ const CodingDashboard = () => {
     } catch (e) {}
     if (container) {
       // Use pointer events for wider device support and more reliable targeting.
-      const adjust = () => {
+      // Structured in-memory log for debugging interactions
+      try {
+        if (typeof window !== 'undefined') {
+          (window as any).__heatmapTooltipLog = (window as any).__heatmapTooltipLog || [];
+          (window as any).__dumpHeatmapTooltipLog = () => JSON.parse(JSON.stringify((window as any).__heatmapTooltipLog || []));
+        }
+      } catch (e) {}
+
+      const pushLog = (entry: any) => {
+        if (!debug) return;
+        try {
+          const rec = { ts: Date.now(), ...entry };
+          (window as any).__heatmapTooltipLog.push(rec);
+          console.debug('[heatmap-debug]', rec);
+        } catch (e) {
+          // ignore logging errors
+        }
+      };
+
+      const adjust = (opts?: { retries?: number, anchorX?: number, anchorY?: number }) => {
         if (!tooltipRef.current || !container) return;
         const tt = tooltipRef.current;
         const bounds = container.getBoundingClientRect();
         const ttW = tt.offsetWidth;
         const ttH = tt.offsetHeight;
-        if (debug) console.debug('[heatmap-debug] adjust - ttW,ttH,bounds', ttW, ttH, bounds.width, bounds.height);
+        pushLog({ event: 'adjust', ttW, ttH, bounds: { w: bounds.width, h: bounds.height }, opts });
+
+        // If tooltip hasn't been painted yet, retry a few times (double RAF + setTimeout fallback)
+        const retries = opts?.retries ?? 0;
+        if ((ttW === 0 || ttH === 0) && retries < 3) {
+          pushLog({ event: 'adjust-retry', retries });
+          requestAnimationFrame(() => requestAnimationFrame(() => adjust({ retries: retries + 1, anchorX: opts?.anchorX, anchorY: opts?.anchorY })));
+          // also schedule a timed fallback in case RAFs don't help
+          setTimeout(() => adjust({ retries: retries + 1, anchorX: opts?.anchorX, anchorY: opts?.anchorY }), 16 + retries * 10);
+          return;
+        }
+
         setTooltip((prev) => {
           if (!prev.visible) return prev;
-          let left = prev.x + 12;
-          let top = prev.y + 12;
+          let left = (opts?.anchorX ?? prev.x) + 12;
+          let top = (opts?.anchorY ?? prev.y) + 12;
+          // flip horizontally if overflowing container width
           if (left + ttW > bounds.width) {
-            left = Math.max(prev.x - ttW - 12, 8);
-            if (debug) console.debug('[heatmap-debug] flipped left to', left);
+            left = Math.max((opts?.anchorX ?? prev.x) - ttW - 12, 8);
+            pushLog({ event: 'flip-left', left });
           }
+          // flip vertically if overflowing container height
           if (top + ttH > bounds.height) {
             top = Math.max(bounds.height - ttH - 8, 8);
-            if (debug) console.debug('[heatmap-debug] flipped top to', top);
+            pushLog({ event: 'flip-top', top });
           }
           return { ...prev, left, top };
         });
       };
 
+      const resolveCellFromEvent = (e: PointerEvent) => {
+        // Try several ways to resolve the SVG cell element that holds data attributes
+        try {
+          // 1) composedPath (best for shadow DOM / SVG nesting)
+          const cp: any[] = typeof (e as any).composedPath === 'function' ? (e as any).composedPath() : [];
+          for (const el of cp || []) {
+            if (!el || !(el as Element).getAttribute) continue;
+            if ((el as Element).hasAttribute && (el as Element).hasAttribute('data-date')) return { el: el as Element, method: 'composedPath' };
+          }
+
+          // 2) closest on target
+          const target = e.target as Element | null;
+          if (target) {
+            const closestRect = target.closest ? target.closest('[data-date]') : null;
+            if (closestRect) return { el: closestRect as Element, method: 'closest' };
+          }
+
+          // 3) elementFromPoint fallback
+          const fromPoint = document.elementFromPoint(e.clientX, e.clientY) as Element | null;
+          if (fromPoint) {
+            const cp2 = (fromPoint as Element).closest ? (fromPoint as Element).closest('[data-date]') : null;
+            if (cp2) return { el: cp2 as Element, method: 'elementFromPoint' };
+          }
+        } catch (err) {
+          pushLog({ event: 'resolve-error', error: String(err) });
+        }
+        return null;
+      };
+
       const onPointerMove = (e: PointerEvent) => {
-        const target = e.target as HTMLElement | null;
-        const rectEl = target?.closest ? (target.closest('rect') as SVGRectElement | null) : null;
-        if (rectEl && rectEl.hasAttribute('data-date')) {
+        const resolved = resolveCellFromEvent(e);
+        if (resolved && resolved.el) {
+          const rectEl = resolved.el as HTMLElement;
           const date = rectEl.getAttribute('data-date') || '';
           const count = rectEl.getAttribute('data-count') || '0';
           const title = rectEl.getAttribute('data-title') || `${count} contributions on ${date}`;
           const bounds = container!.getBoundingClientRect();
-          const anchorX = (e as PointerEvent).clientX - bounds.left;
-          const anchorY = (e as PointerEvent).clientY - bounds.top;
-          if (debug) console.debug('[heatmap-debug] pointermove rect', { date, count, title, anchorX, anchorY });
+          const anchorX = e.clientX - bounds.left;
+          const anchorY = e.clientY - bounds.top;
+          pushLog({ event: 'pointermove', method: resolved.method, date, count, anchorX, anchorY });
+
           // initial guess for left/top; will be adjusted to avoid overflow
           setTooltip({ visible: true, x: anchorX, y: anchorY, left: anchorX + 12, top: anchorY + 12, text: title });
-          // Ensure measurement runs after tooltip has been painted: double RAF
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            if (debug) {
-              const tt = tooltipRef.current;
-              console.debug('[heatmap-debug] after RAF tooltip exists?', !!tt, 'offsets', tt?.offsetWidth, tt?.offsetHeight);
-            }
-            adjust();
-          }));
+
+          // Measurement + adjust with robust retries; pass anchor to adjust so it can retry using it
+          requestAnimationFrame(() => requestAnimationFrame(() => adjust({ retries: 0, anchorX, anchorY })));
         } else {
-          if (debug) console.debug('[heatmap-debug] pointermove - no rect found, hiding');
+          pushLog({ event: 'pointermove-miss', clientX: e.clientX, clientY: e.clientY });
           setTooltip((t) => t.visible ? { ...t, visible: false } : t);
         }
       };
 
-  const onPointerOver = (e: PointerEvent) => { if (debug) console.debug('[heatmap-debug] pointerover'); onPointerMove(e); };
-  const onPointerOut = () => { if (debug) console.debug('[heatmap-debug] pointerout'); setTooltip((t) => t.visible ? { ...t, visible: false } : t); };
+      const onPointerOver = (e: PointerEvent) => { pushLog({ event: 'pointerover' }); onPointerMove(e); };
+      const onPointerOut = () => { pushLog({ event: 'pointerout' }); setTooltip((t) => t.visible ? { ...t, visible: false } : t); };
 
       container.addEventListener('pointermove', onPointerMove);
       container.addEventListener('pointerover', onPointerOver);
       container.addEventListener('pointerout', onPointerOut);
-      window.addEventListener('resize', adjust);
+      const onResize = () => adjust();
+      window.addEventListener('resize', onResize);
+
+  // As a robust fallback: attach per-rect listeners directly to each [data-date] element
+      // This avoids delegation misses caused by SVG nesting or pointer event differences.
+      const attachedRects: Array<{ el: Element; handlers: { move: (e: PointerEvent) => void; enter: (e: PointerEvent) => void; leave: (e: PointerEvent) => void } }> = [];
+
+      const attachPerRectListeners = (attempt = 0) => {
+        try {
+          const nodes = container!.querySelectorAll('[data-date]');
+          if (!nodes || nodes.length === 0) {
+            pushLog({ event: 'attach-rects-miss', attempt });
+            if (attempt < 5) setTimeout(() => attachPerRectListeners(attempt + 1), 100 + attempt * 50);
+            return;
+          }
+          pushLog({ event: 'attach-rects', count: nodes.length });
+          try { (window as any).__heatmapInitInfo = (window as any).__heatmapInitInfo || {}; (window as any).__heatmapInitInfo.lastAttach = Date.now(); (window as any).__heatmapInitInfo.lastCount = nodes.length; } catch (e) {}
+          nodes.forEach((n) => {
+            const move = (ev: Event) => onPointerMove(ev as unknown as PointerEvent);
+            const enter = (ev: Event) => onPointerOver(ev as unknown as PointerEvent);
+            const leave = () => onPointerOut();
+            n.addEventListener('pointermove', move as EventListener);
+            n.addEventListener('pointerenter', enter as EventListener);
+            n.addEventListener('pointerleave', leave as EventListener);
+            attachedRects.push({ el: n, handlers: { move: move as any, enter: enter as any, leave: leave as any } });
+          });
+        } catch (err) {
+          pushLog({ event: 'attach-rects-error', error: String(err) });
+        }
+      };
+
+      // Initial attempt to attach per-rect listeners
+      attachPerRectListeners();
+
+      // Observe mutations within the heatmap container; the SVG may be re-rendered after initial mount.
+      let mo: MutationObserver | null = null;
+      try {
+        if (container && typeof MutationObserver !== 'undefined') {
+          mo = new MutationObserver((mutations) => {
+            pushLog({ event: 'mutation-observed', count: mutations.length });
+            // re-attach in case nodes were replaced
+            attachPerRectListeners();
+          });
+          mo.observe(container, { childList: true, subtree: true });
+        }
+      } catch (err) {
+        pushLog({ event: 'mutation-observer-error', error: String(err) });
+      }
 
       // clean up on unmount
       return () => {
         try { container?.removeEventListener('pointermove', onPointerMove); } catch (e) {}
         try { container?.removeEventListener('pointerover', onPointerOver); } catch (e) {}
         try { container?.removeEventListener('pointerout', onPointerOut); } catch (e) {}
-        try { window.removeEventListener('resize', adjust); } catch (e) {}
+        try { window.removeEventListener('resize', onResize); } catch (e) {}
+        try {
+          // remove per-rect listeners if attached
+          // attachedRects is closed-over; safe to iterate
+          attachedRects.forEach(({ el, handlers }) => {
+            try { el.removeEventListener('pointermove', handlers.move as EventListener); } catch (e) {}
+            try { el.removeEventListener('pointerenter', handlers.enter as EventListener); } catch (e) {}
+            try { el.removeEventListener('pointerleave', handlers.leave as EventListener); } catch (e) {}
+          });
+        } catch (e) {}
+        try { if (mo) mo.disconnect(); } catch (e) {}
       };
     }
 
@@ -364,10 +513,63 @@ const CodingDashboard = () => {
     }
   }, []);
 
+  // Include GeeksforGeeks total into the LeetCode difficulty breakdown.
+  // NOTE: GfG only provides a total problem count, not difficulty breakdown. We distribute
+  // the GfG count proportionally across Easy/Medium/Hard according to the current
+  // LeetCode breakdown. If the LeetCode breakdown is all zeros, distribute evenly.
+  // This is an approximation; if you'd prefer a different rule (all to Easy, or a
+  // separate "Other" bucket), tell me and I can change it.
+  const _leetEasy = leetcodeStats.easySolved || 0;
+  const _leetMed = leetcodeStats.mediumSolved || 0;
+  const _leetHard = leetcodeStats.hardSolved || 0;
+  let addEasy = 0;
+  let addMed = 0;
+  let addHard = 0;
+  const totalLeetBreakdown = _leetEasy + _leetMed + _leetHard;
+  if (gfgCount > 0) {
+    if (totalLeetBreakdown > 0) {
+      const pEasy = _leetEasy / totalLeetBreakdown;
+      const pMed = _leetMed / totalLeetBreakdown;
+      const pHard = _leetHard / totalLeetBreakdown;
+      addEasy = Math.floor(pEasy * gfgCount);
+      addMed = Math.floor(pMed * gfgCount);
+      addHard = Math.floor(pHard * gfgCount);
+      // distribute any rounding remainder to the largest proportions
+      let rem = gfgCount - (addEasy + addMed + addHard);
+      const order = [
+        { key: 'easy', prop: pEasy },
+        { key: 'med', prop: pMed },
+        { key: 'hard', prop: pHard },
+      ].sort((a, b) => b.prop - a.prop);
+      let idx = 0;
+      while (rem > 0) {
+        const k = order[idx % 3].key;
+        if (k === 'easy') addEasy++;
+        else if (k === 'med') addMed++;
+        else addHard++;
+        rem--;
+        idx++;
+      }
+    } else {
+      // No LeetCode breakdown available; distribute evenly
+      addEasy = Math.floor(gfgCount / 3);
+      addMed = Math.floor(gfgCount / 3);
+      addHard = Math.floor(gfgCount / 3);
+      let rem = gfgCount - (addEasy + addMed + addHard);
+      let ii = 0;
+      while (rem > 0) {
+        if (ii % 3 === 0) addEasy++;
+        else if (ii % 3 === 1) addMed++;
+        else addHard++;
+        rem--; ii++;
+      }
+    }
+  }
+
   const problemData = [
-    { name: 'Easy', value: leetcodeStats.easySolved, color: 'hsl(var(--chart-1))' },
-    { name: 'Medium', value: leetcodeStats.mediumSolved, color: 'hsl(var(--chart-2))' },
-    { name: 'Hard', value: leetcodeStats.hardSolved, color: 'hsl(var(--chart-3))' },
+    { name: 'Easy', value: _leetEasy + addEasy, color: 'hsl(var(--chart-1))' },
+    { name: 'Medium', value: _leetMed + addMed, color: 'hsl(var(--chart-2))' },
+    { name: 'Hard', value: _leetHard + addHard, color: 'hsl(var(--chart-3))' },
   ];
 
   // Preferred slice colors (LeetCode-like) used as fallbacks if entry.color isn't set
@@ -417,7 +619,7 @@ const CodingDashboard = () => {
 
   const statCards = [
     {
-      title: "Total Solved",
+      title: "Total Questions Solved",
       value: totalSolvedDisplayed,
       icon: Code2,
       color: "text-blue-500 dark:text-blue-400",
@@ -429,9 +631,10 @@ const CodingDashboard = () => {
       color: "text-yellow-500 dark:text-yellow-400",
     },
     {
-      title: "Streak Days",
-      value: leetcodeStats.contributionPoints,
-      icon: Flame,
+      title: "Contest Badge",
+      // image path served from /public (place your badge at public/badge-knight.png)
+      value: 'Knight',
+      img: '/badge-knight.png',
       color: "text-orange-500 dark:text-orange-400",
     },
     {
@@ -475,11 +678,16 @@ const CodingDashboard = () => {
             <Card key={index} className="border-muted/40 hover:border-primary/50 transition-transform duration-300 hover:shadow-2xl transform hover:-translate-y-2 group">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                    <h3 className="text-3xl font-bold">{stat.value}</h3>
-                  </div>
-                  <stat.icon className={`w-8 h-8 ${stat.color} transition-transform duration-300 group-hover:scale-110`} />
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
+                            <h3 className="text-3xl font-bold">{stat.value}</h3>
+                          </div>
+                          {/* show image if provided, otherwise render icon component */}
+                          {stat.img ? (
+                            <img src={stat.img} alt={stat.title} className="w-13 h-12 rounded-md object-contain shadow-sm" />
+                          ) : (
+                            <stat.icon className={`w-8 h-8 ${stat.color} transition-transform duration-300 group-hover:scale-110`} />
+                          )}
                 </div>
               </CardContent>
             </Card>
@@ -557,12 +765,14 @@ const CodingDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart data={ratingData}>
-                  <XAxis 
-                    dataKey="date" 
+              <ResponsiveContainer width="95%" height={200}>
+                <LineChart data={ratingData} margin={{ left: 8, right: 28, top: 8, bottom: 8 }}>
+                  <XAxis
+                    dataKey="date"
                     stroke="hsl(var(--muted-foreground))"
                     fontSize={12}
+                    interval={0} /* show every tick (so months up to Oct are visible) */
+                    padding={{ right: 20 }}
                   />
                   <YAxis 
                     stroke="hsl(var(--muted-foreground))"
