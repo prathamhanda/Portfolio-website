@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import TechStackScroller from "@/components/TechStackScroller";
@@ -10,6 +11,22 @@ import Footer from "@/components/Footer";
 import MobileFAB from "@/components/MobileFAB";
 
 const Index = () => {
+  useEffect(() => {
+    // Handle hash navigation when component mounts
+    const hash = window.location.hash;
+    if (hash) {
+      const elementId = hash.substring(1); // Remove the # symbol
+      setTimeout(() => {
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-background transition-colors duration-300 relative">
       {/* Grid overlay */}

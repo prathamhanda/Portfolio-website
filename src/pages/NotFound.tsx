@@ -1,4 +1,4 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useFastFloat } from "@/hooks/useFastFloat";
 import { ArrowRight, Home } from "lucide-react";
@@ -6,12 +6,27 @@ import { Button } from "@/components/ui/button";
 
 const NotFound = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
   const blobA = useRef<HTMLDivElement | null>(null);
   const blobB = useRef<HTMLDivElement | null>(null);
   const blobC = useRef<HTMLDivElement | null>(null);
   const blobD = useRef<HTMLDivElement | null>(null);
   const { animate } = useFastFloat({ amplitude: 18, period: 900 });
+
+  const handleExploreProjects = () => {
+    navigate('/');
+    // Use setTimeout to ensure navigation completes first
+    setTimeout(() => {
+      const projectsSection = document.getElementById('projects');
+      if (projectsSection) {
+        projectsSection.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 100);
+  };
 
   useEffect(() => {
     const mq = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(max-width: 767px)') : null;
@@ -95,15 +110,14 @@ const NotFound = () => {
               <ArrowRight className="w-5 h-5" />
             </Button>
           </Link>
-          <Link to="/#projects">
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="rounded-full gap-2 px-8 py-6 text-base font-medium border-2 border-black dark:border-white hover:bg-black hover:text-white hover:border-white dark:hover:bg-white dark:hover:text-black"
-            >
-              Explore Projects
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            onClick={handleExploreProjects}
+            className="rounded-full gap-2 px-8 py-6 text-base font-medium border-2 border-black dark:border-white hover:bg-black hover:text-white hover:border-white dark:hover:bg-white dark:hover:text-black"
+          >
+            Explore Projects
+          </Button>
         </div>
       </div>
 
