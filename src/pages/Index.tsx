@@ -5,6 +5,7 @@ import TechStackScroller from "@/components/TechStackScroller";
 import About from "@/components/About";
 import Timeline from "../components/Timeline";
 import Projects from "@/components/Projects";
+import CodingDashboard from "@/components/CodingDashboard";
 import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -34,12 +35,14 @@ const Index = () => {
 
       {/* Main content with higher z-index */}
       <div className="relative z-10">
-        <Navbar />
+  <Navbar />
         <Hero />
         <TechStackScroller />
         <About />
         <Timeline />
         <Projects />
+  {/* Coding Dashboard - optional section showing coding stats */}
+  <CodingDashboard />
         <FAQ />
         <Contact />
         <Footer />

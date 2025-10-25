@@ -71,9 +71,18 @@ const Projects = () => {
           {filteredProjects.map((project, index) => (
             <div
               key={project.id}
-              className={`group glass-card rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ${
+              onClick={() => openProject(project)}
+              className={`group glass-card rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer ${
                 projectsVisible ? `scroll-animate scroll-animate-delay-${Math.min(index % 3 + 1, 3)}` : ''
               }`}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openProject(project);
+                }
+              }}
             >
               <div className="relative overflow-hidden">
                 <span className="absolute top-4 left-4 z-10 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-3 py-1 rounded-full text-xs font-medium border border-gray-200 dark:border-gray-700">
@@ -120,7 +129,10 @@ const Projects = () => {
                   </div>
 
                   <button
-                    onClick={() => openProject(project)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openProject(project);
+                    }}
                     className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:gap-3 transition-all"
                   >
                     View Project
