@@ -576,6 +576,45 @@ const CodingDashboard = () => {
   const sliceColors = ['#28a745', '#f59e0b', '#ef4444'];
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  // Responsive chart ticks: reduce number of X axis ticks and rotate labels on small screens
+  const [chartMaxTicks, setChartMaxTicks] = useState<number>(8);
+  useEffect(() => {
+    const update = () => {
+      try {
+        const w = typeof window !== 'undefined' ? window.innerWidth : 1024;
+        if (w < 640) setChartMaxTicks(4); // small screens
+        else if (w < 1024) setChartMaxTicks(6); // tablet
+        else setChartMaxTicks(8); // desktop
+      } catch (e) {
+        setChartMaxTicks(8);
+      }
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  // Custom X axis tick renderer so we can rotate labels on small screens
+  const renderXAxisTick = (props: any) => {
+    const { x, y, payload } = props || {};
+    const isSmall = chartMaxTicks <= 4;
+    const label = payload?.value || '';
+    const dy = 16; // nudge label down
+    if (isSmall) {
+      // rotate around the label position so it doesn't overlap
+      return (
+        <text x={x} y={y + dy} transform={`rotate(-30 ${x} ${y + dy})`} textAnchor="end" fontSize={10} fill="hsl(var(--muted-foreground))">
+          {label}
+        </text>
+      );
+    }
+    return (
+      <text x={x} y={y + dy} textAnchor="middle" fontSize={12} fill="hsl(var(--muted-foreground))">
+        {label}
+      </text>
+    );
+  };
+
   const renderActiveShape = (props: any) => {
     const {
       cx,
@@ -765,15 +804,26 @@ const CodingDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="95%" height={200}>
-                <LineChart data={ratingData} margin={{ left: 8, right: 28, top: 8, bottom: 8 }}>
-                  <XAxis
-                    dataKey="date"
-                    stroke="hsl(var(--muted-foreground))"
-                    fontSize={12}
-                    interval={0} /* show every tick (so months up to Oct are visible) */
-                    padding={{ right: 20 }}
-                  />
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={ratingData} margin={{ left: 8, right: 32, top: 8, bottom: 24 }}>
+                  {/* compute an interval to avoid overcrowding on small screens */}
+                  {
+                    (() => {
+                      const len = (ratingData || []).length;
+                      const maxTicks = chartMaxTicks || 6;
+                      const interval = len > 0 ? Math.max(0, Math.floor((len - 1) / maxTicks)) : 0;
+                      const isSmall = chartMaxTicks <= 4;
+                      return (
+                        <XAxis
+                          dataKey="date"
+                          stroke="hsl(var(--muted-foreground))"
+                          interval={interval}
+                          padding={{ right: 20 }}
+                          tick={renderXAxisTick}
+                        />
+                      );
+                    })()
+                  }
                   <YAxis 
                     stroke="hsl(var(--muted-foreground))"
                     fontSize={12}

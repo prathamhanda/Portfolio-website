@@ -16,6 +16,14 @@ const Projects = () => {
       ? projects
       : projects.filter((p) => p.category === filter);
 
+  // Display featured projects first, then newest entries (preserve array order otherwise)
+  const displayedProjects = filteredProjects.slice().sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    // fallback: keep original order but show newer items (later in array) first
+    return projects.indexOf(b) - projects.indexOf(a);
+  });
+
   const openProject = (project: any) => {
     setSelectedProject(project);
   };
@@ -54,6 +62,16 @@ const Projects = () => {
               Web
             </button>
             <button
+              onClick={() => setFilter("tools-extensions")}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+                filter === "tools-extensions"
+                  ? "bg-foreground text-background"
+                  : "glass-card hover:bg-muted/50"
+              }`}
+            >
+              Tools
+            </button>
+            <button
               onClick={() => setFilter("ai-ml")}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === "ai-ml"
@@ -68,7 +86,7 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
+          {displayedProjects.map((project, index) => (
             <div
               key={project.id}
               onClick={() => openProject(project)}
