@@ -41,6 +41,13 @@ const CodingDashboard = () => {
   const [ghError, setGhError] = useState<string | null>(null);
   const [retrying, setRetrying] = useState(false);
 
+  // Platform usernames (allow overriding via Vite env variables)
+  const LEETCODE_USER = (import.meta as any).env?.VITE_LEETCODE_USERNAME || 'prathamhanda';
+  const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
+  const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'prathamh';
+  const CODECHEF_USER = (import.meta as any).env?.VITE_CODECHEF_USERNAME || 'prathamhanda';
+  const CODEFORCES_USER = (import.meta as any).env?.VITE_CODEFORCES_USERNAME || 'prathamhanda10';
+
   useEffect(() => { 
     // Allow configuring usernames through Vite env variables:
     // VITE_LEETCODE_USERNAME and VITE_GITHUB_USERNAME
@@ -615,6 +622,55 @@ const CodingDashboard = () => {
     );
   };
 
+  // Platform icon renderer: prefer PNGs placed in /public/icons/<slug>.png.
+  // Use a safe image onError handler and a tiny SVG data-URL fallback so we don't rely on component state here.
+  const PlatformIcon = ({ name, className }: { name: string; className?: string }) => {
+    const slug = (name || '').toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+    const src = `/icons/${slug}.png`;
+    const placeholder = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" rx="4" fill="%23e5e7eb"/></svg>';
+    return (
+      // eslint-disable-next-line jsx-a11y/alt-text
+      <img
+        src={src}
+        onError={(e) => {
+          try {
+            const img = e.currentTarget as HTMLImageElement;
+            img.onerror = null;
+            img.src = placeholder;
+          } catch (_) {
+            // ignore
+          }
+        }}
+        className={className}
+        style={{ width: 20, height: 20, objectFit: 'contain' }}
+      />
+    );
+  };
+
+  const PlatformLink = ({ name, url, user }: { name: string; url: string; user?: string }) => {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={`${name}${user ? ` — ${user}` : ''}`}
+        className="group inline-flex items-center gap-3 bg-card border border-border/60 hover:border-primary/60 hover:shadow-xl transition transform hover:-translate-y-1 px-3 py-2 rounded-lg"
+      >
+        <div className="flex items-center justify-center w-9 h-9 rounded-md bg-gradient-to-br from-muted/40 to-muted/10 ring-1 ring-transparent group-hover:ring-primary/30">
+          {name.toLowerCase() === 'github' ? (
+            <GithubIcon className="w-5 h-5" />
+          ) : (
+            <PlatformIcon name={name} className="w-5 h-5" />
+          )}
+        </div>
+        <div className="flex flex-col leading-tight">
+          <span className="text-sm font-medium">{name}</span>
+          {user && <span className="text-xs text-muted-foreground">{user}</span>}
+        </div>
+      </a>
+    );
+  };
+
   const renderActiveShape = (props: any) => {
     const {
       cx,
@@ -709,6 +765,14 @@ const CodingDashboard = () => {
           <p className="text-muted-foreground text-lg">
             Daily consistency and continuous learning
           </p>
+          {/* Platform badges (stylish links) */}
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <PlatformLink name="GitHub" url={`https://github.com/${GITHUB_USER}`} user={GITHUB_USER} />
+            <PlatformLink name="LeetCode" url={`https://leetcode.com/${LEETCODE_USER}`} user={LEETCODE_USER} />
+            <PlatformLink name="GeeksforGeeks" url={`https://www.geeksforgeeks.org/user/${GFG_USER}`} user={GFG_USER} />
+            <PlatformLink name="CodeChef" url={`https://www.codechef.com/users/${CODECHEF_USER}`} user={CODECHEF_USER} />
+            <PlatformLink name="CodeForces" url={`https://codeforces.com/profile/${CODEFORCES_USER}`} user={CODEFORCES_USER} />
+          </div>
         </div>
 
         {/* Stats Grid */}
