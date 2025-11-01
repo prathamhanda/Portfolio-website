@@ -52,18 +52,52 @@ interface SheetContentProps
     VariantProps<typeof sheetVariants> {}
 
 const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Content>, SheetContentProps>(
-  ({ side = "right", className, children, ...props }, ref) => (
-    <SheetPortal>
-      <SheetOverlay />
-      <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
-        {children}
-        <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
-      </SheetPrimitive.Content>
-    </SheetPortal>
-  ),
+  ({ side = "right", className, children, ...props }, ref) => {
+    // local ref to the content node so we can detect animation lifecycle and
+    // toggle a short-lived class on <body> to reduce expensive visual effects
+    // (backdrop-filter, large box-shadow) while the sheet is animating in.
+    const contentRef = React.useRef<HTMLElement | null>(null);
+
+    const setRefs = (node: any) => {
+      contentRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) (ref as any).current = node;
+    };
+
+    const onAnimStart = (e: React.AnimationEvent) => {
+      try {
+        document.body.classList.add('sheet-animating');
+      } catch (err) {}
+    };
+
+    const onAnimEnd = (e: React.AnimationEvent) => {
+      try {
+        // remove after a short timeout to allow any microtasks to finish
+        window.setTimeout(() => document.body.classList.remove('sheet-animating'), 60);
+      } catch (err) {}
+    };
+
+    return (
+      <SheetPortal>
+        <SheetOverlay />
+        <SheetPrimitive.Content
+          // expose a simple data attribute so CSS can scope to the sheet content
+          data-sheet-content
+          ref={setRefs}
+          onAnimationStart={onAnimStart}
+          onAnimationEnd={onAnimEnd}
+          className={cn(sheetVariants({ side }), className)}
+          {...props}
+        >
+          {children}
+          <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        </SheetPrimitive.Content>
+      </SheetPortal>
+    );
+  },
 );
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 

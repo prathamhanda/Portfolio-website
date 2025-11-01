@@ -277,3 +277,68 @@ All colors MUST be HSL.
 
 
 }
+
+/* Performance override for mobile bottom-sheet entrance
+   Use a GPU-accelerated translate3d animation, set transform-origin to center bottom
+   and hint the browser to only animate transform/opacity to avoid layout thrashing.
+*/
+@layer utilities {
+  @keyframes sheet-slide-up-fast {
+    from {
+      transform: translate3d(0, 100%, 0);
+      opacity: 0;
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  /* Target both the plugin class and common Radix/Shadcn data-state classes */
+  .slide-in-from-bottom-full,
+  [data-state="open"].slide-in-from-bottom,
+  [data-state="open"]\:slide-in-from-bottom {
+    transform-origin: center bottom !important;
+    backface-visibility: hidden !important;
+    will-change: transform, opacity !important;
+    animation-name: sheet-slide-up-fast !important;
+    animation-duration: 260ms !important;
+    animation-timing-function: cubic-bezier(.2, .8, .2, 1) !important;
+    animation-fill-mode: both !important;
+  }
+
+  /* Make overlay fade less expensive during entrance by only animating opacity */
+  .fixed.inset-0.z-\[100\].bg-black\/80,
+  .fixed.inset-0.z-50.bg-black\/80 {
+    will-change: opacity !important;
+    backface-visibility: hidden !important;
+  }
+}
+
+/* While sheet is animating we reduce expensive visual effects to avoid jank */
+body.sheet-animating {
+  /* hint to the browser */
+  will-change: transform, opacity !important;
+}
+
+/* reduce overlay effects while animating (remove backdrop-filter/blurs) */
+body.sheet-animating .fixed.inset-0.bg-black\/80,
+body.sheet-animating .fixed.inset-0.z-50.bg-black\/80 {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  opacity: 0.85 !important; /* slightly lower to avoid repaint spikes */
+}
+
+/* reduce box-shadow and force compositing for the sheet content while animating */
+body.sheet-animating [data-sheet-content] {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+  transition: box-shadow 160ms linear !important;
+  transform: translateZ(0) !important;
+  will-change: transform, opacity !important;
+  contain: paint !important;
+}
+
+/* restore full shadow after animation (small safe default) */
+[data-sheet-content] {
+  -webkit-transform: translateZ(0);
+}
