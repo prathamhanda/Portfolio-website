@@ -624,9 +624,10 @@ const CodingDashboard = () => {
 
   // Platform icon renderer: prefer PNGs placed in /public/icons/<slug>.png.
   // Use a safe image onError handler and a tiny SVG data-URL fallback so we don't rely on component state here.
-  const PlatformIcon = ({ name, className }: { name: string; className?: string }) => {
+  const PlatformIcon = ({ name, className, logo }: { name: string; className?: string; logo?: string }) => {
+    // If a logo filename or path is provided, prefer it. Otherwise derive a slug-based png path.
     const slug = (name || '').toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
-    const src = `/icons/${slug}.png`;
+    const src = logo ? (logo.startsWith('/') ? logo : `/icons/${logo}`) : `/icons/${slug}.png`;
     const placeholder = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" rx="4" fill="%23e5e7eb"/></svg>';
     return (
       // eslint-disable-next-line jsx-a11y/alt-text
@@ -647,7 +648,7 @@ const CodingDashboard = () => {
     );
   };
 
-  const PlatformLink = ({ name, url, user }: { name: string; url: string; user?: string }) => {
+  const PlatformLink = ({ name, url, user, logo }: { name: string; url: string; user?: string; logo?: string }) => {
     return (
       <a
         href={url}
@@ -660,7 +661,7 @@ const CodingDashboard = () => {
           {name.toLowerCase() === 'github' ? (
             <GithubIcon className="w-5 h-5" />
           ) : (
-            <PlatformIcon name={name} className="w-5 h-5" />
+            <PlatformIcon name={name} logo={logo} className="w-5 h-5" />
           )}
         </div>
         <div className="flex flex-col leading-tight">
@@ -767,11 +768,11 @@ const CodingDashboard = () => {
           </p>
           {/* Platform badges (stylish links) */}
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <PlatformLink name="GitHub" url={`https://github.com/${GITHUB_USER}`} user={GITHUB_USER} />
-            <PlatformLink name="LeetCode" url={`https://leetcode.com/${LEETCODE_USER}`} user={LEETCODE_USER} />
-            <PlatformLink name="GeeksforGeeks" url={`https://www.geeksforgeeks.org/user/${GFG_USER}`} user={GFG_USER} />
-            <PlatformLink name="CodeChef" url={`https://www.codechef.com/users/${CODECHEF_USER}`} user={CODECHEF_USER} />
-            <PlatformLink name="CodeForces" url={`https://codeforces.com/profile/${CODEFORCES_USER}`} user={CODEFORCES_USER} />
+          <PlatformLink name="LeetCode" url={`https://leetcode.com/${LEETCODE_USER}`} user={LEETCODE_USER} logo={"LeetCode_logo_black.png"} />
+          <PlatformLink name="GeeksforGeeks" url={`https://www.geeksforgeeks.org/user/${GFG_USER}`} user={GFG_USER} logo={"GeeksForGeeks_logo.png"} />
+          <PlatformLink name="CodeChef" url={`https://www.codechef.com/users/${CODECHEF_USER}`} user={CODECHEF_USER} logo={"codechef.png"} />
+          <PlatformLink name="CodeForces" url={`https://codeforces.com/profile/${CODEFORCES_USER}`} user={CODEFORCES_USER} logo={"codeforces.webp"} />
+          <PlatformLink name="GitHub" url={`https://github.com/${GITHUB_USER}`} user={GITHUB_USER} />
           </div>
         </div>
 
