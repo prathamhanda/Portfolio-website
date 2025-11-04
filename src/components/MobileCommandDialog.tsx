@@ -75,7 +75,7 @@ const MobileCommandDialog: React.FC<MobileCommandDialogProps> = ({ open, onOpenC
           </div>
 
           <div className="relative">
-            <Command className="w-full">
+            <Command className="w-full" value="">
               {children}
             </Command>
 

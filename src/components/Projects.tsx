@@ -62,9 +62,9 @@ const Projects = () => {
               Web
             </button>
             <button
-              onClick={() => setFilter("tools-extensions")}
+              onClick={() => setFilter("tools")}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
-                filter === "tools-extensions"
+                filter === "tools"
                   ? "bg-foreground text-background"
                   : "glass-card hover:bg-muted/50"
               }`}

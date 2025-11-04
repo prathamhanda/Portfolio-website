@@ -12,7 +12,7 @@ interface LeetCodeStats {
   hardSolved: number;
   ranking: number;
   contributionPoints: number;
-  reputation: number;
+  ContestRating: number;
 }
 
 interface ContributionDay {
@@ -28,7 +28,7 @@ const CodingDashboard = () => {
     hardSolved: 0,
     ranking: 0,
     contributionPoints: 0,
-    reputation: 0,
+    ContestRating: 1871,
   });
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const [gfgCount, setGfgCount] = useState<number>(0);
@@ -70,7 +70,7 @@ const CodingDashboard = () => {
           hardSolved: data.hardSolved || 0,
           ranking: data.ranking || 0,
           contributionPoints: data.contributionPoints || 0,
-          reputation: data.reputation || 0,
+          ContestRating: 1871 ,
         });
 
         // Try to fetch contest rating history from LeetCode GraphQL (best-effort).
@@ -734,8 +734,8 @@ const CodingDashboard = () => {
       color: "text-orange-500 dark:text-orange-400",
     },
     {
-      title: "Reputation",
-      value: leetcodeStats.reputation,
+      title: "Contest Rating",
+      value: leetcodeStats.ContestRating,
       icon: TrendingUp,
       color: "text-green-500 dark:text-green-400",
     },
