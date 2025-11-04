@@ -40,47 +40,50 @@ const Projects = () => {
           <h2 className="text-5xl font-bold mb-8">Selected work</h2>
 
           {/* Filter Tabs */}
-          <div className="flex gap-2">
+          <div className="flex justify-start overflow-x-auto pb-2 sm:pb-0">
+            <div className="inline-flex items-center bg-gray-100/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-full p-1.5 border border-gray-200/60 dark:border-gray-700/30 shadow-sm min-w-max">
             <button
               onClick={() => setFilter("all")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                 filter === "all"
-                  ? "bg-foreground text-background"
-                  : "glass-card hover:bg-muted/50"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/60 dark:hover:bg-gray-700/50"
               }`}
             >
               All
             </button>
             <button
               onClick={() => setFilter("web")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                 filter === "web"
-                  ? "bg-foreground text-background"
-                  : "glass-card hover:bg-muted/50"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/60 dark:hover:bg-gray-700/50"
               }`}
             >
               Web
             </button>
             <button
               onClick={() => setFilter("tools")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                 filter === "tools"
-                  ? "bg-foreground text-background"
-                  : "glass-card hover:bg-muted/50"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/60 dark:hover:bg-gray-700/50"
               }`}
             >
               Tools
             </button>
             <button
               onClick={() => setFilter("ai-ml")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                 filter === "ai-ml"
-                  ? "bg-foreground text-background"
-                  : "glass-card hover:bg-muted/50"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/60 dark:hover:bg-gray-700/50"
               }`}
             >
               AI/ML
             </button>
+           
+            </div>
           </div>
         </div>
 
