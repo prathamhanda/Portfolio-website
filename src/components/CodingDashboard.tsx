@@ -711,7 +711,7 @@ const CodingDashboard = () => {
     return null;
   };
 
-  const totalSolvedDisplayed = leetcodeStats.totalSolved + gfgCount;
+  const totalSolvedDisplayed = leetcodeStats.totalSolved + gfgCount + 550;
 
   const statCards = [
     {
