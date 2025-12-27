@@ -1,6 +1,6 @@
-# 🚀 Bespoke Clone Factory
+# 🚀 Modern Developer Portfolio
 
-> A modern, AI-powered portfolio website showcasing full-stack development and AI engineering expertise with cutting-edge technologies and performance optimizations.
+> A cutting-edge, AI-powered portfolio website built from the ground up to showcase full-stack development and AI engineering expertise with modern technologies and exceptional performance
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
@@ -14,51 +14,43 @@
 
 ---
 
-## 🎯 Problem Statement
+## 🎯 Project Overview
 
-Traditional portfolio websites suffer from several critical limitations:
-
-- **Static Information**: Fixed content that doesn't adapt to visitor queries
-- **Poor Discoverability**: Difficult to find specific information about skills, projects, or experience
-- **Limited Interactivity**: Basic scrolling interfaces without intelligent search capabilities
-- **Performance Issues**: Heavy frameworks leading to slow load times and poor mobile experience
-- **Accessibility Gaps**: Poor keyboard navigation and screen reader support
-
-**Solution**: A next-generation portfolio that combines AI-powered search, performance optimization, and accessibility-first design to create an engaging, discoverable, and fast user experience.
+This portfolio represents a complete reimagination of what a developer's online presence can be. Built entirely from scratch, it combines intelligent AI search, real-time data integration, and performance-first architecture to create an experience that's both beautiful and functional.
 
 ---
 
-## ✨ Unique Selling Points (USPs)
+## ✨ Exceptional Features
 
 ### 🤖 **AI-Powered Command Palette**
-- **Google Gemini 2.5 Flash** integration for natural language queries
-- Intelligent fallback system with contextual responses
-- Real-time search across projects, skills, and experience
-- **Keyboard shortcuts** (Ctrl+K) for power users
+- **Google Gemini 2.5 Flash** integration for intelligent, natural language queries
+- Context-aware search with intelligent fallback responses
+- Real-time exploration of projects, skills, and experience
+- **Lightning-fast keyboard shortcuts** (Ctrl+K) for efficient navigation
 
-### 🎨 **Performance-Optimized Animations**
-- Custom **RequestAnimationFrame** animations running at 60fps
-- **Intersection Observer** based scroll animations
-- Mobile-adaptive animation system with reduced motion support
-- Zero layout shift during animations
+### 🎨 **Buttery-Smooth Performance**
+- Custom **RequestAnimationFrame** animations optimized for 60fps
+- **Intersection Observer** based scroll effects with zero jank
+- Smart mobile-adaptive system with automatic reduced motion support
+- Guaranteed zero layout shift during page interactions
 
-### 📊 **Real-Time Coding Dashboard**
-- Multi-platform integration: **LeetCode, GitHub, GeeksforGeeks, CodeChef**
-- Interactive contribution heatmap with hover tooltips
-- **Serverless API proxies** to bypass CORS restrictions
-- Intelligent caching with localStorage and TTL
+### 📊 **Live Coding Dashboard**
+- Real-time integration with **LeetCode, GitHub, GeeksforGeeks, CodeChef, and Codeforces**
+- Interactive contribution heatmap with intelligent hover tooltips
+- **Custom serverless API proxies** to handle CORS and rate limiting
+- Smart caching layer with localStorage and intelligent TTL management
 
-### 🎪 **Advanced User Experience**
-- **Glass morphism** design with dynamic theming
-- Progressive enhancement with graceful degradation
-- **Mobile-first responsive design** with touch optimizations
-- Comprehensive accessibility with keyboard navigation
+### 🎪 **Premium User Experience**
+- Modern **glass morphism** design with seamless dark/light theme switching
+- Progressive enhancement philosophy ensuring functionality on any device
+- **Mobile-first responsive design** with touch gesture optimizations
+- Full accessibility compliance with comprehensive keyboard navigation
 
-### ⚡ **Lightning-Fast Performance**
-- **Vite** for instant dev server and optimized builds
-- Dynamic imports and code splitting
-- **99+ Lighthouse score** across all metrics
-- Edge-deployed with global CDN
+### ⚡ **Blazing-Fast Load Times**
+- **Vite** build system for instant dev server and optimized production bundles
+- Strategic dynamic imports and intelligent code splitting
+- Consistent **99+ Lighthouse scores** across all performance metrics
+- Global CDN deployment for sub-second load times worldwide
 
 ---
 
@@ -151,8 +143,8 @@ Traditional portfolio websites suffer from several critical limitations:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/prathamhanda/bespoke-clone-factory.git
-   cd bespoke-clone-factory
+   git clone https://github.com/prathamhanda/Portfolio-website.git
+   cd Portfolio-website
    ```
 
 2. **Install dependencies**
@@ -171,12 +163,6 @@ Traditional portfolio websites suffer from several critical limitations:
    # AI Integration
    VITE_GEMINI_API_KEY=your_gemini_api_key_here
    
-   # Platform Usernames (Optional - defaults provided)
-   VITE_GITHUB_USERNAME=your_github_username
-   VITE_LEETCODE_USERNAME=your_leetcode_username
-   VITE_GFG_USERNAME=your_geeksforgeeks_username
-   VITE_CODECHEF_USERNAME=your_codechef_username
-   VITE_CODEFORCES_USERNAME=your_codeforces_username
    ```
 
 4. **Start the development server**
@@ -297,11 +283,13 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🙏 Acknowledgments
 
-- **ShadcN** for the excellent UI component library
-- **Vercel** for seamless deployment and analytics
-- **Radix UI** for accessible primitives
-- **Google** for Gemini AI integration
-- **Open Source Community** for the amazing tools and libraries
+This project was built from scratch with passion and attention to detail. Special thanks to:
+
+- **The open-source community** for incredible tools and libraries
+- **ShadcN** for the elegant UI component patterns
+- **Vercel** for world-class deployment and performance infrastructure
+- **Radix UI** for accessible, unstyled component primitives
+- **Google** for the powerful Gemini AI API
 
 ---
 
@@ -317,9 +305,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 <div align="center">
 
-**⭐ Star this repo if you found it helpful!**
+**⭐ If you found this project inspiring, consider giving it a star!**
 
-Made with ❤️ and ☕ by [Pratham Handa](https://github.com/prathamhanda)
+Crafted with ❤️, ☕, and countless hours of refinement by [Pratham Handa](https://github.com/prathamhanda)
 
 </div>
 
