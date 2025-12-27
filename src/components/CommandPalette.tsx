@@ -190,7 +190,7 @@ const CommandPalette = () => {
     const delay = isMobile ? 2000 : 1500;
     const timer = setTimeout(() => {
       handleAISearch(searchQuery);
-    }, delay); // 🔧 ADJUST THIS VALUE TO CHANGE DEBOUNCE TIMING
+    }, delay);
 
     // Cleanup: cancel previous timer if user types again
     return () => {

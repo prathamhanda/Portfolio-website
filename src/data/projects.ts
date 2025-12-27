@@ -38,11 +38,10 @@ export const projectsData: Project[] = [
     title: "Brain Tumor Detector",
     description: "A three-stage deep learning pipeline achieving 99.3% accuracy and 97.2% IoU in brain tumor detection and segmentation.",
     fullDescription: "An advanced medical AI system that combines YOLOv8 for tumor detection, SAM for precise segmentation, and custom PyTorch models for classification. The system processes MRI scans in real-time to assist healthcare professionals in early diagnosis and surgical planning. The three-stage pipeline ensures high accuracy while maintaining clinical workflow compatibility.",
-    image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&h=600&fit=crop",
+    image: "/projects/5.png",
     images: [
-      "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop"
+      "/projects/5.png",
+      "/projects/a4.png"
     ],
     tags: ["Python", "PyTorch", "YOLO", "Segment Anything Model", "Streamlit"],
     techStack: ["Python", "PyTorch", "YOLOv8", "Segment Anything Model", "OpenCV", "Streamlit", "NumPy", "Matplotlib"],
@@ -156,8 +155,7 @@ Response:
     image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&h=600&fit=crop"
+      "/projects/a5.png"
     ],
     tags: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine"],
     techStack: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine API", "NumPy", "Flask", "Redis"],
@@ -245,11 +243,11 @@ python main.py --config config.yaml`,
     title: "RoomsOnRent",
     description: "A containerized dual-portal platform for student housing with separate interfaces for students and landlords.",
     fullDescription: "A full-stack web application designed specifically for student housing needs, featuring dual portals for students and landlords. The platform includes advanced search capabilities, real-time availability updates, virtual property tours, and integrated booking systems. Built with modern web technologies and deployed using containerization for scalability.",
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop",
+    image: "/projects/2.png",
     images: [
-      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1515263487990-61b07816b924?w=800&h=600&fit=crop"
+      "/projects/2.png",
+      "/projects/4.png",
+      "/projects/3.png"
     ],
     tags: ["React", "Node.js", "MongoDB", "Docker", "Cloudinary"],
     techStack: ["React", "Node.js", "Express.js", "MongoDB", "Docker", "Cloudinary", "JWT", "Stripe API"],
@@ -347,10 +345,10 @@ npm run dev`,
     title: "CHIP-8 Emulator",
     description: "A C++ emulator for the CHIP-8 interpreted programming language using SDL2 for graphics and input.",
     fullDescription: "A fully functional CHIP-8 emulator built with C++ and using the SDL2 library for graphics and input. It correctly interprets CHIP-8 opcodes, allowing classic games like Space Invaders and Pong to be played. The project demonstrates low-level system understanding, memory management, and C++ implementation skills. It includes 23 public domain ROMs for testing.",
-    image: "https://github.com/prathamhanda/CHIP-8-Emulator/raw/main/doc/screenshots/invaders.png",
+    image: "/projects/6.png",
     images: [
-      "https://github.com/prathamhanda/CHIP-8-Emulator/raw/main/doc/screenshots/invaders.png",
-      "https://github.com/prathamhanda/CHIP-8-Emulator/raw/main/doc/screenshots/pong.png"
+      "/projects/6.png",
+      "/projects/a2.png",
     ],
     tags: ["C++", "C", "Emulator", "SDL2", "CMake"],
     techStack: ["C++", "C", "SDL2", "CMake", "Makefile"],
@@ -427,10 +425,10 @@ $ make`,
   "title": "BreastCancer-Predictor",
   "description": "AI-powered diagnostic tool that analyzes tumor cell measurements to classify breast masses as benign or malignant.",
   "fullDescription": "An AI-powered diagnostic tool that analyzes tumor cell measurements to classify breast masses as benign or malignant. This project uses multiple machine learning classifiers trained on the Wisconsin Breast Cancer Dataset and provides an interactive Streamlit web app for clinicians and researchers to explore and test predictions. The app includes visualization (radar charts), real-time predictions, and confusion-matrix based performance reporting for multiple models.",
-  "image": "https://res.cloudinary.com/dglcgpley/image/upload/v1751453007/banner_xplmkk.png",
+  "image": "/projects/5.png",
   "images": [
-    "https://res.cloudinary.com/dglcgpley/image/upload/v1751453007/banner_xplmkk.png",
-    "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop"
+    "/projects/5.png",
+    "/projects/a3.png",
   ],
   "tags": [
     "Python",
@@ -534,10 +532,10 @@ $ make`,
   "title": "Dot Ignorer",
   "description": "A lightweight VS Code extension to quickly generate and manage .gitignore files from curated templates.",
   "fullDescription": "Dot Ignorer is a Visual Studio Code extension that speeds up creating and managing .gitignore files by providing a comprehensive, curated set of templates (sourced from the official gitignore repository and project-specific templates). The extension exposes a single, easy command that opens a quick-pick list of templates and writes the selected template into the workspace root, with overwrite confirmation when needed. The extension is designed to be zero-config, fast, and friendly for developers working across many languages and environments.",
-  "image": "https://vsmarketplacebadges.dev/version-short/wazeerc.dot-ignorer.svg",
+  "image": "/projects/Dot-ignorer.png",
   "images": [
-    "https://vsmarketplacebadges.dev/version-short/wazeerc.dot-ignorer.svg",
-    "https://vsmarketplacebadges.dev/rating-star/wazeerc.dot-ignorer.svg"
+    "/projects/Dot-ignorer.png",
+    "/projects/a(1).png"
   ],
   "tags": [
     "VSCode",
