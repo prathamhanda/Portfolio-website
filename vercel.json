@@ -1,11 +1,6 @@
 {
   "buildCommand": "npm run build",
   "framework": "vite",
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "vercel-node@18.x"
-    }
-  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
