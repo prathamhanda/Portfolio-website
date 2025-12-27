@@ -574,9 +574,9 @@ const CodingDashboard = () => {
   }
 
   const problemData = [
-    { name: 'Easy', value: _leetEasy + addEasy, color: 'hsl(var(--chart-1))' },
-    { name: 'Medium', value: _leetMed + addMed, color: 'hsl(var(--chart-2))' },
-    { name: 'Hard', value: _leetHard + addHard, color: 'hsl(var(--chart-3))' },
+    { name: 'Easy', value: _leetEasy + addEasy + 257, color: 'hsl(var(--chart-1))' },
+    { name: 'Medium', value: _leetMed + addMed + 257, color: 'hsl(var(--chart-2))' },
+    { name: 'Hard', value: _leetHard + addHard + 36, color: 'hsl(var(--chart-3))' },
   ];
 
   // Preferred slice colors (LeetCode-like) used as fallbacks if entry.color isn't set
