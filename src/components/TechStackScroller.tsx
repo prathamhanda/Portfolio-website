@@ -9,7 +9,6 @@ const TechStackScroller = () => {
     "Python",
     "MySQL",
     "MongoDB",
-    "MongoDB",
     "TailwindCSS",
     "Docker",
     "Next.js",

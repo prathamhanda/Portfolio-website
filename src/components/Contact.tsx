@@ -16,8 +16,8 @@ const Contact = () => {
                 Get in Touch
               </p>
               <h2 className="text-5xl font-bold mb-6">Let's work together</h2>
-              <p className="text-lg text-muted-foreground">
-                I'm actively seeking SDE and AI/ML internship opportunities for Summer 2026. Whether you need a full stack developer, want to discuss intelligent systems, or have an interesting problem to solve, I'd love to connect.
+              <p className="text-lg text-muted-foreground test">
+                If you have an interesting challenge, a project in mind, or just want to start a conversation, feel free to reach out. I am always open to learning, collaborating, and building things that matter.
               </p>
             </div>
 

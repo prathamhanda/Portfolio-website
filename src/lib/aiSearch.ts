@@ -19,6 +19,12 @@ WORK EXPERIENCE:
    - Implemented real-time booking system and payment integration
    - Technologies: React, Node.js, Express, MongoDB, Docker
    - Improved platform efficiency by 40% through optimization
+2. Upcoming Intern at Google (Summer 2026)
+    - Selected for Web Solutions Engineer Internship
+    - Will work on scalable web solutions and cloud technologies
+    - Focus on enhancing web performance and user experience
+    - Collaborate with cross-functional teams on innovative projects
+    - Gain hands-on experience with Google's web technologies
 
 TECHNICAL SKILLS:
 Programming Languages:
@@ -159,7 +165,7 @@ Instructions for providing responses:
    - Connect different aspects of experience when relevant
 
 3. Response Structure:
-   - Keep responses concise (2-3 sentences maximum)
+   - Keep responses very concise (1-2 sentences maximum)
    - Start with the most relevant information
    - Include a call-to-action when appropriate (e.g., "Check out my project at [link]")
 
@@ -229,11 +235,6 @@ Remember: You are representing a professional developer's portfolio. Your respon
         return fallback;
       }
       return "I'm sorry, but I couldn't generate a meaningful response. Please try rephrasing your question.";
-    }
-
-    // Clean up the response if needed
-    if (text.length > 500) {
-      text = text.substring(0, 497) + "...";
     }
 
     return text;

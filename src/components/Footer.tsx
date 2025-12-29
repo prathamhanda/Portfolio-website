@@ -72,7 +72,7 @@ const Footer = () => {
             <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl p-6 space-y-4 border border-white/10">
               <h4 className="text-xl font-semibold text-white">Let's talk</h4>
               <p className="text-gray-400 text-sm">
-                Open to SDE and AI/ML internship opportunities. Let's build something impactful together.
+                Open to SDE and AI/ML opportunities. Let's build something impactful together.
               </p>
               <a
                 href="mailto:prathamhanda10@gmail.com"

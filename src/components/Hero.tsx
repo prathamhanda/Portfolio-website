@@ -89,7 +89,16 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Button size="lg" className="rounded-full gap-2 px-8 py-6 text-base font-medium">
+            <Button 
+              size="lg" 
+              className="rounded-full gap-2 px-8 py-6 text-base font-medium"
+              onClick={() => {
+                const projectsSection = document.getElementById('projects');
+                if (projectsSection) {
+                  projectsSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
               View my work
               <ArrowRight className="w-5 h-5" />
             </Button>
@@ -97,8 +106,9 @@ const Hero = () => {
               size="lg"
               variant="outline"
               className="rounded-full gap-2 px-8 py-6 text-base font-medium border-2 border-black dark:border-white hover:bg-black hover:text-white hover:border-white dark:hover:bg-white dark:hover:text-black dark:hover:border-black"
+              onClick={() => window.open('https://drive.google.com/file/d/1w7tvBBgr6TmbTeEXSwQiIs-8VHi9mBEf/view?usp=sharing', '_blank')}
             >
-              Download Resume
+              View Resume
               <Download className="w-5 h-5" />
             </Button>
           </div>

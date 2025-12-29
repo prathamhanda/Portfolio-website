@@ -152,9 +152,10 @@ Response:
     title: "AI-RoadIntelligence",
     description: "Real-time traffic optimization system using YOLOv8 for vehicle detection at 45 FPS with under 50ms latency.",
     fullDescription: "A comprehensive traffic management system that leverages computer vision and AI to optimize traffic flow in real-time. The system integrates YOLOv8 for vehicle detection, SUMO traffic simulation for scenario modeling, and custom algorithms for emergency vehicle routing. Designed for smart city implementations with scalable architecture.",
-    image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
+    image: "/projects/66.png",
     images: [
-      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
+      "/projects/66.png",
+      "/projects/66a.png",
       "/projects/a5.png"
     ],
     tags: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine"],

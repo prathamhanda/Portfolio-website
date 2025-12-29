@@ -4,20 +4,37 @@ const About = () => {
   const { ref: aboutRef, isVisible: aboutVisible } = useScrollAnimation();
   
   const skills = {
-    development: [
+    fullstack: [
       "C++",
-      "Python",
+      "Python", 
       "JavaScript",
       "React",
       "Node.js",
-      "Express",
+      "Express.js",
       "MongoDB",
-      "PyTorch",
-      "TensorFlow",
-      "OpenCV"
+      "Data Structures",
+      "Algorithms",
+      "REST API Design",
     ],
-    design: ["Deep Learning", "Computer Vision", "YOLO", "Data Structures", "Algorithms"],
-    tools: ["Git", "Docker", "POSTMAN", "VS Code", "SUMO", "Streamlit"],
+    ml: [
+      "PyTorch",
+      "TensorFlow", 
+      "OpenCV",
+      "Deep Learning",
+      "Computer Vision",
+      "YOLO",
+      "Model Deployment"
+    ],
+    tools: [
+      "Git",
+      "Docker",
+      "Postman",
+      "VS Code",
+      "Streamlit",
+      "SUMO",
+      "JWT Authentication",
+      "CI/CD"
+    ],
   };
 
   return (
@@ -35,24 +52,17 @@ const About = () => {
 
             <div className="space-y-6 text-lg text-muted-foreground">
               <p>
-                I'm a third year Computer Science Engineering student at Thapar Institute of Engineering & Technology with a CGPA of 9.75. Currently working as a Full Stack Developer Intern at DBuck, where I built a web platform serving 10K+ students for housing solutions using the MERN stack.
+                I'm a third-year Computer Science Engineering student at Thapar Institute of Engineering & Technology, maintaining a CGPA of 9.75. Currently, I work as a Full Stack Developer Intern at DBuck, where I've built and scaled a web platform used by 10,000+ students for housing solutions, working end-to-end with the MERN stack.
               </p>
 
               <p>
-                My journey spans from building deep learning pipelines that achieve 99.3% accuracy in medical diagnostics to creating containerized web applications with 75% response time reductions. I've solved 600+ DSA problems on competitive coding platforms and earned a Knight Badge on LeetCode, ranking in the top 3.5% globally with a contest rating of 1939.
-              </p>
+                My work lies at the intersection of software engineering and applied AI. I have designed deep learning pipelines for medical diagnostics achieving 99.3% accuracy, and built containerized web applications that reduced response times by up to 75%. Alongside this, I actively strengthen my problem solving skills, having solved 1000+ DSA problems on competitive platforms and earning a Knight Badge on LeetCode, placing me in the top 3.5 % globally with a contest rating of 1939. </p>
 
               <p>
-                What drives me is solving real-world problems with measurable impact. Whether it's optimizing traffic systems at 45 FPS, architecting scalable platforms, or building AI models that aid surgical planning, I approach each challenge with precision and a focus on delivering quantifiable results.
+                What truly drives me is solving real-world problems with measurable impact. Whether it's optimizing traffic systems to run at 45 FPS, architecting scalable platforms, or building AI models that assist in surgical planning, I approach every challenge with precision, curiosity, and a strong focus on delivering results that matter.
               </p>
             </div>
 
-            <a
-              href="#projects"
-              className="inline-flex items-center gap-2 text-lg font-medium border-b-2 border-black pb-1 hover:gap-4 transition-all"
-            >
-              See my work
-            </a>
           </div>
 
           {/* Right Content - Skills Card */}
@@ -60,13 +70,13 @@ const About = () => {
             <h3 className="text-2xl font-bold mb-8">Skills & Expertise</h3>
 
             <div className="space-y-8">
-              {/* Development */}
+              {/* Software & Full-Stack Development */}
               <div>
                 <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
-                  Development
+                  Software & Full-Stack Development
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {skills.development.map((skill) => (
+                  {skills.fullstack.map((skill) => (
                     <span
                       key={skill}
                       className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
@@ -77,13 +87,13 @@ const About = () => {
                 </div>
               </div>
 
-              {/* Design */}
+              {/* Machine Learning & Computer Vision */}
               <div>
                 <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
-                  Design
+                  Machine Learning & Computer Vision
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {skills.design.map((skill) => (
+                  {skills.ml.map((skill) => (
                     <span
                       key={skill}
                       className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
@@ -94,10 +104,10 @@ const About = () => {
                 </div>
               </div>
 
-              {/* Tools */}
+              {/* Developer Tools & Ecosystem */}
               <div>
                 <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
-                  Tools
+                  Developer Tools & Ecosystem
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {skills.tools.map((skill) => (

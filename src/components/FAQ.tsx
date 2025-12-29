@@ -9,27 +9,28 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 const FAQ = () => {
   const { ref: faqRef, isVisible: faqVisible } = useScrollAnimation();
   const faqs = [
-    {
-      question: "What's your technical background?",
-      answer:
-        "I'm a third year CSE student at Thapar Institute with a 9.75 CGPA, specializing in full stack development with React, Node.js, and MongoDB alongside deep learning using PyTorch and TensorFlow. With 600+ DSA problems solved and a Knight Badge on LeetCode (top 3.5% globally, contest rating 1939), I combine strong algorithmic thinking with practical development skills.",
-    },
-    {
-      question: "What kind of projects have you built?",
-      answer:
-        "I've built AI-powered systems like a Brain Tumor Detector with 99.3% accuracy, real-time traffic optimization using YOLOv8 at 45 FPS, and production-ready web applications like RoomsOnRent serving 10K+ students. My work spans from deep learning pipelines to containerized full stack platforms, always focusing on solving real-world problems with measurable impact.",
-    },
-    {
-      question: "Are you open to internship opportunities?",
-      answer:
-        "Absolutely! I'm actively seeking SDE and AI/ML internship opportunities for Summer 2026. Currently interning as a Full Stack Developer at DBuck, I'm looking for roles where I can work on challenging problems at the intersection of AI and scalable web development. Reach out at prathamhanda10@gmail.com to discuss opportunities.",
-    },
-    {
-      question: "What makes your approach different?",
-      answer:
-        "I don't just code, I solve problems with precision. Every project I build has a clear metric of success, whether it's 99.3% accuracy, 45 FPS performance, or 75% response time reduction. With leadership roles like Joint Secretary at LEAD Society and experience conducting DSA workshops for 50+ students, I bring both technical excellence and the ability to collaborate effectively.",
-    },
-  ];
+  {
+    question: "What do you do and what are you currently working on?",
+    answer:
+      "I am a third year Computer Science Engineering student at Thapar Institute with a CGPA of 9.75. Right now, I spend most of my time building full stack applications using React and Node.js, and experimenting with machine learning models using PyTorch and TensorFlow. I enjoy working on projects where I can take an idea from scratch and turn it into something real and useful.",
+  },
+  {
+    question: "What kind of projects excite you the most?",
+    answer:
+      "I am most excited by projects that solve real problems and have a visible impact. This could be building an AI model that helps in medical diagnosis with high accuracy, optimizing traffic systems to work in real time, or creating web platforms that thousands of people actually use. Seeing something I built being used in the real world is what motivates me the most.",
+  },
+  {
+    question: "What tools and technologies do you feel most comfortable with?",
+    answer:
+      "On the development side, I am most comfortable with React, Node.js, Express, and MongoDB. For machine learning and computer vision, I regularly work with PyTorch, TensorFlow, and OpenCV. I also use Docker and Git in most projects and enjoy learning new tools whenever a project demands it.",
+  },
+  {
+    question: "How do you usually approach a new problem or project?",
+    answer:
+      "I like to start by clearly understanding the problem and deciding what success should look like. From there, I break things down into smaller parts, build step by step, and keep measuring whether I am actually improving performance or usability. Solving over 1000+ DSA problems has helped me think more systematically, but I always try to balance clean logic with practical execution.",
+  },
+];
+
 
   return (
     <section id="faq" ref={faqRef} className="py-24 bg-background">

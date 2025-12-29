@@ -31,7 +31,7 @@ const CodingDashboard = () => {
     ContestRating: 1871,
   });
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
-  const [gfgCount, setGfgCount] = useState<number>(0);
+  const [gfgCount, setGfgCount] = useState<number>(304);
   const [gfgError, setGfgError] = useState<string | null>(null);
   const heatmapRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -55,54 +55,121 @@ const CodingDashboard = () => {
   const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
   const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'prathamh';
 
-    // Fetch LeetCode stats
+    // Fetch LeetCode stats using GraphQL API
     const fetchLeetCodeStats = async () => {
       try {
-        // Public LeetCode stats API (fallback) - keep as-is but use env username if provided
-        const leetcodeUrl = `https://leetcode-stats-api.herokuapp.com/${LEETCODE_USER}`;
-        const response = await fetch(leetcodeUrl);
-        const data = await response.json();
-
-        setLeetcodeStats({
-          totalSolved: data.totalSolved || 0,
-          easySolved: data.easySolved || 0,
-          mediumSolved: data.mediumSolved || 0,
-          hardSolved: data.hardSolved || 0,
-          ranking: data.ranking || 0,
-          contributionPoints: data.contributionPoints || 0,
-          ContestRating: 1871 ,
-        });
-
-        // Try to fetch contest rating history from LeetCode GraphQL (best-effort).
-        // If that fails, fall back to a small mock dataset.
-        try {
-          const gqlUrl = 'https://leetcode.com/graphql';
-          const query = `query getUserContestHistory($username: String!) {\n  userContestRankingHistory(username: $username) {\n    contest {\n      title\n      start_time\n      startTime\n    }\n    rating\n    ranking\n    attended\n  }\n}`;
-          const resp = await fetch(gqlUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query, variables: { username: LEETCODE_USER } }),
-          });
-          if (resp.ok) {
-            const jr = await resp.json();
-            const hist = jr?.data?.userContestRankingHistory;
-            if (Array.isArray(hist) && hist.length > 0) {
-              // Map to monthly points for chart: use contest title or index as x and rating as y
-              const mapped = hist.map((h: any, i: number) => {
-                const ts = h?.contest?.start_time || h?.contest?.startTime || null;
-                const dateLabel = ts ? new Date(ts * 1000).toLocaleString(undefined, { month: 'short', year: 'numeric' }) : `C${i + 1}`;
-                return { date: dateLabel, rating: Number(h?.rating || 0) };
-              });
-              // keep last 12 entries
-              setRatingData(mapped.slice(-12));
-            } else {
-              throw new Error('no contest history');
+        const gqlUrl = 'https://leetcode.com/graphql';
+        const query = `
+          query fullUserData($username: String!) {
+            matchedUser(username: $username) {
+              username
+              profile {
+                realName
+                userAvatar
+                countryName
+                ranking
+                reputation
+              }
+              submitStats {
+                acSubmissionNum {
+                  difficulty
+                  count
+                  submissions
+                }
+                totalSubmissionNum {
+                  difficulty
+                  count
+                  submissions
+                }
+              }
             }
-          } else {
-            throw new Error(`LeetCode GraphQL returned ${resp.status}`);
+            userContestRanking(username: $username) {
+              attendedContestsCount
+              rating
+              globalRanking
+              totalParticipants
+              topPercentage
+            }
+            userContestRankingHistory(username: $username) {
+              contest {
+                title
+                startTime
+              }
+              rating
+              ranking
+            }
           }
-        } catch (err) {
-          console.debug('LeetCode contest history fetch failed, using mock rating data', err);
+        `;
+        
+        const response = await fetch(gqlUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Mozilla/5.0'
+          },
+          body: JSON.stringify({
+            query,
+            variables: { username: LEETCODE_USER }
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`LeetCode GraphQL returned ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('LeetCode GraphQL Response:', data); // Debug log
+        
+        // Extract submission stats
+        const submitStats = data?.data?.matchedUser?.submitStats?.acSubmissionNum || [];
+        const profile = data?.data?.matchedUser?.profile || {};
+        const contestRanking = data?.data?.userContestRanking || {};
+        const contestHistory = data?.data?.userContestRankingHistory || [];
+        
+        // Parse difficulty breakdown
+        let easySolved = 0;
+        let mediumSolved = 0;
+        let hardSolved = 0;
+        let totalSolved = 0;
+        
+        submitStats.forEach((stat: any) => {
+          const difficulty = stat.difficulty?.toLowerCase();
+          const count = parseInt(stat.count) || 0;
+          totalSolved += count;
+          
+          if (difficulty === 'easy') easySolved = count;
+          else if (difficulty === 'medium') mediumSolved = count;
+          else if (difficulty === 'hard') hardSolved = count;
+        });
+        
+        // Set the stats
+        setLeetcodeStats({
+          totalSolved: totalSolved || 632,
+          easySolved: easySolved || 185,
+          mediumSolved: mediumSolved || 349,
+          hardSolved: hardSolved || 98,
+          ranking: profile.ranking || 101686,
+          contributionPoints: 0, // GraphQL doesn't provide this
+          ContestRating: contestRanking.rating || 1871,
+        });
+        
+        // Process contest history for rating chart
+        if (contestHistory && contestHistory.length > 0) {
+          const mapped = contestHistory.map((h: any, i: number) => {
+            const startTime = h?.contest?.startTime;
+            const dateLabel = startTime ? 
+              new Date(startTime * 1000).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 
+              `Contest ${i + 1}`;
+            return { 
+              date: dateLabel, 
+              rating: Number(h?.rating || 1500) 
+            };
+          }).filter((item: any) => item.rating > 0); // Filter out zero ratings
+          
+          // Keep last 12 entries
+          setRatingData(mapped.slice(-12));
+        } else {
+          // Fallback mock data if no contest history
           const mockRatingData = [
             { date: 'Jan', rating: 1400 },
             { date: 'Feb', rating: 1450 },
@@ -117,8 +184,33 @@ const CodingDashboard = () => {
           ];
           setRatingData(mockRatingData);
         }
+        
       } catch (error: any) {
         console.error('Error fetching LeetCode stats:', error);
+        // Fallback to default values on error
+        setLeetcodeStats({
+          totalSolved: 632,
+          easySolved: 185,
+          mediumSolved: 349,
+          hardSolved: 98,
+          ranking: 101686,
+          contributionPoints: 0,
+          ContestRating: 1871,
+        });
+        
+        const mockRatingData = [
+          { date: 'Jan', rating: 1400 },
+          { date: 'Feb', rating: 1450 },
+          { date: 'Mar', rating: 1350 },
+          { date: 'Apr', rating: 1580 },
+          { date: 'May', rating: 1650 },
+          { date: 'Jun', rating: 1575 },
+          { date: 'Jul', rating: 1694 },
+          { date: 'Aug', rating: 1871 },
+          { date: 'Sep', rating: 1939 },
+          { date: 'Oct', rating: 1931 },
+        ];
+        setRatingData(mockRatingData);
       }
     };
 
@@ -235,7 +327,7 @@ const CodingDashboard = () => {
           if (r.ok) {
             const j = await r.json();
             if (typeof j?.count === 'number') {
-              setGfgCount(Number(j.count || 0));
+              setGfgCount(Number(j.count || 304));
               try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), count: Number(j.count || 0) })); } catch (e) {}
               return;
             }
@@ -266,9 +358,9 @@ const CodingDashboard = () => {
         const count = possible?.userInfo?.total_problems_solved
           || possible?.initialState?.userProfileApi?.getUserInfo?.data?.total_problems_solved
           || possible?.initialState?.userProfileApi?.getUserInfo?.data?.data?.total_problems_solved
-          || 0;
+          || 304;
 
-        setGfgCount(Number(count || 0));
+        setGfgCount(Number(count || 304));
         try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), count: Number(count || 0) })); } catch (e) {}
       } catch (err: any) {
         console.warn('GfG fetch failed', err);
@@ -574,9 +666,9 @@ const CodingDashboard = () => {
   }
 
   const problemData = [
-    { name: 'Easy', value: _leetEasy + addEasy + 257, color: 'hsl(var(--chart-1))' },
-    { name: 'Medium', value: _leetMed + addMed + 257, color: 'hsl(var(--chart-2))' },
-    { name: 'Hard', value: _leetHard + addHard + 36, color: 'hsl(var(--chart-3))' },
+    { name: 'Easy', value: _leetEasy + addEasy + 257 + 70, color: 'hsl(var(--chart-1))' },
+    { name: 'Medium', value: _leetMed + addMed + 257 + 100, color: 'hsl(var(--chart-2))' },
+    { name: 'Hard', value: _leetHard + addHard + 36 + 38, color: 'hsl(var(--chart-3))' },
   ];
 
   // Preferred slice colors (LeetCode-like) used as fallbacks if entry.color isn't set
@@ -710,8 +802,9 @@ const CodingDashboard = () => {
     }
     return null;
   };
-
-  const totalSolvedDisplayed = leetcodeStats.totalSolved + gfgCount + 550;
+  // console.log('leetcodeStats', leetcodeStats);
+  // console.log('gfgCount', gfgCount);
+  const totalSolvedDisplayed = leetcodeStats.totalSolved + gfgCount + 208;
 
   const statCards = [
     {

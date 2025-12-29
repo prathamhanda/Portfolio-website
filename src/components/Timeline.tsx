@@ -144,11 +144,16 @@ const Timeline = () => {
       id="timeline"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Title */}
-        <div ref={ref} className={isVisible ? "scroll-animate" : "opacity-0"}>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-center mb-20">
+        {/* Title with Google Intern Badge */}
+        <div ref={ref} className={`${isVisible ? "scroll-animate" : "opacity-0"} flex items-center justify-center gap-8 mb-20 flex-wrap`}>
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-center">
            Tracing the Arc...
           </h2>
+          <img 
+            src="/icons/google-intern.png" 
+            alt="Google Intern '26" 
+            className="object-contain w-32 h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 flex-shrink-0"
+          />
         </div>
 
         {/* Desktop Timeline - Horizontal */}

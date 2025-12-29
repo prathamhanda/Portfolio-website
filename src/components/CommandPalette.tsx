@@ -352,11 +352,11 @@ const CommandPalette = () => {
         <CommandSeparator />
         <CommandGroup heading="Actions">
           <CommandItem onSelect={() => {
-            window.location.href = "/resume.pdf";
+            window.open('https://drive.google.com/file/d/1w7tvBBgr6TmbTeEXSwQiIs-8VHi9mBEf/view?usp=drive_link', '_blank');
             setOpen(false);
           }}>
             <Download className="mr-2 h-4 w-4" />
-            <span>Download Resume</span>
+            <span>View Resume</span>
           </CommandItem>
           <CommandItem onSelect={() => {
             window.open("https://github.com/prathamhanda", "_blank");
