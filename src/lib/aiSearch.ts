@@ -5,7 +5,7 @@ Name: Pratham Handa
 Role: Computer Science Student & Full Stack Developer
 Education: 3rd Year, Computer Science Engineering at Thapar Institute (9.75 CGPA)
 Email: prathamhanda10@gmail.com
-LinkedIn: linkedin.com/in/prathamhanda
+LinkedIn: linkedin.com/in/prathamh
 GitHub: github.com/prathamhanda
 Portfolio: pratham.codes
 
@@ -110,12 +110,12 @@ const fallbackResponses: Record<string, string> = {
   "skills": "I'm proficient in C++, Python, JavaScript/TypeScript for programming; React, Node.js, Express.js, MongoDB for web development; and PyTorch, TensorFlow, YOLO for AI/ML, with practical experience in Docker and AWS.",
   "education": "I'm a 3rd-year Computer Science Engineering student at Thapar Institute, maintaining a 9.75 CGPA and receiving both Reliance Undergraduate and Merit III Scholarships.",
   "projects": "My portfolio includes the Brain Tumor Detector (99.3% accuracy), AI-RoadIntelligence for traffic optimization (35% reduction in wait times), RoomsOnRent platform, and LEAD Society's website.",
-  "contact": "You can reach me at prathamhanda10@gmail.com, connect on LinkedIn (linkedin.com/in/prathamhanda), or check out my work on GitHub (github.com/prathamhanda).",
+  "contact": "You can reach me at prathamhanda10@gmail.com, connect on LinkedIn (linkedin.com/in/prathamh), or check out my work on GitHub (github.com/prathamhanda).",
   "achievements": "I hold a LeetCode Knight Badge (top 3.5% globally), solved 1000+ DSA problems, and serve as Student Placement Representative while maintaining a 9.75 CGPA.",
   "leadership": "As Joint Secretary of LEAD Society, I've mentored 50+ students in DSA and web development, organized 10+ technical workshops, and maintain active involvement in the tech community.",
   "availability": "I'm open to full-time opportunities starting from May 2024, with a focus on full-stack development, AI/ML, or software engineering roles.",
-  "text": "You can reach me through my website (pratham.codes), LinkedIn (linkedin.com/in/prathamhanda), or email (prathamhanda10@gmail.com).",
-  "contact information": "Feel free to reach out via email at prathamhanda10@gmail.com or connect with me on LinkedIn at linkedin.com/in/prathamhanda.",
+  "text": "You can reach me through my website (pratham.codes), LinkedIn (linkedin.com/in/prathamh), or email (prathamhanda10@gmail.com).",
+  "contact information": "Feel free to reach out via email at prathamhanda10@gmail.com or connect with me on LinkedIn at linkedin.com/in/prathamh.",
 };
 
 function getFallbackResponse(query: string): string | null {

@@ -85,7 +85,7 @@ const Hero = () => {
           </h1>
 
           <p className="text-lg text-muted-foreground max-w-lg">
-            Third year CSE student at Thapar Institute with a 9.75 CGPA. I specialize in creating AI-powered applications and scalable web platforms, combining deep learning expertise with full stack development. Knight Badge holder on LeetCode, ranking in the top 3.5% globally.
+            Hi, I'm <span className="text-foreground font-medium">Pratham Handa</span>. <br></br>I solve real problems through thoughtful engineering, combining strong fundamentals with practical execution. I care deeply about performance, clarity, and building systems that scale beyond prototypes.
           </p>
 
           <div className="flex flex-wrap gap-4">

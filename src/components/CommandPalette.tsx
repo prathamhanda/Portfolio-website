@@ -366,7 +366,7 @@ const CommandPalette = () => {
             <span>View GitHub</span>
           </CommandItem>
           <CommandItem onSelect={() => {
-            window.open("https://linkedin.com/in/prathamhanda", "_blank");
+            window.open("https://linkedin.com/in/prathamh", "_blank");
             setOpen(false);
           }}>
             <Linkedin className="mr-2 h-4 w-4" />

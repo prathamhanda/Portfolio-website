@@ -297,7 +297,7 @@ This project was built from scratch with passion and attention to detail. Specia
 
 **Pratham Handa**
 - 🌐 Portfolio: [pratham.codes](https://pratham.codes)
-- 💼 LinkedIn: [linkedin.com/in/prathamhanda](https://linkedin.com/in/prathamhanda)
+- 💼 LinkedIn: [linkedin.com/in/prathamh/](https://www.linkedin.com/in/prathamh/)
 - 🐙 GitHub: [github.com/prathamhanda](https://github.com/prathamhanda)
 - 📧 Email: prathamhanda10@gmail.com
 
