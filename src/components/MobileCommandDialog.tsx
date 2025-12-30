@@ -125,7 +125,7 @@ const MobileCommandDialog: React.FC<MobileCommandDialogProps> = ({ open, onOpenC
 
         <DialogPrimitive.Content 
           ref={contentRef as any} 
-          className="fixed left-0 right-0 bottom-0 z-[9999] mx-auto w-full max-w-3xl rounded-t-xl bg-popover p-4 shadow-2xl overflow-auto animate-slide-up mobile-command-content"
+          className="fixed left-0 right-0 bottom-0 z-[9999] mx-auto w-full max-w-3xl rounded-t-xl bg-popover p-4 shadow-2xl overflow-auto overflow-x-hidden animate-slide-up mobile-command-content"
           style={{
             maxHeight: `${Math.min(viewportHeight * 0.92, viewportHeight - 20)}px`,
             height: 'auto',
