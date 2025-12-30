@@ -1,96 +1,49 @@
 // Resume context for AI assistant
-const RESUME_CONTEXT = `
-PERSONAL INFORMATION & CONTACT:
+const RESUME_CONTEXT = `PERSONAL INFORMATION & CONTACT:
 Name: Pratham Handa
-Role: Computer Science Student & Full Stack Developer
-Education: 3rd Year, Computer Science Engineering at Thapar Institute (9.75 CGPA)
+Role: Computer Science Student
+Education: 3rd Year, CSE, Thapar Institute (CGPA: 9.75)
 Email: prathamhanda10@gmail.com
 LinkedIn: linkedin.com/in/prathamh
 GitHub: github.com/prathamhanda
 Portfolio: pratham.codes
-
 PROFESSIONAL SUMMARY:
-A passionate Computer Science student and Full Stack Developer with expertise in AI/ML and web development. Known for delivering high-performance solutions and maintaining excellent academic performance. Strong problem-solving skills demonstrated through competitive programming achievements.
-
+Computer Science student with experience in full stack development and AI-based projects. Strong academic record and competitive programming background.
 WORK EXPERIENCE:
-1. Full Stack Developer Intern at DBuck (2023)
-   - Led development of a MERN stack web application for student housing
-   - Served 10,000+ active student users
-   - Implemented real-time booking system and payment integration
-   - Technologies: React, Node.js, Express, MongoDB, Docker
-   - Improved platform efficiency by 40% through optimization
-2. Upcoming Intern at Google (Summer 2026)
-    - Selected for Web Solutions Engineer Internship
-    - Will work on scalable web solutions and cloud technologies
-    - Focus on enhancing web performance and user experience
-    - Collaborate with cross-functional teams on innovative projects
-    - Gain hands-on experience with Google's web technologies
-
+1. Full Stack Developer Intern — DBuck (2023)
+   - Built MERN-based student housing platform
+   - Used by 10,000+ students
+   - Implemented booking and payment features
+   - Tech: React, Node.js, MongoDB, Docker
+2. Web Solutions Engineer Intern — Google (Summer 2026)
+   - Incoming intern
 TECHNICAL SKILLS:
 Programming Languages:
-- Advanced: C++, Python, JavaScript/TypeScript
-- Intermediate: Java, SQL, HTML/CSS
-- Basic: Rust, Go
-
+- C++, Python, JavaScript/TypeScript, Java, SQL
 Frameworks & Technologies:
-- Web Development: React, Next.js, Node.js, Express.js, MongoDB, PostgreSQL
-- AI/ML: PyTorch, TensorFlow, YOLO, OpenCV, Scikit-learn
-- DevOps: Docker, Git, AWS, CI/CD
-- Tools: VS Code, PyCharm, Postman, Jupyter
-
+- React, Next.js, Node.js, Express
+- MongoDB, PostgreSQL
+- PyTorch, TensorFlow, YOLO, OpenCV
+- Git, Docker
 PROJECT PORTFOLIO:
-1. Brain Tumor Detector (AI/Healthcare)
-   - Achieved 99.3% classification accuracy and 97.2% IoU
-   - Built deep learning pipeline using PyTorch and YOLO
-   - Deployed as a web application using FastAPI
-   - GitHub: github.com/prathamhanda/BrainTumor-Detector
-
-2. AI-RoadIntelligence (Computer Vision)
-   - Real-time traffic optimization using YOLOv8
-   - Reduced average traffic wait time by 35%
-   - Implemented on actual traffic intersections
-   - GitHub: github.com/prathamhanda/AI-RoadIntelligence
-
-3. RoomsOnRent (Full Stack)
-   - Containerized dual-portal platform for student housing
-   - Features: Real-time availability, virtual tours, instant booking
-   - Tech Stack: MERN + Docker + AWS
-   - Live: roomsonrent.prathamhanda.com
-
-4. LEAD Society Website (Web Development)
-   - Official website with event management system
-   - 500+ active monthly users
-   - Live: www.leadtiet.netlify.app
-
+1. Brain Tumor Detector
+   - AI-based tumor classification and segmentation
+   - Built using PyTorch, YOLO, FastAPI
+2. AI-RoadIntelligence
+   - Real-time traffic optimization system
+   - Computer vision based solution
+3. RoomsOnRent
+   - Full stack student housing platform
+   - MERN + Docker
 ACHIEVEMENTS & LEADERSHIP:
-Competitive Programming:
-- LeetCode Knight Badge (Top 3.5% globally)
-- 1000+ DSA problems solved on LeetCode/GeeksforGeeks
-- Regular participant in coding competitions
-
-Academic Excellence:
-- Current CGPA: 9.75/10
-- Reliance Undergraduate Scholarship recipient
-- Merit III Scholarship awardee
-
-Leadership:
-- Student Placement Representative for CSE branch
-- Joint Secretary of LEAD Society
-- Mentored 50+ students in DSA and web development
-- Organized 10+ technical workshops and hackathons
-
-WORK STYLE & APPROACH:
-- Collaborative team player with strong communication skills
-- Detail-oriented with focus on clean, maintainable code
-- Quick learner adapting to new technologies
-- Agile methodology practitioner
-- Regular contributor to open-source projects
-- Emphasis on documentation and code reviews
-
+- LeetCode Knight Badge (Top 3.5%)
+- 1000+ DSA problems solved
+- Merit I & III Scholarship recipient from TIET
+- Reliance Undergraduate Scholar
+- Student Placement Representative (CSE)
+- Joint Secretary, LEAD Society
 ADDITIONAL INFORMATION:
-Languages: English (Professional), Hindi (Native)
-Interests: Competitive Programming, Open Source, Tech Blogging
-Availability: Open to Full-time opportunities from May 2024
+Languages: English, Hindi, Punjabi
 `;
 
 interface GeminiResponse {
@@ -138,93 +91,137 @@ function getFallbackResponse(query: string): string | null {
 
 export async function queryAI(query: string): Promise<string> {
   try {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    
-    if (!apiKey) {
-      console.error("Gemini API key not configured");
+    // Support multiple Gemini keys. The environment can provide:
+    // - VITE_GEMINI_API_KEYS (comma-separated list)
+    // - VITE_GEMINI_API_KEY1 ... VITE_GEMINI_API_KEY5
+    // - fallback VITE_GEMINI_API_KEY (single key)
+    const env = (import.meta as any).env || {};
+
+    function getGeminiKeys(): string[] {
+      const keys: string[] = [];
+      if (env.VITE_GEMINI_API_KEYS) {
+        keys.push(...String(env.VITE_GEMINI_API_KEYS).split(',').map((k: string) => k.trim()).filter(Boolean));
+      }
+      for (let i = 1; i <= 5; i++) {
+        const k = env[`VITE_GEMINI_API_KEY${i}`];
+        if (k) keys.push(String(k));
+      }
+      if (env.VITE_GEMINI_API_KEY) {
+        keys.push(String(env.VITE_GEMINI_API_KEY));
+      }
+      // de-duplicate while preserving order
+      return Array.from(new Set(keys));
+    }
+
+    // Persistent rotation index: prefer localStorage in browser, otherwise use module-level counter
+    let rotationIndex = (globalThis as any).__GEMINI_ROTATION_INDEX || 0;
+
+    function consumeStartIndex(n: number): number {
+      if (n <= 0) return 0;
+      try {
+        const stored = localStorage.getItem('gemini_key_index');
+        let idx = stored ? parseInt(stored, 10) : 0;
+        const start = idx % n;
+        idx = (idx + 1) % n;
+        localStorage.setItem('gemini_key_index', String(idx));
+        return start;
+      } catch (e) {
+        const start = rotationIndex % n;
+        rotationIndex = (rotationIndex + 1) % n;
+        (globalThis as any).__GEMINI_ROTATION_INDEX = rotationIndex;
+        return start;
+      }
+    }
+
+    const keys = getGeminiKeys();
+    if (!keys || keys.length === 0) {
+      console.error("Gemini API key(s) not configured");
       return "AI feature not configured. Please check the environment variables.";
     }
 
     // Enhanced prompt with better context and instructions
     const prompt = `You are an AI assistant for Pratham Handa's portfolio website. You have access to Pratham's complete professional profile and should provide helpful, accurate responses to visitors' questions. Consider the following detailed information:
-
 ${RESUME_CONTEXT}
 
 Question: ${query}
-
 Instructions for providing responses:
 1. Voice and Tone:
    - Answer in Pratham's voice (first person)
-   - Maintain a professional yet approachable tone
    - Be confident but humble
-
 2. Content Guidelines:
    - Provide specific, data-backed information when available
-   - Include relevant links or contact methods when appropriate
    - Highlight achievements and metrics that support your answer
-   - Connect different aspects of experience when relevant
-
 3. Response Structure:
-  - Prefer concise answers, but always finish sentences and include proper punctuation. Do not truncate important details. And DON'T Exceed 3 lines in response.
+  - Prefer concise answers, but always finish sentences and include proper punctuation. Do not truncate important details. And DON'T Exceed 2 lines in response.
+  - Keep the response as condensed as possible while ensuring clarity and completeness.
   - Start with the most relevant information
-  - Include a call-to-action when appropriate (e.g., "Check out my project at [link]")
-
-4. Special Cases:
-   - For contact requests: Provide appropriate contact method(s)
-   - For technical questions: Reference specific projects/skills
-   - For availability: Mention timeline and preferred roles
-   - For location/collaboration: Specify remote/onsite preferences
-
 5. Always:
-   - Be accurate and truthful
    - Stay within the scope of the provided information
    - Maintain consistency with the portfolio website
-   - Provide actionable information when possible
-
 Remember: You are representing a professional developer's portfolio. Your responses should reflect technical expertise while remaining accessible to all visitors.`;
 
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
+    // Try each configured key in round-robin order. We consume a start index so
+    // each call prefers a different primary key and will retry with others.
+    const start = consumeStartIndex(keys.length);
+    let lastErrorText: string | null = null;
+    let data: GeminiResponse | null = null;
+    let ok = false;
+
+    for (let attempt = 0; attempt < keys.length; attempt++) {
+      const key = keys[(start + attempt) % keys.length];
+      try {
+        const resp = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              contents: [
                 {
-                  text: prompt,
+                  parts: [
+                    {
+                      text: prompt,
+                    },
+                  ],
                 },
               ],
-            },
-          ],
-          generationConfig: {
-                    maxOutputTokens: 1500,
-                    temperature: 0.7,
-                    topP: 0.8,
-                    topK: 40,
-                  },
-        }),
-      }
-    );
+              generationConfig: {
+                temperature: 0.3,
+                topP: 0.6,
+                topK: 30,
+              },
+            }),
+          }
+        );
 
-    if (!response.ok) {
-      console.error("API Error:", response.status);
-      const errorText = await response.text();
-      console.error("API Error details:", errorText);
-      
-      // Try to get a fallback response
-      const fallback = getFallbackResponse(query);
-      if (fallback) {
-        return fallback;
+        if (!resp.ok) {
+          const txt = await resp.text();
+          lastErrorText = `status=${resp.status} body=${txt}`;
+          // try the next key
+          continue;
+        }
+
+        data = await resp.json();
+        ok = true;
+        break;
+      } catch (err: any) {
+        lastErrorText = String(err?.message || err);
+        // try next key
+        continue;
       }
-      
+    }
+
+    if (!ok || !data) {
+      console.error("All Gemini keys failed", lastErrorText);
+      const fallback = getFallbackResponse(query);
+      if (fallback) return fallback;
       return `I apologize, but I'm having trouble processing your query at the moment. Please try again or rephrase your question.`;
     }
 
-    const data: GeminiResponse = await response.json();
+    
+
     let text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 
     // Validate and clean up the response
