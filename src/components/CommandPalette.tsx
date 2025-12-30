@@ -39,7 +39,6 @@ const aiSuggestions = [
   "What projects have you worked on",
   "What technologies do you use",
   "What is your education background",
-  "What are your career goals",
   "What is your work style",
   "Tell me about your achievements"
 ];
@@ -222,11 +221,11 @@ const CommandPalette = () => {
   const commandContent = (
     <>
       <CommandInput 
-        placeholder={isMobile ? "Search projects or commands" : "Search projects, ask questions, or use commands... (AI-powered)"} 
+        placeholder={isMobile ? "Search portfolio or commands" : "Search portfolio, ask questions, or use commands... (AI-powered)"} 
         value={searchQuery}
         onValueChange={setSearchQuery}
       />
-      <CommandList>
+      <CommandList className={isMobile ? "max-h-none flex-1 overflow-y-auto" : undefined}>
         {!aiResponse && !aiLoading && <CommandEmpty>
           {searchQuery ? "Searching..." : "Start typing to search or ask anything..."}
         </CommandEmpty>}
@@ -251,7 +250,7 @@ const CommandPalette = () => {
                   <div className="text-xs font-semibold text-muted-foreground mb-2">🤖 AI ASSISTANT</div>
                   <div className="flex items-start gap-3">
                     <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0 text-blue-500" />
-                        <p className="text-sm text-foreground leading-relaxed">{aiResponse}</p>
+                        <p className="text-sm text-foreground leading-relaxed flex-1 whitespace-pre-wrap break-words">{aiResponse}</p>
                         {/* aria-live region for screen readers on mobile */}
                         {isMobile && (
                           <div className="sr-only" aria-live="polite">AI response: {aiResponse}</div>
@@ -380,11 +379,11 @@ const CommandPalette = () => {
   return (
     <>
       {isMobile ? (
-        <MobileCommandDialog open={open} onOpenChange={setOpen}>
+        <MobileCommandDialog open={open} onOpenChange={setOpen} searchValue={searchQuery} onClear={() => setSearchQuery("")}>
           {commandContent}
         </MobileCommandDialog>
       ) : (
-        <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandDialog open={open} onOpenChange={setOpen} searchValue={searchQuery} onClear={() => setSearchQuery("")}>
           {commandContent}
         </CommandDialog>
       )}

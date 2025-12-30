@@ -165,9 +165,9 @@ Instructions for providing responses:
    - Connect different aspects of experience when relevant
 
 3. Response Structure:
-   - Keep responses very concise (1-2 sentences maximum)
-   - Start with the most relevant information
-   - Include a call-to-action when appropriate (e.g., "Check out my project at [link]")
+  - Prefer concise answers, but always finish sentences and include proper punctuation. Do not truncate important details. And DON'T Exceed 3 lines in response.
+  - Start with the most relevant information
+  - Include a call-to-action when appropriate (e.g., "Check out my project at [link]")
 
 4. Special Cases:
    - For contact requests: Provide appropriate contact method(s)
@@ -201,11 +201,11 @@ Remember: You are representing a professional developer's portfolio. Your respon
             },
           ],
           generationConfig: {
-            maxOutputTokens: 500,
-            temperature: 0.7,
-            topP: 0.8,
-            topK: 40,
-          },
+                    maxOutputTokens: 1500,
+                    temperature: 0.7,
+                    topP: 0.8,
+                    topK: 40,
+                  },
         }),
       }
     );

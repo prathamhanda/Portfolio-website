@@ -342,3 +342,50 @@ body.sheet-animating [data-sheet-content] {
 [data-sheet-content] {
   -webkit-transform: translateZ(0);
 }
+
+/* Mobile Command Palette Improvements */
+@media (max-width: 640px) {
+  /* Ensure proper scrolling behavior on mobile */
+  .mobile-command-content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    /* Prevent awkward resizing during keyboard transitions */
+    transition: max-height 0.2s ease-out, bottom 0.2s ease-out;
+  }
+  
+  /* Prevent zoom on input focus on iOS */
+  input[type="text"], input[type="search"], textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Improve touch scrolling for command list */
+  [data-radix-command-list] {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    /* Allow the command list to take full available height */
+    max-height: none !important;
+    flex: 1;
+  }
+  
+  /* Ensure the dialog stays above virtual keyboard */
+  [data-radix-dialog-content] {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
+  /* Override Command component styles for mobile */
+  [data-cmdk-root] {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* Better support for viewport units that respect virtual keyboard */
+@supports (height: 100dvh) {
+  @media (max-width: 640px) {
+    .mobile-dialog-height {
+      max-height: 92dvh;
+    }
+  }
+}
