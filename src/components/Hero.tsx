@@ -122,7 +122,7 @@ const Hero = () => {
               <img
                 src="/Pratham-PFP.jpg"
                 alt="Profile"
-                className="w-full h-[420px] sm:h-[500px] md:h-[550px] object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-[420px] sm:h-[500px] md:h-[550px] object-cover rounded-2xl transition-transform duration-500 scale-150 sm:scale-100 sm:group-hover:scale-105"
               />
               {/* Vignette effect overlay - dark mode only */}
               <div 
