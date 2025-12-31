@@ -147,7 +147,8 @@ const Hero = () => {
             {/* bottom overlay */}
             <div className="absolute bottom-4 left-4 right-4  rounded-2xl p-6 text-white  border-white/10 ">
               <p className="text-s uppercase tracking-wider mb-2 text-white/80">Available for work</p>
-              <p className="text-lg font-semibold">Let's collaborate on your next project</p>
+              <p className="text-lg font-semibold">Let's collaborate on a project!</p>
+                <p className="text-xs sm:text-xs text-white/60 mt-3">|| ॐ नमः शिवाय ||</p>
             </div>
           </div>
         </div>

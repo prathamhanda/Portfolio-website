@@ -114,6 +114,7 @@ const Footer = () => {
             </div>
             <p className="text-sm text-gray-400">
               Made with ❤️ in Patiala
+            <p className="text-xs text-white/40 mt-1 ml-6">|| ॐ नमः शिवाय ||</p>
             </p>
           </div>
           
