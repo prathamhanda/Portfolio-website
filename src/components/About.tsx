@@ -52,11 +52,11 @@ const About = () => {
 
             <div className="space-y-6 text-lg text-muted-foreground">
               <p>
-                I'm a third-year Computer Science Engineering student at Thapar Institute of Engineering & Technology, maintaining a CGPA of 9.75. Currently, I work as a Full Stack Developer Intern at DBuck, where I've built and scaled a web platform used by 10,000+ students for housing solutions, working end-to-end with the MERN stack.
+                I'm a third-year Computer Science Engineering student at Thapar Institute of Engineering & Technology, maintaining a <span className="font-bold text-black dark:text-white">CGPA of 9.75</span>. Currently, I work as a Full Stack Developer Intern at DBuck, where I've built and scaled a web platform used by 10,000+ students for housing solutions, working end-to-end with the MERN stack.
               </p>
 
               <p>
-                My work lies at the intersection of software engineering and applied AI. I have designed deep learning pipelines for medical diagnostics achieving 99.3% accuracy, and built containerized web applications that reduced response times by up to 75%. Alongside this, I actively strengthen my problem solving skills, having solved 1000+ DSA problems on competitive platforms and earning a Knight Badge on LeetCode, placing me in the top 3.5 % globally with a contest rating of 1939. </p>
+                My work lies at the intersection of software engineering and applied AI. I have designed deep learning pipelines for medical diagnostics achieving 99.3% accuracy, and built containerized web applications that reduced response times by up to 75%. Alongside this, I actively strengthen my problem solving skills, having solved <span className="font-bold text-black dark:text-white">1000+ DSA problems</span> on competitive platforms and earning a Knight Badge on LeetCode, placing me in the <span className="font-bold text-black dark:text-white">top 3.5 %</span> globally with a contest rating of 1939. </p>
 
               <p>
                 What truly drives me is solving real-world problems with measurable impact. Whether it's optimizing traffic systems to run at 45 FPS, architecting scalable platforms, or building AI models that assist in surgical planning, I approach every challenge with precision, curiosity, and a strong focus on delivering results that matter.
