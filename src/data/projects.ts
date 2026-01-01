@@ -423,12 +423,12 @@ $ make`,
   },
   {
   "id": "breast-cancer-predictor",
-  "title": "BreastCancer-Predictor",
+  "title": "Breast Cancer Predictor",
   "description": "AI-powered diagnostic tool that analyzes tumor cell measurements to classify breast masses as benign or malignant.",
   "fullDescription": "An AI-powered diagnostic tool that analyzes tumor cell measurements to classify breast masses as benign or malignant. This project uses multiple machine learning classifiers trained on the Wisconsin Breast Cancer Dataset and provides an interactive Streamlit web app for clinicians and researchers to explore and test predictions. The app includes visualization (radar charts), real-time predictions, and confusion-matrix based performance reporting for multiple models.",
-  "image": "/projects/5.png",
+  "image": "/projects/1.png",
   "images": [
-    "/projects/5.png",
+    "/projects/1.png",
     "/projects/a3.png",
   ],
   "tags": [
