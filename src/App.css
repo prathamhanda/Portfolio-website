@@ -40,3 +40,32 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Marquee styles for very narrow screens (<=360px) */
+@media (max-width: 360px) {
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .marquee__inner {
+    display: inline-block;
+    white-space: nowrap;
+    will-change: transform;
+    animation: marquee 8s linear infinite;
+  }
+
+  .marquee__inner span {
+    display: inline-block;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

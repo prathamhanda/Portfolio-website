@@ -7,6 +7,7 @@ import { useFastFloat } from "@/hooks/useFastFloat";
 const Hero = () => {
   const { ref: heroRef, isVisible: heroVisible } = useScrollAnimation();
   const [isMobile, setIsMobile] = useState(false);
+  const [isNarrow, setIsNarrow] = useState(false);
   const blobA = useRef<HTMLDivElement | null>(null);
   const blobB = useRef<HTMLDivElement | null>(null);
   const blobC = useRef<HTMLDivElement | null>(null);
@@ -18,6 +19,17 @@ const Hero = () => {
     const update = () => {
       const inner = typeof window !== 'undefined' ? window.innerWidth <= 767 : false;
       setIsMobile((mq && mq.matches) || inner);
+    };
+    update();
+    mq?.addEventListener?.('change', update);
+    return () => mq?.removeEventListener?.('change', update);
+  }, []);
+
+  useEffect(() => {
+    const mq = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(max-width: 360px)') : null;
+    const update = () => {
+      const inner = typeof window !== 'undefined' ? window.innerWidth <= 360 : false;
+      setIsNarrow((mq && mq.matches) || inner);
     };
     update();
     mq?.addEventListener?.('change', update);
@@ -75,9 +87,17 @@ const Hero = () => {
         {/* Left Content */}
         <div className={`space-y-7 ${heroVisible ? 'scroll-animate' : ''}`}>
           <div className="inline-block">
-            <span className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium uppercase tracking-wide">
-              Full Stack Developer & AI Engineer
-            </span>
+            {isNarrow ? (
+              <div className="marquee" aria-hidden>
+                <div className="marquee__inner bg-black text-white px-6 py-2 rounded-full text-sm font-medium uppercase tracking-wide">
+                  <span>Full Stack Developer & AI Engineer</span>
+                </div>
+              </div>
+            ) : (
+              <span className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium uppercase tracking-wide">
+                Full Stack Developer & AI Engineer
+              </span>
+            )}
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold leading-tight">
