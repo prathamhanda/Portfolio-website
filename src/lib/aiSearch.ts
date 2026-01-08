@@ -113,22 +113,35 @@ export async function queryAI(query: string): Promise<string> {
       return Array.from(new Set(keys));
     }
 
-    // Persistent rotation index: prefer localStorage in browser, otherwise use module-level counter
-    let rotationIndex = (globalThis as any).__GEMINI_ROTATION_INDEX || 0;
-
+    // Persistent rotation index: pick a random initial key per user, then rotate
     function consumeStartIndex(n: number): number {
       if (n <= 0) return 0;
       try {
         const stored = localStorage.getItem('gemini_key_index');
-        let idx = stored ? parseInt(stored, 10) : 0;
-        const start = idx % n;
-        idx = (idx + 1) % n;
-        localStorage.setItem('gemini_key_index', String(idx));
-        return start;
+
+        // If we have a stored next-index, use it. Otherwise, pick a random start
+        if (stored) {
+          let idx = parseInt(stored, 10);
+          const start = idx % n;
+          idx = (idx + 1) % n;
+          localStorage.setItem('gemini_key_index', String(idx));
+          return start;
+        } else {
+          const randomStart = Math.floor(Math.random() * n);
+          const next = (randomStart + 1) % n;
+          localStorage.setItem('gemini_key_index', String(next));
+          return randomStart;
+        }
       } catch (e) {
-        const start = rotationIndex % n;
-        rotationIndex = (rotationIndex + 1) % n;
-        (globalThis as any).__GEMINI_ROTATION_INDEX = rotationIndex;
+        // Non-browser or localStorage error: use a global fallback with random init
+        const g = globalThis as any;
+        if (typeof g.__GEMINI_ROTATION_INDEX !== 'number') {
+          const randomStart = Math.floor(Math.random() * n);
+          g.__GEMINI_ROTATION_INDEX = (randomStart + 1) % n;
+          return randomStart;
+        }
+        const start = g.__GEMINI_ROTATION_INDEX % n;
+        g.__GEMINI_ROTATION_INDEX = (g.__GEMINI_ROTATION_INDEX + 1) % n;
         return start;
       }
     }
