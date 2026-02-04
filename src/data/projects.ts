@@ -48,7 +48,7 @@ export const projectsData: Project[] = [
     category: "ai-ml",
     featured: true,
     githubUrl: "https://github.com/prathamhanda/BrainTumor-Detector",
-    liveUrl: "https://brain-tumor-detector-demo.streamlit.app",
+    liveUrl: "https://brtumor.streamlit.app",
     features: [
       "Real-time MRI scan analysis",
       "99.3% classification accuracy",
@@ -255,7 +255,7 @@ python main.py --config config.yaml`,
     category: "web",
     featured: true,
     githubUrl: "https://github.com/prathamhanda/roomsonrent",
-    liveUrl: "https://roomsonrent.prathamhanda.com",
+    liveUrl: "https://roomsonrent.in",
     features: [
       "Dual portal system (Students & Landlords)",
       "Advanced property search and filtering",
