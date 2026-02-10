@@ -20,6 +20,17 @@ interface ContributionDay {
   count: number;
 }
 
+interface CodolioStats {
+  totalSolved: number;
+  rank: number;
+  streak: number;
+  totalActiveDays?: number;
+  easySolved?: number;
+  mediumSolved?: number;
+  hardSolved?: number;
+  lastUpdated: string;
+}
+
 const CodingDashboard = () => {
   const [leetcodeStats, setLeetcodeStats] = useState<LeetCodeStats>({
     totalSolved: 0,
@@ -40,6 +51,7 @@ const CodingDashboard = () => {
   const [ratingData, setRatingData] = useState<any[]>([]);
   const [ghError, setGhError] = useState<string | null>(null);
   const [retrying, setRetrying] = useState(false);
+  const [codolioStats, setCodolioStats] = useState<CodolioStats | null>(null);
 
   // Platform usernames (allow overriding via Vite env variables)
   const LEETCODE_USER = (import.meta as any).env?.VITE_LEETCODE_USERNAME || 'prathamhanda';
@@ -47,6 +59,20 @@ const CodingDashboard = () => {
   const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'prathamh';
   const CODECHEF_USER = (import.meta as any).env?.VITE_CODECHEF_USERNAME || 'prathamhanda';
   const CODEFORCES_USER = (import.meta as any).env?.VITE_CODEFORCES_USERNAME || 'prathamhanda10';
+
+  useEffect(() => {
+    fetch('/codolio-stats.json')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load Codolio stats');
+        return res.json();
+      })
+      .then((data) => {
+        setCodolioStats(data);
+      })
+      .catch((err) => {
+        console.error('Error loading Codolio stats:', err);
+      });
+  }, []);
 
   useEffect(() => { 
     // Allow configuring usernames through Vite env variables:
@@ -665,11 +691,22 @@ const CodingDashboard = () => {
     }
   }
 
-  const problemData = [
-    { name: 'Easy', value: _leetEasy + addEasy + 257 + 70, color: 'hsl(var(--chart-1))' },
-    { name: 'Medium', value: _leetMed + addMed + 257 + 100, color: 'hsl(var(--chart-2))' },
-    { name: 'Hard', value: _leetHard + addHard + 36 + 38, color: 'hsl(var(--chart-3))' },
-  ];
+  const codolioEasy = codolioStats?.easySolved ?? 0;
+  const codolioMed = codolioStats?.mediumSolved ?? 0;
+  const codolioHard = codolioStats?.hardSolved ?? 0;
+  const hasCodolioBreakdown = (codolioEasy + codolioMed + codolioHard) > 0;
+
+  const problemData = hasCodolioBreakdown
+    ? [
+        { name: 'Easy', value: codolioEasy, color: 'hsl(var(--chart-1))' },
+        { name: 'Medium', value: codolioMed, color: 'hsl(var(--chart-2))' },
+        { name: 'Hard', value: codolioHard, color: 'hsl(var(--chart-3))' },
+      ]
+    : [
+        { name: 'Easy', value: _leetEasy + addEasy + 257 + 70, color: 'hsl(var(--chart-1))' },
+        { name: 'Medium', value: _leetMed + addMed + 257 + 100, color: 'hsl(var(--chart-2))' },
+        { name: 'Hard', value: _leetHard + addHard + 36 + 38, color: 'hsl(var(--chart-3))' },
+      ];
 
   // Preferred slice colors (LeetCode-like) used as fallbacks if entry.color isn't set
   const sliceColors = ['#28a745', '#f59e0b', '#ef4444'];
@@ -804,7 +841,9 @@ const CodingDashboard = () => {
   };
   // console.log('leetcodeStats', leetcodeStats);
   // console.log('gfgCount', gfgCount);
-  const totalSolvedDisplayed = leetcodeStats.totalSolved + gfgCount + 208;
+  const totalSolvedDisplayed = codolioStats?.totalSolved
+    ? codolioStats.totalSolved
+    : leetcodeStats.totalSolved + gfgCount + 208;
 
   const statCards = [
     {
@@ -814,9 +853,9 @@ const CodingDashboard = () => {
       color: "text-blue-500 dark:text-blue-400",
     },
     {
-      title: "LeetCode Rank",
-      value: leetcodeStats.ranking.toLocaleString(),
-      icon: Trophy,
+      title: "Total Active Days",
+      value: codolioStats?.totalActiveDays ?? 0,
+      icon: Calendar,
       color: "text-yellow-500 dark:text-yellow-400",
     },
     {
