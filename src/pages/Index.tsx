@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import TechStackScroller from "@/components/TechStackScroller";
@@ -12,42 +12,72 @@ import Footer from "@/components/Footer";
 import MobileFAB from "@/components/MobileFAB";
 
 const Index = () => {
+  const [footerHeight, setFooterHeight] = useState(0);
+  const footerRef = useRef<HTMLDivElement>(null);
+
+  // Handle hash navigation when component mounts
   useEffect(() => {
-    // Handle hash navigation when component mounts
     const hash = window.location.hash;
     if (hash) {
-      const elementId = hash.substring(1); // Remove the # symbol
-      setTimeout(() => {
-        const element = document.getElementById(elementId);
-        if (element) {
-          element.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      }, 100);
+      const element = document.querySelector(hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
     }
   }, []);
-  return (
-    <div className="min-h-screen bg-background transition-colors duration-300 relative">
-      {/* Grid overlay */}
-      <div className="grid-overlay" aria-hidden />
 
-      {/* Main content with higher z-index */}
-      <div className="relative z-10">
-  <Navbar />
+  // Dynamically measure the footer's height to ensure perfect scrolling
+  useEffect(() => {
+    if (!footerRef.current) return;
+    
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setFooterHeight(entry.contentRect.height);
+      }
+    });
+    
+    resizeObserver.observe(footerRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  return (
+    <div className="bg-background min-h-screen">
+      
+      {/* MAIN CONTENT CURTAIN 
+        Given z-10 and a solid background to cover the footer.
+        The margin-bottom allows you to scroll past the content just enough to reveal the footer.
+      */}
+      <main 
+        className="relative z-10 bg-background shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-b-[2.5rem] sm:rounded-b-[3rem] overflow-hidden"
+        style={{ marginBottom: footerHeight }}
+      >
+        <Navbar />
         <Hero />
         <TechStackScroller />
         <About />
         <Timeline />
         <Projects />
-  {/* Coding Dashboard - optional section showing coding stats */}
-  <CodingDashboard />
+        <CodingDashboard />
         <FAQ />
         <Contact />
-        <Footer />
-        <MobileFAB />
+      </main>
+{/* FIXED FOOTER */}
+      {/* 1. inset-0 and h-full make this wrapper cover the whole screen behind the curtain.
+        2. flex & justify-end push the actual footer to the very bottom.
+        3. IMPORTANT: Change 'bg-black' to whatever background color class your <Footer /> component uses!
+      */}
+      <div 
+        className="fixed inset-0 w-full h-full z-0 flex flex-col justify-end bg-black"
+      >
+        <div ref={footerRef} className="w-full">
+          <Footer />
+        </div>
       </div>
+
+      {/* Kept outside the stacking contexts so it remains floating above all */}
+      <MobileFAB />
     </div>
   );
 };
