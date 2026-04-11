@@ -2,7 +2,7 @@
 const RESUME_CONTEXT = `PERSONAL INFORMATION & CONTACT:
 Name: Pratham Handa
 Role: Computer Science Student
-Education: 3rd Year, CSE, Thapar Institute (CGPA: 9.75)
+Education: 3rd Year, CSE, Thapar Institute (CGPA: 9.8)
 Email: prathamhanda10@gmail.com
 LinkedIn: linkedin.com/in/prathamh
 GitHub: github.com/prathamhanda
@@ -61,10 +61,10 @@ const fallbackResponses: Record<string, string> = {
   "work style": "I thrive in collaborative environments, following agile methodologies with a strong emphasis on clean code, documentation, and code reviews. I'm detail-oriented and regularly contribute to open-source projects.",
   "experience": "As a Full Stack Developer Intern at DBuck, I led the development of a MERN stack web app serving 10,000+ students, implementing real-time booking systems and achieving 40% platform efficiency improvement.",
   "skills": "I'm proficient in C++, Python, JavaScript/TypeScript for programming; React, Node.js, Express.js, MongoDB for web development; and PyTorch, TensorFlow, YOLO for AI/ML, with practical experience in Docker and AWS.",
-  "education": "I'm a 3rd-year Computer Science Engineering student at Thapar Institute, maintaining a 9.75 CGPA and receiving both Reliance Undergraduate and Merit III Scholarships.",
+  "education": "I'm a 3rd-year Computer Science Engineering student at Thapar Institute, maintaining a 9.8 CGPA and receiving both Reliance Undergraduate and Merit III Scholarships.",
   "projects": "My portfolio includes the Brain Tumor Detector (99.3% accuracy), AI-RoadIntelligence for traffic optimization (35% reduction in wait times), RoomsOnRent platform, and LEAD Society's website.",
   "contact": "You can reach me at prathamhanda10@gmail.com, connect on LinkedIn (linkedin.com/in/prathamh), or check out my work on GitHub (github.com/prathamhanda).",
-  "achievements": "I hold a LeetCode Knight Badge (top 3.5% globally), solved 1000+ DSA problems, and serve as Student Placement Representative while maintaining a 9.75 CGPA.",
+  "achievements": "I hold a LeetCode Knight Badge (top 3.5% globally), solved 1000+ DSA problems, and serve as Student Placement Representative while maintaining a 9.8 CGPA.",
   "leadership": "As Joint Secretary of LEAD Society, I've mentored 50+ students in DSA and web development, organized 10+ technical workshops, and maintain active involvement in the tech community.",
   "availability": "I'm open to full-time opportunities starting from May 2024, with a focus on full-stack development, AI/ML, or software engineering roles.",
   "text": "You can reach me through my website (pratham.codes), LinkedIn (linkedin.com/in/prathamh), or email (prathamhanda10@gmail.com).",

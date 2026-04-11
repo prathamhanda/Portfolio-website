@@ -10,12 +10,11 @@ import {
 } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import CommandPalette from "@/components/CommandPalette";
 import MobileFAB from "@/components/MobileFAB";
-import { preloadImages, getProjectThumbnails } from "@/lib/imagePreloader";
 import Preloader from "@/components/Preloader";
 
 const queryClient = new QueryClient();
@@ -39,16 +38,14 @@ const router = createBrowserRouter([
       { path: "*", element: <NotFound /> },
     ],
   },
-]);
+], {
+  future: {
+    v7_startTransition: true,
+  },
+});
 
 const App = () => {
   const [showPreloader, setShowPreloader] = useState(true);
-
-  useEffect(() => {
-    // Preload project thumbnail images on app initialization
-    const thumbnails = getProjectThumbnails();
-    preloadImages(thumbnails);
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

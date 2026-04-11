@@ -10,10 +10,12 @@ import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import MobileFAB from "@/components/MobileFAB";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const [footerHeight, setFooterHeight] = useState(0);
   const footerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   // Handle hash navigation when component mounts
   useEffect(() => {
@@ -42,6 +44,25 @@ const Index = () => {
     return () => resizeObserver.disconnect();
   }, []);
 
+  // Mobile: keep normal static scroll (no curtain / fixed footer)
+  if (isMobile) {
+    return (
+      <div className="bg-background min-h-screen">
+        <Navbar />
+        <Hero />
+        <TechStackScroller />
+        <About />
+        <Timeline />
+        <Projects />
+        <CodingDashboard />
+        <FAQ />
+        <Contact />
+        <Footer />
+        <MobileFAB />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background min-h-screen">
       
@@ -69,7 +90,7 @@ const Index = () => {
         3. IMPORTANT: Change 'bg-black' to whatever background color class your <Footer /> component uses!
       */}
       <div 
-        className="fixed inset-0 w-full h-full z-0 flex flex-col justify-end bg-black"
+        className="fixed inset-0 w-full h-full z-0 flex flex-col justify-end bg-[#0a0a0a]"
       >
         <div ref={footerRef} className="w-full">
           <Footer />

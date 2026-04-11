@@ -1,13 +1,19 @@
-import { useState } from "react";
-import { ExternalLink } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import ProjectDetailModal from "@/components/ProjectDetailModal";
 import { projectsData } from "@/data/projects";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { preloadImages } from "@/lib/imagePreloader";
 
 const Projects = () => {
   const { ref: projectsRef, isVisible: projectsVisible } = useScrollAnimation();
+  const isMobile = useIsMobile();
   const [filter, setFilter] = useState("all");
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const pageSize = isMobile ? 3 : 6;
+  const [visibleCount, setVisibleCount] = useState(pageSize);
+  const preloaded = useRef<Set<string>>(new Set());
 
   const projects = projectsData;
 
@@ -16,13 +22,36 @@ const Projects = () => {
       ? projects
       : projects.filter((p) => p.category === filter);
 
-  // Display featured projects first, then newest entries (preserve array order otherwise)
+  // Display featured projects first, then keep the exact order from projectsData.
+  // To reorder projects, simply move items up/down in src/data/projects.ts.
   const displayedProjects = filteredProjects.slice().sort((a, b) => {
     if (a.featured && !b.featured) return -1;
     if (!a.featured && b.featured) return 1;
-    // fallback: keep original order but show newer items (later in array) first
-    return projects.indexOf(b) - projects.indexOf(a);
+    return projects.indexOf(a) - projects.indexOf(b);
   });
+
+  // Reset pagination when filter/device changes
+  useEffect(() => {
+    setVisibleCount(pageSize);
+  }, [filter, pageSize]);
+
+  const visibleProjects = useMemo(
+    () => displayedProjects.slice(0, visibleCount),
+    [displayedProjects, visibleCount]
+  );
+
+  const canShowMore = visibleCount < displayedProjects.length;
+  const nextBatch = useMemo(
+    () => displayedProjects.slice(visibleCount, visibleCount + pageSize),
+    [displayedProjects, visibleCount, pageSize]
+  );
+
+  const preloadOnce = (paths: string[]) => {
+    const toLoad = paths.filter((p) => p && !preloaded.current.has(p));
+    if (toLoad.length === 0) return;
+    toLoad.forEach((p) => preloaded.current.add(p));
+    preloadImages(toLoad);
+  };
 
   const openProject = (project: any) => {
     setSelectedProject(project);
@@ -89,7 +118,7 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayedProjects.map((project, index) => (
+          {visibleProjects.map((project, index) => (
             <div
               key={project.id}
               onClick={() => openProject(project)}
@@ -117,6 +146,8 @@ const Projects = () => {
                 <img
                   src={project.image}
                   alt={project.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-64 object-contain group-hover:scale-110 transition-transform duration-300 bg-gray-100 dark:bg-gray-800"
                 />
               </div>
@@ -164,6 +195,26 @@ const Projects = () => {
             </div>
           ))}
         </div>
+
+        {/* Show more */}
+        {canShowMore && (
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onMouseEnter={() => preloadOnce(nextBatch.map((p) => p.image))}
+              onFocus={() => preloadOnce(nextBatch.map((p) => p.image))}
+              onTouchStart={() => preloadOnce(nextBatch.map((p) => p.image))}
+              onClick={() =>
+                setVisibleCount((c) => Math.min(c + pageSize, displayedProjects.length))
+              }
+              className="inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
+              aria-label="Show more projects"
+            >
+              Show more
+              <ChevronDown className="h-4 w-4" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Project Modal */}

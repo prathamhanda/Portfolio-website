@@ -22,7 +22,7 @@ Company Wise Kit 🌟
 Login
 Pratham Handa
 @prathamhanda
-I'm Pratham Handa, a 3rd-year CS student (9.75 CGPA) & incoming Google intern. I excel in full-stack & AI development, a LeetCode Knight.
+I'm Pratham Handa, a 3rd-year CS student (9.8 CGPA) & incoming Google intern. I excel in full-stack & AI development, a LeetCode Knight.
 India
 Thapar Institute of Engineering and Technology
 Problem Solving Stats

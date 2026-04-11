@@ -10,7 +10,6 @@ export const preloadImage = (src: string): Promise<void> => {
 export const preloadImages = async (imagePaths: string[]): Promise<void> => {
   try {
     await Promise.all(imagePaths.map(preloadImage));
-    console.log(`Successfully preloaded ${imagePaths.length} images`);
   } catch (error) {
     console.warn('Some images failed to preload:', error);
   }

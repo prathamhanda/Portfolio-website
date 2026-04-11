@@ -12,7 +12,7 @@ const FAQ = () => {
   {
     question: "What do you do and what are you currently working on?",
     answer:
-      "I am a third year Computer Science Engineering student at Thapar Institute with a CGPA of 9.75. Right now, I spend most of my time building full stack applications using React and Node.js, and experimenting with machine learning models using PyTorch and TensorFlow. I enjoy working on projects where I can take an idea from scratch and turn it into something real and useful.",
+      "I am a third year Computer Science Engineering student at Thapar Institute with a CGPA of 9.8. Right now, I spend most of my time building full stack applications using React and Node.js, and experimenting with machine learning models using PyTorch and TensorFlow. I enjoy working on projects where I can take an idea from scratch and turn it into something real and useful.",
   },
   {
     question: "What kind of projects excite you the most?",

@@ -1,315 +1,246 @@
-# 🚀 Modern Developer Portfolio
+<div align="center">
 
-> A cutting-edge, AI-powered portfolio website built from the ground up to showcase full-stack development and AI engineering expertise with modern technologies and exceptional performance
+#  Pratham Handa | Portfolio
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+<a href="https://pratham.codes">
+<img src="https://img.shields.io/badge/Live%20Portfolio-pratham.codes-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Portfolio" />
+</a>
 
-## 🌟 Live Demo
+### **AI-powered navigation. Performance-first UI. A portfolio that feels like a product.**
 
-**[View Live Portfolio →](https://pratham.codes)**
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-3.x-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com/)
 
----
+<br />
 
-## 🎯 Project Overview
+[🚀 Quick Start](#-quick-start) • [✨ Highlights](#-feature-highlights) • [🖼️ Screenshots](#%EF%B8%8F-screenshots) • [🛠️ Tech Stack](#%EF%B8%8F-tech-stack) • [📖 Customization](#-customization)
 
-This portfolio represents a complete reimagination of what a developer's online presence can be. Built entirely from scratch, it combines intelligent AI search, real-time data integration, and performance-first architecture to create an experience that's both beautiful and functional.
+<br />
 
----
+</div>
 
-## ✨ Exceptional Features
+## 🎯 What is this?
 
-### 🤖 **AI-Powered Command Palette**
-- **Google Gemini 2.5 Flash** integration for intelligent, natural language queries
-- Context-aware search with intelligent fallback responses
-- Real-time exploration of projects, skills, and experience
-- **Lightning-fast keyboard shortcuts** (Ctrl+K) for efficient navigation
+This is a modern, product-grade developer portfolio built with **React + Vite + TypeScript**, designed to showcase projects, experience, and live coding stats with a premium UX.
 
-### 🎨 **Buttery-Smooth Performance**
-- Custom **RequestAnimationFrame** animations optimized for 60fps
-- **Intersection Observer** based scroll effects with zero jank
-- Smart mobile-adaptive system with automatic reduced motion support
-- Guaranteed zero layout shift during page interactions
-
-### 📊 **Live Coding Dashboard**
-- Real-time integration with **LeetCode, GitHub, GeeksforGeeks, CodeChef, and Codeforces**
-- Interactive contribution heatmap with intelligent hover tooltips
-- **Custom serverless API proxies** to handle CORS and rate limiting
-- Smart caching layer with localStorage and intelligent TTL management
-
-### 🎪 **Premium User Experience**
-- Modern **glass morphism** design with seamless dark/light theme switching
-- Progressive enhancement philosophy ensuring functionality on any device
-- **Mobile-first responsive design** with touch gesture optimizations
-- Full accessibility compliance with comprehensive keyboard navigation
-
-### ⚡ **Blazing-Fast Load Times**
-- **Vite** build system for instant dev server and optimized production bundles
-- Strategic dynamic imports and intelligent code splitting
-- Consistent **99+ Lighthouse scores** across all performance metrics
-- Global CDN deployment for sub-second load times worldwide
+It’s optimized for **keyboard-first navigation**, **smooth scroll interactions**, and **fast perceived performance** (preloading, lightweight animations, and a clean component architecture).
 
 ---
 
-## 🛠️ Key Features
+## ✨ Feature Highlights
 
-### 🔍 **Intelligent Search & Navigation**
-- AI-powered natural language query processing
-- Fuzzy search across all content
-- Command palette with autocomplete
-- Smart suggestions and context-aware responses
+<table>
+<tr>
+<td width="50%">
 
-### 📱 **Responsive & Accessible Design**
-- Mobile-first responsive layout
-- Dark/Light theme with system preference detection
-- Full keyboard navigation support
-- Screen reader optimized with ARIA labels
+### 🤖 AI Command Palette
+- Natural language search (Google Gemini integration)
+- Keyboard-first UX (**Ctrl+K**)
+- Quick navigation across sections and content
+- Mobile-friendly quick access (floating action button)
 
-### 📈 **Dynamic Data Integration**
-- Real-time coding statistics from multiple platforms
-- GitHub contribution visualization
-- Live project metrics and performance data
-- Automated data caching and refresh
+</td>
+<td width="50%">
 
-### 🎯 **Project Showcase**
-- Interactive project galleries with image carousels
-- Detailed technical documentation
-- Live demo links and GitHub integration
-- Technology stack visualization
+### 📊 Live Coding Dashboard
+- Multi-platform stats (e.g. competitive programming + contributions)
+- Cached & resilient fetching patterns
+- Clean visualizations and quick glance widgets
 
-### 💫 **Smooth Animations & Interactions**
-- Custom floating animations with configurable parameters
-- Scroll-triggered reveal animations
-- Smooth page transitions
-- Optimized for 60fps performance
+</td>
+</tr>
+<tr>
+<td width="50%">
 
-### 🔧 **Developer Experience**
-- TypeScript for type safety
-- ESLint + Prettier for code quality
-- Component-based architecture
-- Comprehensive error handling
+### 🎨 Premium UI/UX
+- Glassmorphism-inspired cards and layered backgrounds
+- Dark/Light theme support
+- Responsive layout with mobile-friendly interactions
+- Animated SVG preloader experience
+
+</td>
+<td width="50%">
+
+### ⚡ Performance-first Architecture
+- Scroll-triggered reveals via IntersectionObserver
+- Image preloading for key project thumbnails
+- UI built from accessible primitives (Radix + shadcn)
+
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td align="center" width="33%">
+<h3>⌨️</h3>
+<b>Keyboard-first</b><br/>
+<sub>Ctrl+K command palette • fast navigation</sub>
+</td>
+<td align="center" width="33%">
+<h3>🧠</h3>
+<b>AI Search</b><br/>
+<sub>Gemini-powered answers • smart fallbacks</sub>
+</td>
+<td align="center" width="33%">
+<h3>🌓</h3>
+<b>Theme System</b><br/>
+<sub>Light/Dark toggle • system-aware</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="33%">
+<h3>🧩</h3>
+<b>Project Deep Dives</b><br/>
+<sub>Detail modal • gallery • tech stack</sub>
+</td>
+<td align="center" width="33%">
+<h3>📈</h3>
+<b>Live Stats</b><br/>
+<sub>Coding dashboard • charts • snapshots</sub>
+</td>
+<td align="center" width="33%">
+<h3>⚡</h3>
+<b>Perceived Speed</b><br/>
+<sub>Image preloading • scroll reveals</sub>
+</td>
+</tr>
+</table>
 
 ---
 
-## 🏗️ Tech Stack
+## 🖼️ Screenshots
 
-### **Frontend Core**
-- **React 18** - Modern React with concurrent features
-- **TypeScript** - Type safety and enhanced developer experience
-- **Vite** - Lightning-fast build tool and dev server
-- **TailwindCSS** - Utility-first CSS framework
+Add screenshots here to match the “product README” vibe. Recommended set:
 
-### **UI Components & Design**
-- **ShadcN UI** - High-quality React components
-- **Radix UI** - Unstyled, accessible UI primitives
-- **Lucide React** - Beautiful, customizable icons
-- **next-themes** - Advanced theme management
+- **Hero / Landing** (top of the page)
+- **Projects grid** (with cards visible)
+- **Project detail modal** (open on a project)
+- **AI Command Palette** (opened with Ctrl+K)
+- **Coding Dashboard** (stats + charts)
+- **Mobile view** (any section + nav/fab)
 
-### **State Management & Data**
-- **TanStack Query** - Powerful data synchronization
-- **React Hook Form** - Performant forms with validation
-- **Zod** - TypeScript-first schema validation
+<table>
+   <tr>
+      <td align="center" width="50%">
+         <img src="public/ss/hero.png" alt="Hero" />
+         <br />
+         <sub><b>Hero</b> — first impression + headline</sub>
+      </td>
+      <td align="center" width="50%">
+         <img src="public/ss/projects.png" alt="Projects" />
+         <br />
+         <sub><b>Projects</b> — curated work with rich cards</sub>
+      </td>
+   </tr>
+   <tr>
+      <td align="center" width="50%">
+         <img src="public/ss/modal.png" alt="Project Modal" />
+         <br />
+         <sub><b>Project Modal</b> — full project story + gallery</sub>
+      </td>
+      <td align="center" width="50%">
+         <img src="public/ss/command.png" alt="Command Palette" />
+         <br />
+         <sub><b>Command Palette</b> — AI navigation with Ctrl+K</sub>
+      </td>
+   </tr>
+   <tr>
+      <td align="center" width="50%">
+         <img src="public/ss/coding.png" alt="Coding Dashboard" />
+         <br />
+         <sub><b>Coding Dashboard</b> — live stats and visuals</sub>
+      </td>
+      <td align="center" width="50%">
+         <img src="public/ss/mobile.png" alt="Mobile" />
+         <br />
+         <sub><b>Mobile</b> — responsive layout + touch-friendly UX</sub>
+      </td>
+   </tr>
+</table>
 
-### **AI & External Integrations**
-- **Google Gemini AI** - Advanced language model integration
-- **GitHub API** - Repository and contribution data
-- **LeetCode API** - Competitive programming statistics
-- **Recharts** - Data visualization and charts
-
-### **Performance & Analytics**
-- **Vercel Analytics** - Real user monitoring
-- **Vercel Speed Insights** - Core Web Vitals tracking
-- **React Query** - Intelligent caching and background updates
-
-### **Development Tools**
-- **ESLint** - Code linting and quality checks
-- **PostCSS** - CSS processing and optimization
-- **TypeScript ESLint** - TypeScript-specific linting rules
+> Tip: your screenshots live in `public/ss/` — keep adding images there and update the filenames in this section.
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Node.js** (v18 or higher)
-- **npm**, **yarn**, or **bun** package manager
-- **Git** for version control
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/prathamhanda/Portfolio-website.git
-   cd Portfolio-website
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   bun install
-   ```
-
-3. **Environment Setup**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   # AI Integration
-   VITE_GEMINI_API_KEY=your_gemini_api_key_here
-   
-   ```
-
-4. **Start the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   bun dev
-   ```
-
-5. **Open your browser**
-   Navigate to `http://localhost:8080` to see the application running.
-
-### Building for Production
+## 🚀 Quick Start
 
 ```bash
-# Create production build
-npm run build
+# 1) Install deps
+npm install
 
-# Preview production build locally
+# 2) Configure env (optional but recommended for AI features)
+# Create a .env file in the project root
+
+# 3) Start dev server
+npm run dev
+```
+
+Open http://localhost:8080
+
+### 🔐 Environment Variables
+
+Create `.env` in the project root:
+
+```env
+# Enables AI-powered command palette features
+VITE_GEMINI_API_KEY=your_key_here
+```
+
+### Production
+
+```bash
+npm run build
 npm run preview
 ```
 
-### Deployment
+---
 
-The project is optimized for **Vercel** deployment with zero configuration:
+## 🛠️ Tech Stack
 
-1. **Deploy to Vercel**
-   ```bash
-   npm install -g vercel
-   vercel
-   ```
+**Frontend**
+- React 18, TypeScript, Vite
+- Tailwind CSS
 
-2. **Alternative Deployment Options**
-   - **Netlify**: Direct GitHub integration
-   - **GitHub Pages**: Using GitHub Actions
-   - **Firebase Hosting**: Google Cloud integration
+**UI / UX**
+- shadcn/ui + Radix UI primitives
+- lucide-react icons
+- next-themes for theme switching
+
+**Data / Integrations**
+- TanStack Query
+- Google Gemini integration for AI search
+
+**Deployment / Analytics**
+- Vercel
+- Vercel Analytics + Speed Insights
 
 ---
 
-## 🎨 Customization Guide
+## 📖 Customization
 
-### **Personal Information**
-Update your details in `src/lib/aiSearch.ts`:
-```typescript
-const RESUME_CONTEXT = `
-PERSONAL INFORMATION & CONTACT:
-Name: Your Name
-Role: Your Role
-Email: your.email@example.com
-// ... update with your information
-`;
-```
+Common update points:
 
-### **Projects Data**
-Modify `src/data/projects.ts` to showcase your projects:
-```typescript
-export const projectsData: Project[] = [
-  {
-    id: "your-project",
-    title: "Your Project Title",
-    description: "Project description",
-    // ... add your project details
-  }
-];
-```
-
-### **Styling & Theme**
-Customize colors and design tokens in `src/index.css`:
-```css
-:root {
-  --primary: your-color-here;
-  --background: your-background-color;
-  /* ... customize design system */
-}
-```
-
-### **API Integration**
-Update platform usernames in environment variables or component defaults.
-
----
-
-## 📊 Performance Metrics
-
-- **Lighthouse Score**: 99+ across all categories
-- **First Contentful Paint**: < 1.2s
-- **Largest Contentful Paint**: < 2.5s
-- **Cumulative Layout Shift**: < 0.1
-- **Bundle Size**: < 100KB gzipped
-
----
-
-## 🤝 Contributing
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add amazing feature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-This project was built from scratch with passion and attention to detail. Special thanks to:
-
-- **The open-source community** for incredible tools and libraries
-- **ShadcN** for the elegant UI component patterns
-- **Vercel** for world-class deployment and performance infrastructure
-- **Radix UI** for accessible, unstyled component primitives
-- **Google** for the powerful Gemini AI API
+- **Projects**: edit `src/data/projects.ts`
+- **AI Context**: edit `src/lib/aiSearch.ts` (resume/context + fallback answers)
+- **Branding / Theme tokens**: edit `src/index.css` (CSS variables + theme primitives)
+- **Public assets**: swap images under `public/` (icons, project images, preloader SVG)
 
 ---
 
 ## 📬 Contact
 
 **Pratham Handa**
-- 🌐 Portfolio: [pratham.codes](https://pratham.codes)
-- 💼 LinkedIn: [linkedin.com/in/prathamh/](https://www.linkedin.com/in/prathamh/)
-- 🐙 GitHub: [github.com/prathamhanda](https://github.com/prathamhanda)
-- 📧 Email: prathamhanda10@gmail.com
-
----
-
+- Portfolio: https://pratham.codes
+- LinkedIn: https://www.linkedin.com/in/prathamh/
+- GitHub: https://github.com/prathamhanda
+- Email: prathamhanda10@gmail.com
+- LeetCode: https://leetcode.com/u/prathamhanda/
 <div align="center">
 
-**⭐ If you found this project inspiring, consider giving it a star!**
-
-Crafted with ❤️, ☕, and countless hours of refinement by [Pratham Handa](https://github.com/prathamhanda)
+**⭐ If you found this portfolio inspiring, consider giving it a star!**
 
 </div>
-
-
-Local push test: 2025-12-27T20:18:53+05:30

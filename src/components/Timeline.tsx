@@ -9,58 +9,52 @@ interface TimelineItem {
   companyUrl?: string;
   period?: string;
   summary: string;
-  tech: string[];
+  tags: string[];
 }
 
 const timelineData: TimelineItem[] = [
   {
-    date: "APR 2025 - PRESENT",
+    date: "NOV 2025 – PRESENT",
+    title: "Samsung PRISM Research Intern",
+    company: "Samsung Research (PRISM)",
+    companyUrl: "https://research.samsung.com/",
+    period: "Nov 2025 – Present",
+    summary:
+      "Developed on-device short-text topic modelling and shipped a TensorFlow Lite mobile build with ~35% lower memory and inference, improving topic quality by ~18%.",
+    tags: ["On-device ML", "C++", "PyTorch", "TensorFlow Lite", "NLP", "Optimization"],
+  },
+  {
+    date: "APR 2025 – PRESENT",
     title: "Full Stack Developer Intern",
-  company: "DBuck Technologies Pvt. Ltd.",
-  companyUrl: "https://dbuck.in",
-    period: "APR 2025 - PRESENT",
+    company: "DBuck Technologies Pvt. Ltd.",
+    companyUrl: "https://dbuck.in",
+    period: "Apr 2025 – Present",
     summary:
-      "Developed and deployed a containerized student housing platform with dual portals for 10k+ students.",
-    tech: ["React", "Node.js", "MongoDB", "Docker", "RESTful APIs"],
+      "Built and deployed a student housing platform with separate student and owner portals, supporting 10k+ users with a containerized backend and APIs.",
+    tags: ["React", "Node.js", "MongoDB", "Docker", "APIs", "Software Architecture"],
   },
   {
-    date: "JUN - JUL 2025",
+    date: "JUN – JUL 2025",
     title: "Experiential Learning Center Intern",
-  company: "Thapar Institute of Engineering & Technology",
-  companyUrl: "https://www.thapar.edu/academics/centers/experiential-learning-centre1",
-    period: "JUN - JUL 2025",
+    company: "Thapar Institute of Engineering & Technology",
+    companyUrl:
+      "https://www.thapar.edu/academics/centers/experiential-learning-centre1",
+    period: "Jun 2025 – Jul 2025",
     summary:
-      "Engineered a real-time traffic system using YOLOv8 and SUMO, processing streams at 45 FPS with <50ms latency.",
-    tech: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine API"],
+      "Prototyped a real-time traffic monitoring and simulation workflow (~45 FPS, low latency) to evaluate signal strategies for demos.",
+    tags: ["Python", "Machine Learning", "OpenCV", "Simulation", "SUMO"],
   },
   {
-    date: "SEP 2023 - PRESENT",
-    title: "Joint Secretary",
-  company: "LEAD Society",
-  companyUrl: "https://leadtiet.netlify.app/",
-    period: "SEP 2023 - PRESENT",
+    date: "AUG 2024 – PRESENT",
+    title: "Student Placement Representative",
+    company: "Thapar Institute of Engineering & Technology",
+    companyUrl: "https://thapar.edu",
+    period: "Aug 2024 – Present",
     summary:
-      "Built the official society website and mentored students in 2 hrs+ Data Structures and Algorithms workshop.",
-    tech: ["Web Development", "DSA", "Mentorship", "Leadership"],
-  },
-  {
-    date: "AUG 2023 - JUNE 2027",
-    title: "B.E. Computer Science & Engineering",
-  company: "Thapar Institute of Engineering & Technology",
-  companyUrl: "https://thapar.edu",
-    period: "AUG 2023 - JUNE 2027",
-    summary:
-      "Pursuing B.Tech. with a 9.75 CGPA; Reliance Undergraduate Scholar and Merit III Scholarship recipient.",
-    tech: ["Data Structures and Algorithms", "Operating Systems", "DBMS", "AI"],
+      "Supported campus placements by onboarding companies, managing schedules, and keeping recruiter–student communication smooth as an SPO liaison.",
+    tags: ["Coordination", "Recruiter Relations", "Operations", "Communication"],
   },
 ];
-
-function renderCompany(company?: string) {
-  if (!company) return null;
-  return company
-    .replace(/RoomsonRent/gi, (m) => `<span class="text-accent font-semibold">${m}</span>`)
-    .replace(/RoadIntelligence/gi, (m) => `<span class="text-accent font-semibold">${m}</span>`);
-}
 
 const Timeline = () => {
   const { ref, isVisible } = useScrollAnimation();
@@ -168,7 +162,7 @@ const Timeline = () => {
           />
 
           {/* Timeline Items */}
-          <div className="grid grid-cols-4 gap-8 relative items-stretch">
+          <div className="grid grid-flow-col auto-cols-fr gap-8 relative items-stretch">
             {timelineData.map((item, index) => (
               <div
                 key={index}
@@ -188,16 +182,18 @@ const Timeline = () => {
                 </div>
 
                 {/* Content Card */}
-                <div className="glass-card p-4 rounded-xl group cursor-default border border-black/60 dark:border-gray-400 transition-transform duration-200 ease-out transform hover:-translate-y-1 hover:shadow-lg bg-white/5 dark:bg-white/3 backdrop-blur-sm">
+                <div className="glass-card p-5 rounded-xl group cursor-default border border-black/60 dark:border-gray-400 transition-transform duration-200 ease-out transform hover:-translate-y-1 hover:shadow-lg bg-white/5 dark:bg-white/3 backdrop-blur-sm">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-sm text-muted-foreground">{item.period || item.date}</p>
-                      <h3 className="text-xl font-bold mb-1 text-foreground">{item.title}</h3>
+                      <div className="mt-2 flex items-start justify-between gap-3">
+                        <h3 className="text-xl font-bold text-foreground leading-snug">{item.title}</h3>
+                      </div>
                       {item.company && (
                         <p className="text-sm text-muted-foreground mb-3">
                           {item.companyUrl ? (
                             <a href={item.companyUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:underline relative pr-6">
-                              <span dangerouslySetInnerHTML={{ __html: renderCompany(item.company) as string }} />
+                              <span>{item.company}</span>
                               <ArrowRight className="absolute top-0 right-0 w-5 h-5 -rotate-45 text-accent" />
                             </a>
                           ) : (
@@ -208,10 +204,12 @@ const Timeline = () => {
                     </div>
                   </div>
 
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-2" dangerouslySetInnerHTML={{ __html: item.summary }} />
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {item.summary}
+                  </p>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {item.tech.map((tag) => (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {item.tags.map((tag) => (
                       <span
                         key={tag}
                         className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-muted/80 text-foreground font-medium dark:bg-muted/70 dark:text-foreground"
@@ -266,7 +264,7 @@ const Timeline = () => {
                     <p className="text-sm text-muted-foreground mb-3">
                       {item.companyUrl ? (
                         <a href={item.companyUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:underline relative pr-6">
-                          <span dangerouslySetInnerHTML={{ __html: renderCompany(item.company) as string }} />
+                          <span>{item.company}</span>
                           <ArrowRight className="absolute top-0 right-0 w-5 h-5 -rotate-45 text-accent" />
                         </a>
                       ) : (
@@ -275,10 +273,12 @@ const Timeline = () => {
                     </p>
                   )}
 
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-1" dangerouslySetInnerHTML={{ __html: item.summary }} />
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {item.summary}
+                  </p>
 
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {item.tech.map((tag) => (
+                    {item.tags.map((tag) => (
                       <span
                         key={tag}
                         className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-muted/80 text-foreground font-medium dark:bg-muted/70 dark:text-foreground"

@@ -5,6 +5,19 @@ import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Sector } from "recharts";
 
+const DEFAULT_RATING_DATA = [
+  { date: 'Jan', rating: 1400 },
+  { date: 'Feb', rating: 1450 },
+  { date: 'Mar', rating: 1350 },
+  { date: 'Apr', rating: 1580 },
+  { date: 'May', rating: 1650 },
+  { date: 'Jun', rating: 1575 },
+  { date: 'Jul', rating: 1694 },
+  { date: 'Aug', rating: 1871 },
+  { date: 'Sep', rating: 1939 },
+  { date: 'Oct', rating: 1931 },
+];
+
 interface LeetCodeStats {
   totalSolved: number;
   easySolved: number;
@@ -32,6 +45,7 @@ interface CodolioStats {
 }
 
 const CodingDashboard = () => {
+  const isDev = (import.meta as any).env?.DEV === true;
   const [leetcodeStats, setLeetcodeStats] = useState<LeetCodeStats>({
     totalSolved: 0,
     easySolved: 0,
@@ -42,13 +56,11 @@ const CodingDashboard = () => {
     ContestRating: 1871,
   });
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
-  const [gfgCount, setGfgCount] = useState<number>(304);
-  const [gfgError, setGfgError] = useState<string | null>(null);
   const heatmapRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [tooltip, setTooltip] = useState<{ visible: boolean; x: number; y: number; left: number; top: number; text: string }>({ visible: false, x: 0, y: 0, left: 0, top: 0, text: '' });
   const [loading, setLoading] = useState(true);
-  const [ratingData, setRatingData] = useState<any[]>([]);
+  const [ratingData, setRatingData] = useState<any[]>(DEFAULT_RATING_DATA);
   const [ghError, setGhError] = useState<string | null>(null);
   const [retrying, setRetrying] = useState(false);
   const [codolioStats, setCodolioStats] = useState<CodolioStats | null>(null);
@@ -70,176 +82,23 @@ const CodingDashboard = () => {
         setCodolioStats(data);
       })
       .catch((err) => {
-        console.error('Error loading Codolio stats:', err);
+        if (isDev) console.error('Error loading Codolio stats:', err);
       });
   }, []);
 
+  // Use Codolio as the single source of truth for solved counts (avoid client-side LeetCode/GfG scraping).
+  useEffect(() => {
+    if (!codolioStats) return;
+    setLeetcodeStats((prev) => ({
+      ...prev,
+      totalSolved: codolioStats.totalSolved ?? prev.totalSolved,
+      easySolved: codolioStats.easySolved ?? prev.easySolved,
+      mediumSolved: codolioStats.mediumSolved ?? prev.mediumSolved,
+      hardSolved: codolioStats.hardSolved ?? prev.hardSolved,
+    }));
+  }, [codolioStats]);
+
   useEffect(() => { 
-    // Allow configuring usernames through Vite env variables:
-    // VITE_LEETCODE_USERNAME and VITE_GITHUB_USERNAME
-  const LEETCODE_USER = (import.meta as any).env?.VITE_LEETCODE_USERNAME || 'prathamhanda';
-  const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
-  const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'prathamh';
-
-    // Fetch LeetCode stats using GraphQL API
-    const fetchLeetCodeStats = async () => {
-      try {
-        const gqlUrl = 'https://leetcode.com/graphql';
-        const query = `
-          query fullUserData($username: String!) {
-            matchedUser(username: $username) {
-              username
-              profile {
-                realName
-                userAvatar
-                countryName
-                ranking
-                reputation
-              }
-              submitStats {
-                acSubmissionNum {
-                  difficulty
-                  count
-                  submissions
-                }
-                totalSubmissionNum {
-                  difficulty
-                  count
-                  submissions
-                }
-              }
-            }
-            userContestRanking(username: $username) {
-              attendedContestsCount
-              rating
-              globalRanking
-              totalParticipants
-              topPercentage
-            }
-            userContestRankingHistory(username: $username) {
-              contest {
-                title
-                startTime
-              }
-              rating
-              ranking
-            }
-          }
-        `;
-        
-        const response = await fetch(gqlUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'Mozilla/5.0'
-          },
-          body: JSON.stringify({
-            query,
-            variables: { username: LEETCODE_USER }
-          })
-        });
-        
-        if (!response.ok) {
-          throw new Error(`LeetCode GraphQL returned ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log('LeetCode GraphQL Response:', data); // Debug log
-        
-        // Extract submission stats
-        const submitStats = data?.data?.matchedUser?.submitStats?.acSubmissionNum || [];
-        const profile = data?.data?.matchedUser?.profile || {};
-        const contestRanking = data?.data?.userContestRanking || {};
-        const contestHistory = data?.data?.userContestRankingHistory || [];
-        
-        // Parse difficulty breakdown
-        let easySolved = 0;
-        let mediumSolved = 0;
-        let hardSolved = 0;
-        let totalSolved = 0;
-        
-        submitStats.forEach((stat: any) => {
-          const difficulty = stat.difficulty?.toLowerCase();
-          const count = parseInt(stat.count) || 0;
-          totalSolved += count;
-          
-          if (difficulty === 'easy') easySolved = count;
-          else if (difficulty === 'medium') mediumSolved = count;
-          else if (difficulty === 'hard') hardSolved = count;
-        });
-        
-        // Set the stats
-        setLeetcodeStats({
-          totalSolved: totalSolved || 632,
-          easySolved: easySolved || 185,
-          mediumSolved: mediumSolved || 349,
-          hardSolved: hardSolved || 98,
-          ranking: profile.ranking || 101686,
-          contributionPoints: 0, // GraphQL doesn't provide this
-          ContestRating: contestRanking.rating || 1871,
-        });
-        
-        // Process contest history for rating chart
-        if (contestHistory && contestHistory.length > 0) {
-          const mapped = contestHistory.map((h: any, i: number) => {
-            const startTime = h?.contest?.startTime;
-            const dateLabel = startTime ? 
-              new Date(startTime * 1000).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 
-              `Contest ${i + 1}`;
-            return { 
-              date: dateLabel, 
-              rating: Number(h?.rating || 1500) 
-            };
-          }).filter((item: any) => item.rating > 0); // Filter out zero ratings
-          
-          // Keep last 12 entries
-          setRatingData(mapped.slice(-12));
-        } else {
-          // Fallback mock data if no contest history
-          const mockRatingData = [
-            { date: 'Jan', rating: 1400 },
-            { date: 'Feb', rating: 1450 },
-            { date: 'Mar', rating: 1350 },
-            { date: 'Apr', rating: 1580 },
-            { date: 'May', rating: 1650 },
-            { date: 'Jun', rating: 1575 },
-            { date: 'Jul', rating: 1694 },
-            { date: 'Aug', rating: 1871 },
-            { date: 'Sep', rating: 1939 },
-            { date: 'Oct', rating: 1931 },
-          ];
-          setRatingData(mockRatingData);
-        }
-        
-      } catch (error: any) {
-        console.error('Error fetching LeetCode stats:', error);
-        // Fallback to default values on error
-        setLeetcodeStats({
-          totalSolved: 632,
-          easySolved: 185,
-          mediumSolved: 349,
-          hardSolved: 98,
-          ranking: 101686,
-          contributionPoints: 0,
-          ContestRating: 1871,
-        });
-        
-        const mockRatingData = [
-          { date: 'Jan', rating: 1400 },
-          { date: 'Feb', rating: 1450 },
-          { date: 'Mar', rating: 1350 },
-          { date: 'Apr', rating: 1580 },
-          { date: 'May', rating: 1650 },
-          { date: 'Jun', rating: 1575 },
-          { date: 'Jul', rating: 1694 },
-          { date: 'Aug', rating: 1871 },
-          { date: 'Sep', rating: 1939 },
-          { date: 'Oct', rating: 1931 },
-        ];
-        setRatingData(mockRatingData);
-      }
-    };
-
     // Fetch GitHub contributions
     // Fetch GitHub contributions
     const fetchGitHubContributions = async () => {
@@ -288,14 +147,14 @@ const CodingDashboard = () => {
                 setGhError(null);
               }
             } catch (err) {
-              console.error('fallback error', err);
+              if (isDev) console.error('fallback error', err);
             }
           }
         } catch (err) {
-          console.warn('localStorage unavailable', err);
+          if (isDev) console.warn('localStorage unavailable', err);
         }
       } catch (error: any) {
-        console.error('Error fetching GitHub contributions:', error);
+        if (isDev) console.error('Error fetching GitHub contributions:', error);
         setGhError(String(error?.message || error));
       } finally {
         setLoading(false);
@@ -326,84 +185,13 @@ const CodingDashboard = () => {
       fetchGitHubContributions();
     }
 
-    // Fetch GeeksforGeeks profile page and extract total_problems_solved from the __NEXT_DATA__ JSON
-    const fetchGFGCount = async () => {
-      try {
-        setGfgError(null);
-        const cacheKey = `gfgCount:${GFG_USER}`;
-        try {
-          const cached = localStorage.getItem(cacheKey);
-          if (cached) {
-            const parsed = JSON.parse(cached);
-            const age = Date.now() - (parsed.ts || 0);
-            const ttl = 1000 * 60 * 60; // 1 hour
-            if (age < ttl && typeof parsed.count === 'number') {
-              setGfgCount(parsed.count);
-              return;
-            }
-          }
-        } catch (e) {
-          // ignore cache errors
-        }
-
-        // First try a local serverless endpoint (avoids CORS). If not available, fall back to direct client fetch.
-        try {
-          const apiUrl = `/api/gfg-count?user=${encodeURIComponent(GFG_USER)}`;
-          const r = await fetch(apiUrl, { method: 'GET' });
-          if (r.ok) {
-            const j = await r.json();
-            if (typeof j?.count === 'number') {
-              setGfgCount(Number(j.count || 304));
-              try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), count: Number(j.count || 0) })); } catch (e) {}
-              return;
-            }
-          }
-        } catch (e) {
-          // endpoint not available or returned CORS/network error - fall back to client fetch
-          try { if ((window as any)?.console && (window as any).__toggleHeatmapTooltipDebug) (window as any).__toggleHeatmapTooltipDebug; } catch (er) {}
-          // debug logged elsewhere if enabled
-        }
-
-        // Fallback: attempt client-side fetch (may be blocked by CORS)
-        const url = `https://www.geeksforgeeks.org/user/${GFG_USER}/`;
-        const res = await fetch(url, { method: 'GET' });
-        if (!res.ok) throw new Error(`GfG status ${res.status}`);
-        const text = await res.text();
-
-        // Extract __NEXT_DATA__ JSON from the page
-        const m = text.match(/<script\s+id=\"__NEXT_DATA__\"[^>]*>([\s\S]*?)<\/script>/i);
-        if (!m) throw new Error('Could not find __NEXT_DATA__ on GfG page');
-        let json: any;
-        try {
-          json = JSON.parse(m[1]);
-        } catch (err) {
-          throw new Error('Failed to parse GfG JSON');
-        }
-
-        const possible = json?.props?.pageProps || json?.props || json;
-        const count = possible?.userInfo?.total_problems_solved
-          || possible?.initialState?.userProfileApi?.getUserInfo?.data?.total_problems_solved
-          || possible?.initialState?.userProfileApi?.getUserInfo?.data?.data?.total_problems_solved
-          || 304;
-
-        setGfgCount(Number(count || 304));
-        try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), count: Number(count || 0) })); } catch (e) {}
-      } catch (err: any) {
-        console.warn('GfG fetch failed', err);
-        setGfgError(String(err?.message || err));
-      }
-    };
-
-    // try GFG fetch but don't block main loads
-    fetchGFGCount();
-
     // Attach mouse handlers for custom tooltip (reads data- attributes set on rects)
     let container = heatmapRef.current;
     // debug toggle: set VITE_HEATMAP_TOOLTIP_DEBUG=true or set localStorage 'heatmapTooltipDebug' = '1'
     const envDebug = (import.meta as any).env?.VITE_HEATMAP_TOOLTIP_DEBUG === 'true';
     let runtimeDebug = false;
     try { runtimeDebug = typeof window !== 'undefined' && localStorage.getItem('heatmapTooltipDebug') === '1'; } catch (e) {}
-    const debug = envDebug || runtimeDebug;
+    const debug = isDev && (envDebug || runtimeDebug);
     // expose a quick toggle helper for local debugging
     try {
       if (typeof window !== 'undefined') {
@@ -411,7 +199,7 @@ const CodingDashboard = () => {
           const val = v === undefined ? !(localStorage.getItem('heatmapTooltipDebug') === '1') : !!v;
           localStorage.setItem('heatmapTooltipDebug', val ? '1' : '0');
           // eslint-disable-next-line no-console
-          console.log('[heatmap-debug] set heatmapTooltipDebug =', val ? '1' : '0');
+          if (isDev) console.log('[heatmap-debug] set heatmapTooltipDebug =', val ? '1' : '0');
         };
       }
     } catch (e) {}
@@ -430,7 +218,7 @@ const CodingDashboard = () => {
         try {
           const rec = { ts: Date.now(), ...entry };
           (window as any).__heatmapTooltipLog.push(rec);
-          console.debug('[heatmap-debug]', rec);
+          if (isDev) console.debug('[heatmap-debug]', rec);
         } catch (e) {
           // ignore logging errors
         }
@@ -598,8 +386,6 @@ const CodingDashboard = () => {
       };
     }
 
-    fetchLeetCodeStats();
-    fetchGitHubContributions();
     // helper: fallback that aggregates public events into date counts
     async function fetchGitHubEventsFallback(user: string) {
       try {
@@ -632,64 +418,15 @@ const CodingDashboard = () => {
   const formatted = Object.keys(dateCounts).map((k) => ({ date: k, count: dateCounts[k] }));
         return formatted;
       } catch (err) {
-        console.error('GitHub events fallback failed', err);
+        if (isDev) console.error('GitHub events fallback failed', err);
         return [];
       }
     }
   }, []);
 
-  // Include GeeksforGeeks total into the LeetCode difficulty breakdown.
-  // NOTE: GfG only provides a total problem count, not difficulty breakdown. We distribute
-  // the GfG count proportionally across Easy/Medium/Hard according to the current
-  // LeetCode breakdown. If the LeetCode breakdown is all zeros, distribute evenly.
-  // This is an approximation; if you'd prefer a different rule (all to Easy, or a
-  // separate "Other" bucket), tell me and I can change it.
   const _leetEasy = leetcodeStats.easySolved || 0;
   const _leetMed = leetcodeStats.mediumSolved || 0;
   const _leetHard = leetcodeStats.hardSolved || 0;
-  let addEasy = 0;
-  let addMed = 0;
-  let addHard = 0;
-  const totalLeetBreakdown = _leetEasy + _leetMed + _leetHard;
-  if (gfgCount > 0) {
-    if (totalLeetBreakdown > 0) {
-      const pEasy = _leetEasy / totalLeetBreakdown;
-      const pMed = _leetMed / totalLeetBreakdown;
-      const pHard = _leetHard / totalLeetBreakdown;
-      addEasy = Math.floor(pEasy * gfgCount);
-      addMed = Math.floor(pMed * gfgCount);
-      addHard = Math.floor(pHard * gfgCount);
-      // distribute any rounding remainder to the largest proportions
-      let rem = gfgCount - (addEasy + addMed + addHard);
-      const order = [
-        { key: 'easy', prop: pEasy },
-        { key: 'med', prop: pMed },
-        { key: 'hard', prop: pHard },
-      ].sort((a, b) => b.prop - a.prop);
-      let idx = 0;
-      while (rem > 0) {
-        const k = order[idx % 3].key;
-        if (k === 'easy') addEasy++;
-        else if (k === 'med') addMed++;
-        else addHard++;
-        rem--;
-        idx++;
-      }
-    } else {
-      // No LeetCode breakdown available; distribute evenly
-      addEasy = Math.floor(gfgCount / 3);
-      addMed = Math.floor(gfgCount / 3);
-      addHard = Math.floor(gfgCount / 3);
-      let rem = gfgCount - (addEasy + addMed + addHard);
-      let ii = 0;
-      while (rem > 0) {
-        if (ii % 3 === 0) addEasy++;
-        else if (ii % 3 === 1) addMed++;
-        else addHard++;
-        rem--; ii++;
-      }
-    }
-  }
 
   const codolioEasy = codolioStats?.easySolved ?? 0;
   const codolioMed = codolioStats?.mediumSolved ?? 0;
@@ -703,9 +440,9 @@ const CodingDashboard = () => {
         { name: 'Hard', value: codolioHard, color: 'hsl(var(--chart-3))' },
       ]
     : [
-        { name: 'Easy', value: _leetEasy + addEasy + 257 + 70, color: 'hsl(var(--chart-1))' },
-        { name: 'Medium', value: _leetMed + addMed + 257 + 100, color: 'hsl(var(--chart-2))' },
-        { name: 'Hard', value: _leetHard + addHard + 36 + 38, color: 'hsl(var(--chart-3))' },
+        { name: 'Easy', value: _leetEasy, color: 'hsl(var(--chart-1))' },
+        { name: 'Medium', value: _leetMed, color: 'hsl(var(--chart-2))' },
+        { name: 'Hard', value: _leetHard, color: 'hsl(var(--chart-3))' },
       ];
 
   // Preferred slice colors (LeetCode-like) used as fallbacks if entry.color isn't set
@@ -839,11 +576,7 @@ const CodingDashboard = () => {
     }
     return null;
   };
-  // console.log('leetcodeStats', leetcodeStats);
-  // console.log('gfgCount', gfgCount);
-  const totalSolvedDisplayed = codolioStats?.totalSolved
-    ? codolioStats.totalSolved
-    : leetcodeStats.totalSolved + gfgCount + 208;
+  const totalSolvedDisplayed = codolioStats?.totalSolved ?? leetcodeStats.totalSolved;
 
   const statCards = [
     {

@@ -52,7 +52,7 @@ const About = () => {
 
             <div className="space-y-6 text-lg text-muted-foreground">
               <p>
-                I'm a third-year Computer Science Engineering student at Thapar Institute of Engineering & Technology, maintaining a <span className="font-bold text-black dark:text-white">CGPA of 9.75</span>. Currently, I work as a Full Stack Developer Intern at DBuck, where I've built and scaled a web platform used by 10,000+ students for housing solutions, working end-to-end with the MERN stack.
+                I'm a third-year Computer Science Engineering student at Thapar Institute of Engineering & Technology, maintaining a <span className="font-bold text-black dark:text-white">CGPA of 9.8</span>. Currently, I work as a Full Stack Developer Intern at DBuck, where I've built and scaled a web platform used by 10,000+ students for housing solutions, working end-to-end with the MERN stack.
               </p>
 
               <p>

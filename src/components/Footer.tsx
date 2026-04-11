@@ -109,12 +109,12 @@ const Footer = () => {
               </span>
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                CGPA: 9.75
+                CGPA: 9.8
               </span>
             </div>
             <p className="text-sm text-gray-400">
               Made with ❤️ in Patiala
-            <p className="text-xs text-white/40 mt-1 ml-6">|| ॐ नमः शिवाय ||</p>
+              <span className="block text-xs text-white/40 mt-1 ml-6">|| ॐ नमः शिवाय ||</span>
             </p>
           </div>
           
