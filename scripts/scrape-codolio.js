@@ -22,6 +22,7 @@ const parseFirstInt = (text) => {
 log("Starting Codolio scraper...");
 
 const browser = await puppeteer.launch({
+  channel: "chrome",
   headless: "new",
   args: [
     "--no-sandbox",
