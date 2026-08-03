@@ -8,6 +8,20 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      // In local dev, forward /api/github-contribs/<user>.json to GitHub's contributions SVG
+      '/api/github-contribs': {
+        target: 'https://github.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => {
+          // path: /api/github-contribs/<user>.json -> /users/<user>/contributions
+          const m = path.match(/^\/api\/github-contribs\/(.+?)\.json$/);
+          if (m) return `/users/${m[1]}/contributions`;
+          return path.replace(/^\/api\/github-contribs/, '/users');
+        },
+      },
+    },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

@@ -275,6 +275,36 @@ All colors MUST be HSL.
     z-index: 20; /* above .grid-overlay (z-1) and below explicit overlays like tooltips (z-50) */
   }
 
+  /* Polished card visuals: subtle always-on glassy border, light backdrop blur, and smooth hover animations */
+  .rounded-lg.border.bg-card,
+  .card,
+  [data-card] {
+    /* glassy border that reads across light/dark using the design tokens */
+    border: 1px solid hsl(var(--glass-border));
+    background: hsl(var(--card));
+    backdrop-filter: blur(6px) saturate(1.03);
+    -webkit-backdrop-filter: blur(6px) saturate(1.03);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02) inset;
+    transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms cubic-bezier(.2,.8,.2,1), border-color 180ms ease;
+    will-change: transform;
+  }
+
+  .rounded-lg.border.bg-card:hover,
+  .card:hover,
+  [data-card]:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(2,6,23,0.08);
+    border-color: hsl(var(--glass-border));
+  }
+
+  /* Slightly stronger focus ring for keyboard accessibility */
+  .rounded-lg.border.bg-card:focus,
+  .card:focus,
+  [data-card]:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px hsl(var(--ring) / 0.08), 0 10px 30px rgba(2,6,23,0.06);
+  }
+
 
 }
 

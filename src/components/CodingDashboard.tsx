@@ -104,10 +104,44 @@ const CodingDashboard = () => {
     const fetchGitHubContributions = async () => {
       try {
         setGhError(null);
-        const githubUrl = `https://github-contributions-api.deno.dev/${GITHUB_USER}.json`;
+        const githubUrl = `/api/github-contribs/${GITHUB_USER}.json`;
         const response = await fetch(githubUrl);
         if (!response.ok) throw new Error(`Status ${response.status}`);
-        const data = await response.json();
+        let data: any = null;
+        const ct = (response.headers.get('content-type') || '').toLowerCase();
+        if (ct.includes('application/json') || ct.includes('text/json')) {
+          data = await response.json();
+        } else {
+          // Fallback: some dev proxies return the GitHub HTML page. Parse it for data-date/data-count or data-level attributes.
+          const text = await response.text();
+          try {
+            const parser = typeof window !== 'undefined' && (window as any).DOMParser ? new DOMParser() : null;
+            if (parser) {
+              const doc = parser.parseFromString(text, 'text/html');
+              const nodes = Array.from(doc.querySelectorAll('[data-date]'));
+              const parsed: any[] = nodes.map((n: Element) => {
+                const date = n.getAttribute('data-date') || '';
+                const countAttr = n.getAttribute('data-count');
+                const levelAttr = n.getAttribute('data-level');
+                const count = countAttr !== null ? Number(countAttr) : (levelAttr !== null ? Number(levelAttr) : 0);
+                const color = (n.getAttribute('fill') || '') || (n.getAttribute('data-color') || '');
+                return { date, count, color, contributionLevel: levelAttr };
+              });
+              data = { contributions: parsed };
+            } else {
+              // Node environment fallback: try crude regex-based extraction
+              const rectRe = /data-date=\"([^\"]+)\"[^>]*data-count=\"([^\"]+)\"/gi;
+              const arr: any[] = [];
+              let m;
+              while ((m = rectRe.exec(text)) !== null) {
+                arr.push({ date: m[1], count: Number(m[2]) });
+              }
+              data = { contributions: arr };
+            }
+          } catch (e) {
+            data = null;
+          }
+        }
 
         // normalize shapes - the deno API sometimes returns weeks (array of arrays)
         let rawContribs: any[] = [];
@@ -841,16 +875,56 @@ const CodingDashboard = () => {
                         try {
                           setGhError(null);
                           const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
-                          const githubUrl = `https://github-contributions-api.deno.dev/${GITHUB_USER}.json`;
+                          const githubUrl = `/api/github-contribs/${GITHUB_USER}.json`;
                           const response = await fetch(githubUrl);
                           if (!response.ok) throw new Error(`Status ${response.status}`);
-                          const data = await response.json();
+                          let data: any = null;
+                          const ct = (response.headers.get('content-type') || '').toLowerCase();
+                          if (ct.includes('application/json') || ct.includes('text/json')) {
+                            data = await response.json();
+                          } else {
+                            const text = await response.text();
+                            try {
+                              const parser = typeof window !== 'undefined' && (window as any).DOMParser ? new DOMParser() : null;
+                              if (parser) {
+                                const doc = parser.parseFromString(text, 'text/html');
+                                const nodes = Array.from(doc.querySelectorAll('[data-date]'));
+                                const parsed: any[] = nodes.map((n: Element) => {
+                                  const date = n.getAttribute('data-date') || '';
+                                  const countAttr = n.getAttribute('data-count');
+                                  const levelAttr = n.getAttribute('data-level');
+                                  const count = countAttr !== null ? Number(countAttr) : (levelAttr !== null ? Number(levelAttr) : 0);
+                                  const color = (n.getAttribute('fill') || '') || (n.getAttribute('data-color') || '');
+                                  return { date, count, color, contributionLevel: levelAttr };
+                                });
+                                data = { contributions: parsed };
+                              } else {
+                                const rectRe = /data-date=\"([^\"]+)\"[^>]*data-count=\"([^\"]+)\"/gi;
+                                const arr: any[] = [];
+                                let m;
+                                while ((m = rectRe.exec(text)) !== null) {
+                                  arr.push({ date: m[1], count: Number(m[2]) });
+                                }
+                                data = { contributions: arr };
+                              }
+                            } catch (e) {
+                              data = null;
+                            }
+                          }
                           // normalize like main fetch
                           let rawContribs: any[] = [];
-                          if (Array.isArray(data.contributions)) rawContribs = data.contributions.some(Array.isArray) ? (data.contributions as any[]).flat() : data.contributions;
-                          else if (Array.isArray(data.data)) rawContribs = data.data;
-                          else if (Array.isArray((data || {}).years)) rawContribs = (data.years || []).flatMap((y: any) => y.contributions || []);
-                          const formattedContributions = (rawContribs || []).map((contrib: any) => ({ date: contrib.date, count: contrib.count ?? contrib.contributionCount ?? 0 }));
+                          if (data) {
+                            if (Array.isArray(data.contributions)) rawContribs = data.contributions.some(Array.isArray) ? (data.contributions as any[]).flat() : data.contributions;
+                            else if (Array.isArray(data.data)) rawContribs = data.data;
+                            else if (Array.isArray((data || {}).years)) rawContribs = (data.years || []).flatMap((y: any) => y.contributions || []);
+                          }
+                          // normalize formattedContributions like the main fetch
+                          const formattedContributions = (rawContribs || []).map((contrib: any) => ({
+                            date: contrib.date,
+                            count: contrib.count ?? contrib.contributionCount ?? 0,
+                            color: contrib.color,
+                            contributionLevel: contrib.contributionLevel,
+                          }));
                           try { localStorage.setItem(`ghContribs:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formattedContributions })); } catch (e) {}
                           setContributions(formattedContributions);
                         } catch (err: any) {
