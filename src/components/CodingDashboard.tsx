@@ -102,104 +102,35 @@ const CodingDashboard = () => {
     // Fetch GitHub contributions
     // Fetch GitHub contributions
     const fetchGitHubContributions = async () => {
+      setGhError(null);
       try {
-        setGhError(null);
         const staticUrl = `/github-contribs/${GITHUB_USER}.json`;
         const apiUrl = `/api/github-contribs/${GITHUB_USER}.json`;
 
-        // Try a static pre-generated JSON first (served from /public), then fall back to same-origin API.
-        let response = await fetch(staticUrl);
-        let data: any = null;
-        if (response.ok) {
-          try { data = await response.json(); } catch (e) { data = null; }
-        }
-        if (!data) {
-          response = await fetch(apiUrl);
-          if (!response.ok) throw new Error(`Status ${response.status}`);
-        }
-        if (!data) {
-        const ct = (response.headers.get('content-type') || '').toLowerCase();
-        if (ct.includes('application/json') || ct.includes('text/json')) {
-          data = await response.json();
-        } else {
-          // Fallback: some dev proxies return the GitHub HTML page. Parse it for data-date/data-count or data-level attributes.
-          const text = await response.text();
-          try {
-            const parser = typeof window !== 'undefined' && (window as any).DOMParser ? new DOMParser() : null;
-            if (parser) {
-              const doc = parser.parseFromString(text, 'text/html');
-              const nodes = Array.from(doc.querySelectorAll('[data-date]'));
-              const parsed: any[] = nodes.map((n: Element) => {
-                const date = n.getAttribute('data-date') || '';
-                const countAttr = n.getAttribute('data-count');
-                const levelAttr = n.getAttribute('data-level');
-                const count = countAttr !== null ? Number(countAttr) : (levelAttr !== null ? Number(levelAttr) : 0);
-                const color = (n.getAttribute('fill') || '') || (n.getAttribute('data-color') || '');
-                return { date, count, color, contributionLevel: levelAttr };
-              });
-              data = { contributions: parsed };
-            } else {
-              // Node environment fallback: try crude regex-based extraction
-              const rectRe = /data-date=\"([^\"]+)\"[^>]*data-count=\"([^\"]+)\"/gi;
-              const arr: any[] = [];
-              let m;
-              while ((m = rectRe.exec(text)) !== null) {
-                arr.push({ date: m[1], count: Number(m[2]) });
-              }
-              data = { contributions: arr };
-            }
-          } catch (e) {
-            data = null;
+        // Try static first
+        let res = await fetch(staticUrl);
+        if (res.ok) {
+          const json = await res.json().catch(() => null);
+          if (json && Array.isArray(json.contributions)) {
+            const formatted = json.contributions.map((c: any) => ({ date: c.date, count: c.count ?? 0, color: c.color, contributionLevel: c.contributionLevel }));
+            try { localStorage.setItem(`ghContribs:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
+            setContributions(formatted);
+            setLoading(false);
+            return;
           }
         }
 
-        // normalize shapes - the deno API sometimes returns weeks (array of arrays)
-        let rawContribs: any[] = [];
-        if (Array.isArray(data.contributions)) {
-          // contributions may be nested by week -> flatten if needed
-          rawContribs = data.contributions.some(Array.isArray) ? (data.contributions as any[]).flat() : data.contributions;
-        } else if (Array.isArray(data.data)) {
-          rawContribs = data.data;
-        } else if (Array.isArray((data || {}).years)) {
-          // some APIs wrap contributions by year
-          rawContribs = (data.years || []).flatMap((y: any) => y.contributions || []);
-        }
-
-        const formattedContributions = (rawContribs || []).map((contrib: any) => ({
-          date: contrib.date,
-          count: contrib.count ?? contrib.contributionCount ?? 0,
-          // preserve optional fields for richer hovers without extra API calls
-          color: contrib.color,
-          contributionLevel: contrib.contributionLevel,
-        }));
-
-        // caching: store normalized result in localStorage for 1 hour to reduce repeat requests
-        try {
-          const cacheKey = `ghContribs:${GITHUB_USER}`;
-          if (formattedContributions.length > 0) {
-            localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: formattedContributions }));
-            setContributions(formattedContributions);
-            setGhError(null);
-          } else {
-            // no data - try a public events fallback next
-            setGhError('No direct contributions data available from the 3rd-party API; attempting GitHub events fallback.');
-            try {
-              const fallback = await fetchGitHubEventsFallback(GITHUB_USER);
-              if (fallback && fallback.length > 0) {
-                localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: fallback }));
-                setContributions(fallback);
-                setGhError(null);
-              }
-            } catch (err) {
-              if (isDev) console.error('fallback error', err);
-            }
-          }
-        } catch (err) {
-          if (isDev) console.warn('localStorage unavailable', err);
-        }
-      } catch (error: any) {
-        if (isDev) console.error('Error fetching GitHub contributions:', error);
-        setGhError(String(error?.message || error));
+        // Fallback to same-origin API
+        res = await fetch(apiUrl);
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        const data = await res.json();
+        const raw = Array.isArray(data.contributions) ? data.contributions : [];
+        const formatted = raw.map((c: any) => ({ date: c.date, count: c.count ?? 0, color: c.color, contributionLevel: c.contributionLevel }));
+        try { localStorage.setItem(`ghContribs:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
+        setContributions(formatted);
+      } catch (err) {
+        if (isDev) console.error('Error fetching GitHub contributions:', err);
+        setGhError(String((err as any)?.message || err));
       } finally {
         setLoading(false);
         setRetrying(false);
