@@ -104,10 +104,20 @@ const CodingDashboard = () => {
     const fetchGitHubContributions = async () => {
       try {
         setGhError(null);
-        const githubUrl = `/api/github-contribs/${GITHUB_USER}.json`;
-        const response = await fetch(githubUrl);
-        if (!response.ok) throw new Error(`Status ${response.status}`);
+        const staticUrl = `/github-contribs/${GITHUB_USER}.json`;
+        const apiUrl = `/api/github-contribs/${GITHUB_USER}.json`;
+
+        // Try a static pre-generated JSON first (served from /public), then fall back to same-origin API.
+        let response = await fetch(staticUrl);
         let data: any = null;
+        if (response.ok) {
+          try { data = await response.json(); } catch (e) { data = null; }
+        }
+        if (!data) {
+          response = await fetch(apiUrl);
+          if (!response.ok) throw new Error(`Status ${response.status}`);
+        }
+        if (!data) {
         const ct = (response.headers.get('content-type') || '').toLowerCase();
         if (ct.includes('application/json') || ct.includes('text/json')) {
           data = await response.json();
