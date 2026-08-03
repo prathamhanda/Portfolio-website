@@ -56,9 +56,17 @@ export default async function handler(req, res) {
     const r = await fetch(denoTarget);
     if (r.ok) {
       const body = await r.text();
+      // Write to cache for subsequent requests
+      try {
+        await fs.promises.writeFile(cacheFile, body, 'utf8');
+      } catch (e) {
+        // ignore cache write errors
+      }
       res.statusCode = r.status || 200;
       const contentType = r.headers.get('content-type') || 'application/json';
       res.setHeader('Content-Type', contentType);
+      // prefer CDN caching at edge for a short TTL
+      res.setHeader('Cache-Control', `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60`);
       res.end(body);
       return;
     }
@@ -93,9 +101,16 @@ export default async function handler(req, res) {
       contribs.push({ date, count, contributionLevel: level });
     }
 
+    const out = JSON.stringify({ contributions: contribs });
+    try {
+      await fs.promises.writeFile(cacheFile, out, 'utf8');
+    } catch (e) {
+      // ignore
+    }
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ contributions: contribs }));
+    res.setHeader('Cache-Control', `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60`);
+    res.end(out);
     return;
   } catch (err) {
     res.statusCode = 502;
