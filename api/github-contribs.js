@@ -1,4 +1,4 @@
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   // Basic CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
@@ -59,24 +59,17 @@ module.exports = async (req, res) => {
     const svg = await svgRes.text();
     const contribs = [];
 
-    // Common pattern: rect elements with data-date and data-count or data-level attributes
-    const rectRe = /<rect[^>]*data-date="([^"]+)"[^>]*data-count="([^"]+)"[^>]*?(?:data-level="([^"]+)")?[^>]*?>/gi;
+    // Generic extraction: look for any element with data-date and optional data-count/data-level
+    const genericRe = /<[^>]+data-date="([^"]+)"([^>]*)>/gi;
     let m;
-    while ((m = rectRe.exec(svg)) !== null) {
+    while ((m = genericRe.exec(svg)) !== null) {
       const date = m[1];
-      const count = parseInt(m[2], 10) || 0;
-      const level = m[3] || null;
+      const rest = m[2] || '';
+      const countMatch = rest.match(/data-count="([^"]+)"/i);
+      const levelMatch = rest.match(/data-level="([^"]+)"/i);
+      const count = countMatch ? parseInt(countMatch[1], 10) || 0 : (levelMatch ? Number(levelMatch[1]) || 0 : 0);
+      const level = levelMatch ? levelMatch[1] : null;
       contribs.push({ date, count, contributionLevel: level });
-    }
-
-    // If none found, try permissive pattern for data-date + data-level
-    if (contribs.length === 0) {
-      const rectRe2 = /<rect[^>]*data-date="([^"]+)"[^>]*data-level="([^"]+)"[^>]*?>/gi;
-      while ((m = rectRe2.exec(svg)) !== null) {
-        const date = m[1];
-        const level = m[2] || '0';
-        contribs.push({ date, count: Number(level) || 0, contributionLevel: level });
-      }
     }
 
     res.statusCode = 200;
