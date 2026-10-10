@@ -10,14 +10,14 @@ const FAQ = () => {
   const { ref: faqRef, isVisible: faqVisible } = useScrollAnimation();
   const faqs = [
   {
-    question: "What do you do and what are you currently working on?",
+    question: "What do you do and what have you recently worked on?",
     answer:
-      "I am a third year Computer Science Engineering student at Thapar Institute with a CGPA of 9.83. Right now, I spend most of my time building full stack applications using React and Node.js, and experimenting with machine learning models using PyTorch and TensorFlow. I enjoy working on projects where I can take an idea from scratch and turn it into something real and useful.",
+      "I am pursuing a B.Tech. in Computer Science & Engineering at Thapar Institute (2023–2027) with a 9.83/10 CGPA. I have interned as a Web Solutions Engineer at Google and a Research Intern at Samsung PRISM, working across full-stack systems and applied AI.",
   },
   {
     question: "What kind of projects excite you the most?",
     answer:
-      "I am most excited by projects that solve real problems and have a visible impact. This could be building an AI model that helps in medical diagnosis with high accuracy, optimizing traffic systems to work in real time, or creating web platforms that thousands of people actually use. Seeing something I built being used in the real world is what motivates me the most.",
+      "I am most excited by projects that solve real problems and have a visible impact, from AI-powered learning tools such as StudyBud to real-time traffic intelligence and accessible web products. Seeing something I built being useful is what motivates me.",
   },
   {
     question: "What tools and technologies do you feel most comfortable with?",
@@ -27,7 +27,7 @@ const FAQ = () => {
   {
     question: "How do you usually approach a new problem or project?",
     answer:
-      "I like to start by clearly understanding the problem and deciding what success should look like. From there, I break things down into smaller parts, build step by step, and keep measuring whether I am actually improving performance or usability. Solving over 1000+ DSA problems has helped me think more systematically, but I always try to balance clean logic with practical execution.",
+      "I like to start by clearly understanding the problem and deciding what success should look like. From there, I break things down, build step by step, and measure whether performance or usability improves. Solving 1,400+ DSA problems has helped me think systematically while balancing clean logic with practical execution.",
   },
 ];
 

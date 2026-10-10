@@ -150,7 +150,7 @@ Response:
   {
     id: "ai-road-intelligence",
     title: "AI-RoadIntelligence",
-    description: "Real-time traffic optimization system using YOLOv8 for vehicle detection at 45 FPS with under 50ms latency.",
+    description: "Real-time traffic intelligence using YOLOv8 and OpenCV, processing 4+ concurrent streams at 45 FPS with under 50ms processing delay.",
     fullDescription: "A comprehensive traffic management system that leverages computer vision and AI to optimize traffic flow in real-time. The system integrates YOLOv8 for vehicle detection, SUMO traffic simulation for scenario modeling, and custom algorithms for emergency vehicle routing. Designed for smart city implementations with scalable architecture.",
     image: "/projects/66.png",
     images: [
@@ -189,11 +189,6 @@ Response:
         value: "<50ms",
         label: "Response Latency",
         description: "System response time for signal changes"
-      },
-      {
-        value: "35%",
-        label: "Traffic Improvement",
-        description: "Reduction in average wait times"
       },
       {
         value: "<3s",
@@ -758,7 +753,7 @@ $ make`,
 {
     id: "moviemania",
     title: "MovieMania",
-    description: "An AI-enhanced, full-stack entertainment tracking platform featuring Gemini-powered smart search, advanced analytics dashboards, and seamless Trakt integration.",
+    description: "A MERN entertainment platform for discovering and tracking movies and TV, with watchlists, collections, analytics, and personalized recommendations.",
     fullDescription: "MovieMania is a comprehensive entertainment tracking ecosystem that transforms how users discover, organize, and analyze their viewing habits. Engineered with the MERN stack, the application serves as a centralized hub by integrating the TMDB API for rich media metadata and the Trakt API for cross-platform watch history synchronization. The platform distinguishes itself through its embedded AI suite, leveraging Google's Gemini API to power a semantic Smart Search Bar, predictive rating badges, and an interactive Review Assistant. Users can visualize their media consumption through an advanced Insights Dashboard that generates dynamic data visualizations, including viewing heatmaps, genre distributions, and watch streaks.",
     image: "/projects/moviemania_0.png",
     images: [
@@ -769,9 +764,9 @@ $ make`,
       "React",
       "Node.js",
       "MongoDB",
-      "Gemini API",
       "TMDB API",
-      "Trakt",
+      "OMDb API",
+      "Selenium",
       "Data Visualization"
     ],
     techStack: [
@@ -781,13 +776,12 @@ $ make`,
       "Express.js",
       "MongoDB",
       "Tailwind CSS",
-      "Google Gemini AI",
       "TMDB API",
-      "Trakt API",
+      "OMDb API",
       "Selenium WebDriver (Java)"
     ],
     category: "web",
-    featured: false,
+    featured: true,
     githubUrl: "https://github.com/prathamhanda/MovieMania",
     features: [
       "AI-powered Review Assistant and semantic smart search utilizing Google Gemini",

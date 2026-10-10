@@ -6,12 +6,18 @@ const About = () => {
   const skills = {
     fullstack: [
       "C++",
+      "C",
       "Python", 
       "JavaScript",
+      "TypeScript",
       "React",
+      "Java",
       "Node.js",
       "Express.js",
       "MongoDB",
+      "PostgreSQL",
+      "SQL",
+      "gRPC-Web",
       "Data Structures",
       "Algorithms",
       "REST API Design",
@@ -19,6 +25,10 @@ const About = () => {
     ml: [
       "PyTorch",
       "TensorFlow", 
+      "TensorFlow Lite",
+      "LLMs",
+      "RAG",
+      "Transformers",
       "OpenCV",
       "Deep Learning",
       "Computer Vision",
@@ -29,10 +39,8 @@ const About = () => {
       "Git",
       "Docker",
       "Postman",
-      "VS Code",
-      "Streamlit",
       "SUMO",
-      "JWT Authentication",
+      "Google Drive API",
       "CI/CD"
     ],
   };
@@ -52,14 +60,23 @@ const About = () => {
 
             <div className="space-y-6 text-lg text-muted-foreground">
               <p>
-                I'm a third-year Computer Science Engineering student at Thapar Institute of Engineering & Technology, maintaining a <span className="font-bold text-black dark:text-white">CGPA of 9.83</span>. Currently, I work as a Full Stack Developer Intern at DBuck, where I've built and scaled a web platform used by 10,000+ students for housing solutions, working end-to-end with the MERN stack.
+                I'm a Computer Science undergraduate at Thapar Institute of Engineering and Technology with a <span className="font-bold text-black dark:text-white">9.83 CGPA</span> and industry and research experience at <span className="font-bold text-black dark:text-white">Google</span> and <span className="font-bold text-black dark:text-white">Samsung PRISM</span>.
               </p>
 
               <p>
-                My work lies at the intersection of software engineering and applied AI. I have designed deep learning pipelines for medical diagnostics achieving 99.3% accuracy, and built containerized web applications that reduced response times by up to 75%. Alongside this, I actively strengthen my problem solving skills, having solved <span className="font-bold text-black dark:text-white">1000+ DSA problems</span> on competitive platforms and earning a Knight Badge on LeetCode, placing me in the <span className="font-bold text-black dark:text-white">top 3.5 %</span> globally with a contest rating of 1939. </p>
+                At Google, I built LLM-powered semantic search and RAG pipelines over 20K+ product documents. At Samsung PRISM, I worked on on-device topic modeling, optimising ML pipelines for efficient mobile inference.
+              </p>
 
               <p>
-                What truly drives me is solving real-world problems with measurable impact. Whether it's optimizing traffic systems to run at 45 FPS, architecting scalable platforms, or building AI models that assist in surgical planning, I approach every challenge with precision, curiosity, and a strong focus on delivering results that matter.
+                Beyond internships, I enjoy building systems from the ground up. My projects include a 3D brain tumour segmentation pipeline using nnU-Net and PyTorch, and a real-time traffic intelligence system using OpenCV that processes video at 45 FPS with sub-50ms processing latency. 
+                
+              </p>
+                <p>
+                  I've solved <span className="font-bold text-black dark:text-white">1,400+ DSA problems</span>, earned <span className="font-bold text-black dark:text-white">LeetCode's Knight</span> badge, and been recognised as a <span className="font-bold text-black dark:text-white">Reliance Undergraduate Scholar</span>. I'm also a Joint Secretary of TIET's LEAD Society and was selected for <span className="font-bold text-black dark:text-white">Amazon ML Summer School 2026</span>.
+                  </p>
+
+              <p>
+                I'm drawn to challenging problems at the intersection of AI, systems, and software engineering. I enjoy going beyond theory, understanding problems deeply, and turning ideas into useful, reliable solutions.
               </p>
             </div>
 

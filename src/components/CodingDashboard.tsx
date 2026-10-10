@@ -53,7 +53,7 @@ const CodingDashboard = () => {
     hardSolved: 0,
     ranking: 0,
     contributionPoints: 0,
-    ContestRating: 1871,
+    ContestRating: 1939,
   });
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const heatmapRef = useRef<HTMLDivElement | null>(null);
@@ -113,7 +113,7 @@ const CodingDashboard = () => {
           const json = await res.json().catch(() => null);
           if (json && Array.isArray(json.contributions)) {
             const formatted = json.contributions.map((c: any) => ({ date: c.date, count: c.count ?? 0, color: c.color, contributionLevel: c.contributionLevel }));
-            try { localStorage.setItem(`ghContribs:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
+            try { localStorage.setItem(`ghContribs_v2:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
             setContributions(formatted);
             setLoading(false);
             return;
@@ -126,7 +126,7 @@ const CodingDashboard = () => {
         const data = await res.json();
         const raw = Array.isArray(data.contributions) ? data.contributions : [];
         const formatted = raw.map((c: any) => ({ date: c.date, count: c.count ?? 0, color: c.color, contributionLevel: c.contributionLevel }));
-        try { localStorage.setItem(`ghContribs:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
+        try { localStorage.setItem(`ghContribs_v2:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
         setContributions(formatted);
       } catch (err) {
         if (isDev) console.error('Error fetching GitHub contributions:', err);
@@ -139,7 +139,7 @@ const CodingDashboard = () => {
 
     // check cache first
     try {
-      const cacheKey = `ghContribs:${GITHUB_USER}`;
+      const cacheKey = `ghContribs_v2:${GITHUB_USER}`;
       const cachedRaw = localStorage.getItem(cacheKey);
       if (cachedRaw) {
         const parsed = JSON.parse(cachedRaw);
@@ -159,7 +159,9 @@ const CodingDashboard = () => {
       // localStorage not available or parse failed - just fetch
       fetchGitHubContributions();
     }
+  }, []); // <-- End of fetch hook
 
+  useEffect(() => { // <-- Start of tooltip hook
     // Attach mouse handlers for custom tooltip (reads data- attributes set on rects)
     let container = heatmapRef.current;
     // debug toggle: set VITE_HEATMAP_TOOLTIP_DEBUG=true or set localStorage 'heatmapTooltipDebug' = '1'
@@ -397,7 +399,7 @@ const CodingDashboard = () => {
         return [];
       }
     }
-  }, []);
+  }, [loading, contributions]); // <-- Re-run when data loads and heatmap renders
 
   const _leetEasy = leetcodeStats.easySolved || 0;
   const _leetMed = leetcodeStats.mediumSolved || 0;
@@ -642,11 +644,14 @@ const CodingDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Problem Breakdown */}
           <Card className="border-muted/40 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="flex items-center gap-2">
                 <Target className="w-5 h-5 text-primary" />
                 Problem Breakdown
               </CardTitle>
+              <div className="px-2 py-0.5 rounded-md bg-muted/30 border border-muted/50 text-[10px] uppercase tracking-wider font-semibold text-muted-foreground/70" title="Distribution based on LeetCode questions only">
+                LeetCode
+              </div>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col md:flex-row items-center justify-between gap-8">

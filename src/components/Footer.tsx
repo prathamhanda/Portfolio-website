@@ -21,7 +21,7 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-white">pratham.codes</h3>
             <p className="text-gray-400">
-              Building intelligent systems where AI meets full stack development. Third year CSE student at Thapar Institute.
+              Building intelligent systems across AI and full-stack engineering. B.Tech. CSE student at Thapar Institute (2023–2027).
             </p>
             <div className="flex gap-3">
               <a
@@ -96,7 +96,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400">
-              © 2025 Pratham Handa. All rights reserved.
+              © {new Date().getFullYear()} Pratham Handa. All rights reserved.
             </p>
             <div className="flex gap-6 text-xs text-gray-400">
               <span className="flex items-center gap-2">

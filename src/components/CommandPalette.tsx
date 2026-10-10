@@ -56,11 +56,11 @@ const CommandPalette = () => {
   const projectsData = [
     {
       id: "brain-tumor",
-      title: "Brain Tumor Detector",
+       title: "Brain Tumor Detector",
       description: "Deep learning pipeline with 99.3% accuracy using PyTorch and YOLO",
       category: "project" as const,
       icon: <Briefcase className="mr-2 h-4 w-4" />,
-      action: () => window.open("https://github.com/prathamhanda/BrainTumor-Detector", "_blank")
+      action: () => window.open("https://github.com/prathamhanda/BRATS-2025_Tumor-Prediction", "_blank")
     },
     {
       id: "road-intelligence",
@@ -72,7 +72,7 @@ const CommandPalette = () => {
     },
     {
       id: "roomsonrent",
-      title: "RoomsOnRent",
+       title: "RoomsOnRent",
       description: "Containerized dual-portal platform for student housing",
       category: "project" as const,
       icon: <Briefcase className="mr-2 h-4 w-4" />,

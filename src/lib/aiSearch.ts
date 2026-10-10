@@ -2,7 +2,7 @@
 const RESUME_CONTEXT = `PERSONAL INFORMATION & CONTACT:
 Name: Pratham Handa
 Role: Computer Science Student
-Education: 3rd Year, CSE, Thapar Institute (CGPA: 9.83)
+Education: B.Tech. Computer Science & Engineering, Thapar Institute of Engineering & Technology, Patiala (Aug 2023 – May 2027), CGPA 9.83/10
 Email: prathamhanda10@gmail.com
 LinkedIn: linkedin.com/in/prathamh
 GitHub: github.com/prathamhanda
@@ -10,13 +10,12 @@ Portfolio: pratham.codes
 PROFESSIONAL SUMMARY:
 Computer Science student with experience in full stack development and AI-based projects. Strong academic record and competitive programming background.
 WORK EXPERIENCE:
-1. Full Stack Developer Intern — DBuck (2023)
-   - Built MERN-based student housing platform
-   - Used by 10,000+ students
-   - Implemented booking and payment features
-   - Tech: React, Node.js, MongoDB, Docker
-2. Web Solutions Engineer Intern — Google (Summer 2026)
-   - Incoming intern
+1. Web Solutions Engineer Intern — Google, Hyderabad (May – Jul 2026)
+   - Architected parallel LLM/RAG pipelines using Gemini Embeddings over 20K+ product changelog documents, saving 33,500+ manual hours
+   - Built an Angular and gRPC-Web real-time article diff review editor with Drive APIs and 1P Offline Access
+2. Samsung PRISM Research Intern — Remote (Nov 2025 – Mar 2026)
+   - Designed on-device notification topic extraction trained on 5,500+ messages using RAKE pseudo-labels
+   - Benchmarked MobileBERT, DistilBERT and BERT-base; deployed INT8 TensorFlow Lite models 4x smaller for mobile NPUs
 TECHNICAL SKILLS:
 Programming Languages:
 - C++, Python, JavaScript/TypeScript, Java, SQL
@@ -25,6 +24,7 @@ Frameworks & Technologies:
 - MongoDB, PostgreSQL
 - PyTorch, TensorFlow, YOLO, OpenCV
 - Git, Docker
+PROJECT PORTFOLIO:
 PROJECT PORTFOLIO:
 1. Brain Tumor Detector
    - AI-based tumor classification and segmentation
@@ -37,11 +37,14 @@ PROJECT PORTFOLIO:
    - MERN + Docker
 ACHIEVEMENTS & LEADERSHIP:
 - LeetCode Knight Badge (Top 3.5%)
-- 1000+ DSA problems solved
+- 1400+ DSA problems solved; LeetCode Knight, 1939 contest rating (top 3.5%)
 - Merit I & III Scholarship recipient from TIET
 - Reliance Undergraduate Scholar
-- Student Placement Representative (CSE)
-- Joint Secretary, LEAD Society
+- Student Placement Representative (CSE), TIET
+- Joint Secretary, LEAD Society (Sep 2023 – May 2026); mentored 250+ students in DSA
+- Amazon ML Summer School 2026 selectee
+- Semi-Finalist at Flipkart Grid 8.0
+- Merit I (twice) and III Scholar (13+ lakhs); Reliance UG Scholar (top 5000 PAN India, 2 lakhs)
 ADDITIONAL INFORMATION:
 Languages: English, Hindi, Punjabi
 `;
@@ -59,14 +62,14 @@ interface GeminiResponse {
 // Fallback responses for common queries when AI fails
 const fallbackResponses: Record<string, string> = {
   "work style": "I thrive in collaborative environments, following agile methodologies with a strong emphasis on clean code, documentation, and code reviews. I'm detail-oriented and regularly contribute to open-source projects.",
-  "experience": "As a Full Stack Developer Intern at DBuck, I led the development of a MERN stack web app serving 10,000+ students, implementing real-time booking systems and achieving 40% platform efficiency improvement.",
+  "experience": "As a Web Solutions Engineer Intern at Google (May–July 2026), I architected two LLM/RAG pipelines using Gemini Embeddings over 20K+ product changelog documents, saving 33,500+ manual hours, and built an Angular and gRPC-Web editor for real-time article diff reviews. Previously, at Samsung PRISM (Nov 2025–Mar 2026), I built an on-device notification topic extraction pipeline and deployed INT8 TensorFlow Lite models 4× smaller for mobile NPUs.",
   "skills": "I'm proficient in C++, Python, JavaScript/TypeScript for programming; React, Node.js, Express.js, MongoDB for web development; and PyTorch, TensorFlow, YOLO for AI/ML, with practical experience in Docker and AWS.",
-  "education": "I'm a 3rd-year Computer Science Engineering student at Thapar Institute, maintaining a 9.83 CGPA and receiving both Reliance Undergraduate and Merit III Scholarships.",
+  "education": "I'm pursuing a B.Tech. in Computer Science & Engineering at Thapar Institute of Engineering & Technology (Aug 2023–May 2027), with a 9.83/10 CGPA. I am a Merit I (twice) and III Scholar and a Reliance Undergraduate Scholar.",
   "projects": "My portfolio includes the Brain Tumor Detector (99.3% accuracy), AI-RoadIntelligence for traffic optimization (35% reduction in wait times), RoomsOnRent platform, and LEAD Society's website.",
   "contact": "You can reach me at prathamhanda10@gmail.com, connect on LinkedIn (linkedin.com/in/prathamh), or check out my work on GitHub (github.com/prathamhanda).",
-  "achievements": "I hold a LeetCode Knight Badge (top 3.5% globally), solved 1000+ DSA problems, and serve as Student Placement Representative while maintaining a 9.83 CGPA.",
-  "leadership": "As Joint Secretary of LEAD Society, I've mentored 50+ students in DSA and web development, organized 10+ technical workshops, and maintain active involvement in the tech community.",
-  "availability": "I'm open to full-time opportunities starting from May 2024, with a focus on full-stack development, AI/ML, or software engineering roles.",
+  "achievements": "I hold a LeetCode Knight Badge with a 1939 contest rating (top 3.5% globally), have solved 1400+ DSA problems, and was selected for Amazon ML Summer School 2026. I am a Merit I (twice) and III Scholar and Reliance UG Scholar.",
+  "leadership": "As Joint Secretary of LEAD Society (Sep 2023–May 2026), I built its official website and mentored 250+ students in a two-hour DSA workshop. I also served as Technical Head for a seminar whose landing page served 500+ users and which featured six speaker presentations.",
+  "availability": "I am a Computer Science student at Thapar Institute with internship experience at Google and Samsung, interested in software engineering and applied AI.",
   "text": "You can reach me through my website (pratham.codes), LinkedIn (linkedin.com/in/prathamh), or email (prathamhanda10@gmail.com).",
   "contact information": "Feel free to reach out via email at prathamhanda10@gmail.com or connect with me on LinkedIn at linkedin.com/in/prathamh.",
 };
@@ -91,163 +94,51 @@ function getFallbackResponse(query: string): string | null {
 
 export async function queryAI(query: string): Promise<string> {
   try {
-    // Support multiple Gemini keys. The environment can provide:
-    // - VITE_GEMINI_API_KEYS (comma-separated list)
-    // - VITE_GEMINI_API_KEY1 ... VITE_GEMINI_API_KEY5
-    // - fallback VITE_GEMINI_API_KEY (single key)
-    const env = (import.meta as any).env || {};
-
-    function getGeminiKeys(): string[] {
-      const keys: string[] = [];
-      if (env.VITE_GEMINI_API_KEYS) {
-        keys.push(...String(env.VITE_GEMINI_API_KEYS).split(',').map((k: string) => k.trim()).filter(Boolean));
+    let startIndex = 0;
+    try {
+      const stored = localStorage.getItem('gemini_key_index');
+      if (stored) {
+        startIndex = parseInt(stored, 10);
+      } else {
+        // Fallback assumption, though the server determines the random start if absent
+        startIndex = Math.floor(Math.random() * 5); 
       }
-      for (let i = 1; i <= 5; i++) {
-        const k = env[`VITE_GEMINI_API_KEY${i}`];
-        if (k) keys.push(String(k));
-      }
-      if (env.VITE_GEMINI_API_KEY) {
-        keys.push(String(env.VITE_GEMINI_API_KEY));
-      }
-      // de-duplicate while preserving order
-      return Array.from(new Set(keys));
+    } catch (e) {
+      // Ignore localStorage errors
     }
 
-    // Persistent rotation index: pick a random initial key per user, then rotate
-    function consumeStartIndex(n: number): number {
-      if (n <= 0) return 0;
-      try {
-        const stored = localStorage.getItem('gemini_key_index');
+    const resp = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, startIndex }),
+    });
 
-        // If we have a stored next-index, use it. Otherwise, pick a random start
-        if (stored) {
-          let idx = parseInt(stored, 10);
-          const start = idx % n;
-          idx = (idx + 1) % n;
-          localStorage.setItem('gemini_key_index', String(idx));
-          return start;
-        } else {
-          const randomStart = Math.floor(Math.random() * n);
-          const next = (randomStart + 1) % n;
-          localStorage.setItem('gemini_key_index', String(next));
-          return randomStart;
-        }
-      } catch (e) {
-        // Non-browser or localStorage error: use a global fallback with random init
-        const g = globalThis as any;
-        if (typeof g.__GEMINI_ROTATION_INDEX !== 'number') {
-          const randomStart = Math.floor(Math.random() * n);
-          g.__GEMINI_ROTATION_INDEX = (randomStart + 1) % n;
-          return randomStart;
-        }
-        const start = g.__GEMINI_ROTATION_INDEX % n;
-        g.__GEMINI_ROTATION_INDEX = (g.__GEMINI_ROTATION_INDEX + 1) % n;
-        return start;
-      }
-    }
-
-    const keys = getGeminiKeys();
-    if (!keys || keys.length === 0) {
-      console.error("Gemini API key(s) not configured");
-      return "AI feature not configured. Please check the environment variables.";
-    }
-
-    // Enhanced prompt with better context and instructions
-    const prompt = `You are an AI assistant for Pratham Handa's portfolio website. You have access to Pratham's complete professional profile and should provide helpful, accurate responses to visitors' questions. Consider the following detailed information:
-${RESUME_CONTEXT}
-
-Question: ${query}
-Instructions for providing responses:
-1. Voice and Tone:
-   - Answer in Pratham's voice (first person)
-   - Be confident but humble
-2. Content Guidelines:
-   - Provide specific, data-backed information when available
-   - Highlight achievements and metrics that support your answer
-3. Response Structure:
-  - Prefer concise answers, but always finish sentences and include proper punctuation. Do not truncate important details. And DON'T Exceed 2 lines in response.
-  - Keep the response as condensed as possible while ensuring clarity and completeness.
-  - Start with the most relevant information
-5. Always:
-   - Stay within the scope of the provided information
-   - Maintain consistency with the portfolio website
-Remember: You are representing a professional developer's portfolio. Your responses should reflect technical expertise while remaining accessible to all visitors.`;
-
-    // Try each configured key in round-robin order. We consume a start index so
-    // each call prefers a different primary key and will retry with others.
-    const start = consumeStartIndex(keys.length);
-    let lastErrorText: string | null = null;
-    let data: GeminiResponse | null = null;
-    let ok = false;
-
-    for (let attempt = 0; attempt < keys.length; attempt++) {
-      const key = keys[(start + attempt) % keys.length];
-      try {
-        const resp = await fetch(
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              contents: [
-                {
-                  parts: [
-                    {
-                      text: prompt,
-                    },
-                  ],
-                },
-              ],
-              generationConfig: {
-                temperature: 0.3,
-                topP: 0.6,
-                topK: 30,
-              },
-            }),
-          }
-        );
-
-        if (!resp.ok) {
-          const txt = await resp.text();
-          lastErrorText = `status=${resp.status} body=${txt}`;
-          // try the next key
-          continue;
-        }
-
-        data = await resp.json();
-        ok = true;
-        break;
-      } catch (err: any) {
-        lastErrorText = String(err?.message || err);
-        // try next key
-        continue;
-      }
-    }
-
-    if (!ok || !data) {
-      console.error("All Gemini keys failed", lastErrorText);
+    if (!resp.ok) {
+      const txt = await resp.text();
+      console.error("Server API failed:", resp.status, txt);
+      
       const fallback = getFallbackResponse(query);
       if (fallback) return fallback;
-      return `I apologize, but I'm having trouble processing your query at the moment. Please try again or rephrase your question.`;
+      return "I apologize, but I'm having trouble processing your query at the moment. Please try again or rephrase your question.";
     }
 
-    
+    const data = await resp.json();
 
-    let text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    if (data.nextIndex !== undefined) {
+      try {
+        localStorage.setItem('gemini_key_index', String(data.nextIndex));
+      } catch (e) {}
+    }
 
-    // Validate and clean up the response
-    if (!text || text.length < 10) {
-      console.warn("Empty or very short response from API");
+    if (!data.text) {
       const fallback = getFallbackResponse(query);
-      if (fallback) {
-        return fallback;
-      }
+      if (fallback) return fallback;
       return "I'm sorry, but I couldn't generate a meaningful response. Please try rephrasing your question.";
     }
 
-    return text;
+    return data.text;
   } catch (error) {
     console.error("Error in queryAI:", error);
     

@@ -14,21 +14,31 @@ interface TimelineItem {
 
 const timelineData: TimelineItem[] = [
   {
-    date: "NOV 2025 – PRESENT",
+    date: "MAY 2026 – JUL 2026",
+    title: "Web Solutions Engineer Intern",
+    company: "Google",
+    companyUrl: "https://about.google/",
+    period: "MAY 2026 – JUL 2026",
+    summary:
+      "Architected two parallel LLM/RAG pipelines over 20K+ product changelog documents, saving 33,500+ manual hours, and built an Angular and gRPC-Web editor for real-time article diff reviews.",
+    tags: ["Gemini Embeddings", "LLMs", "RAG", "Angular", "gRPC-Web", "Google Drive API"],
+  },
+  {
+    date: "NOV 2025 – MAR 2026",
     title: "Samsung PRISM Research Intern",
     company: "Samsung Research (PRISM)",
     companyUrl: "https://research.samsung.com/",
-    period: "Nov 2025 – Present",
+    period: "NOV 2025 – MAR 2026",
     summary:
-      "Developed on-device short-text topic modelling and shipped a TensorFlow Lite mobile build with ~35% lower memory and inference, improving topic quality by ~18%.",
-    tags: ["On-device ML", "C++", "PyTorch", "TensorFlow Lite", "NLP", "Optimization"],
+      "Designed an on-device notification topic extraction pipeline trained on 5,500+ messages with RAKE pseudo-labels; benchmarked transformer models and deployed INT8-quantized TensorFlow Lite models (4× smaller) for mobile NPUs.",
+    tags: ["Transformers", "PyTorch", "TensorFlow Lite", "INT8", "NLP", "MobileBERT"],
   },
   {
-    date: "APR 2025 – PRESENT",
+    date: "APR 2025 – JUN 2026",
     title: "Full Stack Developer Intern",
     company: "DBuck Technologies Pvt. Ltd.",
     companyUrl: "https://dbuck.in",
-    period: "Apr 2025 – Present",
+    period: "APR 2025 – JUN 2026",
     summary:
       "Built and deployed a student housing platform with separate student and owner portals, supporting 10k+ users with a containerized backend and APIs.",
     tags: ["React", "Node.js", "MongoDB", "Docker", "APIs", "Software Architecture"],
@@ -39,21 +49,21 @@ const timelineData: TimelineItem[] = [
     company: "Thapar Institute of Engineering & Technology",
     companyUrl:
       "https://www.thapar.edu/academics/centers/experiential-learning-centre1",
-    period: "Jun 2025 – Jul 2025",
+    period: "JUN 2025 – JUL 2025",
     summary:
       "Prototyped a real-time traffic monitoring and simulation workflow (~45 FPS, low latency) to evaluate signal strategies for demos.",
     tags: ["Python", "Machine Learning", "OpenCV", "Simulation", "SUMO"],
   },
-  {
-    date: "AUG 2024 – PRESENT",
-    title: "Student Placement Representative",
-    company: "Thapar Institute of Engineering & Technology",
-    companyUrl: "https://thapar.edu",
-    period: "Aug 2024 – Present",
-    summary:
-      "Supported campus placements by onboarding companies, managing schedules, and keeping recruiter–student communication smooth as an SPO liaison.",
-    tags: ["Coordination", "Recruiter Relations", "Operations", "Communication"],
-  },
+  // {
+  //   date: "AUG 2024 – PRESENT",
+  //   title: "Student Placement Representative",
+  //   company: "Thapar Institute of Engineering & Technology",
+  //   companyUrl: "https://thapar.edu",
+  //   period: "Aug 2024 – Present",
+  //   summary:
+  //     "Supported campus placements by onboarding companies, managing schedules, and keeping recruiter–student communication smooth as an SPO liaison.",
+  //   tags: ["Coordination", "Recruiter Relations", "Operations", "Communication"],
+  // },
 ];
 
 const Timeline = () => {
@@ -138,12 +148,12 @@ const Timeline = () => {
       id="timeline"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Title with Google Intern Badge */}
+        {/* Experience and leadership timeline */}
         <div ref={ref} className={`${isVisible ? "scroll-animate" : "opacity-0"} flex items-center justify-center gap-8 mb-20 flex-wrap`}>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-center">
            Tracing the Arc...
           </h2>
-          <img 
+           <img 
             src="/icons/google-intern.png" 
             alt="Google Intern '26" 
             className="object-contain w-32 h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 flex-shrink-0"
