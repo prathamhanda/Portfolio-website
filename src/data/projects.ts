@@ -1293,7 +1293,7 @@ $ make`,
         "tailwindcss",
         "shadcn-ui"
       ],
-      automation: "Includes a scheduled GitHub workflow (weekly-codolio-stats.yml) that executes scrape-codolio.js to keep coding statistics synchronized."
+      automation: "Includes a scheduled GitHub workflow (weekly-coding-stats.yml) that runs every Sunday and refreshes the coding statistics and GitHub contribution heatmap from Codolio and GitHub."
     }
   },
 ];
