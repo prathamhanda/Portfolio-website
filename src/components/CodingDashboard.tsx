@@ -649,9 +649,9 @@ const CodingDashboard = () => {
                 <Target className="w-5 h-5 text-primary" />
                 Problem Breakdown
               </CardTitle>
-              <div className="px-2 py-0.5 rounded-md bg-muted/30 border border-muted/50 text-[10px] uppercase tracking-wider font-semibold text-muted-foreground/70" title="Distribution based on LeetCode questions only">
+              {/* <div className="px-2 py-0.5 rounded-md bg-muted/30 border border-muted/50 text-[10px] uppercase tracking-wider font-semibold text-muted-foreground/70" title="Distribution based on LeetCode questions only">
                 LeetCode
-              </div>
+              </div> */}
             </CardHeader>
             <CardContent>
               <div className="flex flex-col md:flex-row items-center justify-between gap-8">
