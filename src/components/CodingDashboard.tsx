@@ -8,14 +8,14 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, 
 const DEFAULT_RATING_DATA = [
   { date: 'Jan', rating: 1400 },
   { date: 'Feb', rating: 1450 },
-  { date: 'Mar', rating: 1350 },
-  { date: 'Apr', rating: 1580 },
-  { date: 'May', rating: 1650 },
-  { date: 'Jun', rating: 1575 },
-  { date: 'Jul', rating: 1694 },
-  { date: 'Aug', rating: 1871 },
-  { date: 'Sep', rating: 1939 },
-  { date: 'Oct', rating: 1931 },
+  { date: 'Mar', rating: 1694 },
+  { date: 'Apr', rating: 1758 },
+  { date: 'May', rating: 1857 },
+  { date: 'Jun', rating: 1919 },
+  { date: 'Jul', rating: 1898 },
+  { date: 'Aug', rating: 1938 },
+  { date: 'Sep', rating: 1870 },
+  { date: 'Oct', rating: 1883 },
 ];
 
 interface LeetCodeStats {

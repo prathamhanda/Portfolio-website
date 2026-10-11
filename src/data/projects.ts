@@ -38,10 +38,10 @@ export const projectsData: Project[] = [
     title: "Brain Tumor Detector",
     description: "A 3-stage deep learning pipeline achieving 94.5% accuracy and 97.2% IoU in brain tumor detection and segmentation.",
     fullDescription: "An advanced medical AI system that combines YOLOv8 for tumor detection, SAM for precise segmentation, and custom PyTorch models for classification. The system processes MRI scans in real-time to assist healthcare professionals in early diagnosis and surgical planning. The three-stage pipeline ensures high accuracy while maintaining clinical workflow compatibility.",
-    image: "/projects/5.png",
+    image: "/projects/brain-tumor-detector-cover.png",
     images: [
-      "/projects/5.png",
-      "/projects/a4.png"
+      "/projects/brain-tumor-detector-cover.png",
+      "/projects/brain-tumor-detector-1.png"
     ],
     tags: ["Python", "PyTorch", "YOLO", "Segment Anything Model", "Streamlit"],
     techStack: ["Python", "PyTorch", "YOLOv8", "Segment Anything Model", "OpenCV", "Streamlit", "NumPy", "Matplotlib"],
@@ -152,11 +152,11 @@ Response:
     title: "AI-RoadIntelligence",
     description: "Real-time traffic intelligence using YOLOv8 and OpenCV, processing 4+ concurrent streams at 45 FPS with under 50ms processing delay.",
     fullDescription: "A comprehensive traffic management system that leverages computer vision and AI to optimize traffic flow in real-time. The system integrates YOLOv8 for vehicle detection, SUMO traffic simulation for scenario modeling, and custom algorithms for emergency vehicle routing. Designed for smart city implementations with scalable architecture.",
-    image: "/projects/66.png",
+    image: "/projects/ai-road-intelligence-cover.png",
     images: [
-      "/projects/66.png",
-      "/projects/66a.png",
-      "/projects/a5.png"
+      "/projects/ai-road-intelligence-cover.png",
+      "/projects/ai-road-intelligence-1.png",
+      "/projects/ai-road-intelligence-2.png"
     ],
     tags: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine"],
     techStack: ["Python", "YOLOv8", "OpenCV", "SUMO", "SightEngine API", "NumPy", "Flask", "Redis"],
@@ -239,11 +239,11 @@ python main.py --config config.yaml`,
     title: "RoomsOnRent",
     description: "A containerized dual-portal platform for student housing with separate interfaces for students and landlords.",
     fullDescription: "A full-stack web application designed specifically for student housing needs, featuring dual portals for students and landlords. The platform includes advanced search capabilities, real-time availability updates, virtual property tours, and integrated booking systems. Built with modern web technologies and deployed using containerization for scalability.",
-    image: "/projects/2.png",
+    image: "/projects/roomsonrent-cover.png",
     images: [
-      "/projects/2.png",
-      "/projects/4.png",
-      "/projects/3.png"
+      "/projects/roomsonrent-cover.png",
+      "/projects/roomsonrent-1.png",
+      "/projects/roomsonrent-2.png"
     ],
     tags: ["React", "Node.js", "MongoDB", "Docker", "Cloudinary"],
     techStack: ["React", "Node.js", "Express.js", "MongoDB", "Docker", "Cloudinary", "JWT", "Stripe API"],
@@ -341,10 +341,10 @@ npm run dev`,
     title: "CareSentry AI",
     description: "An intelligent digital health companion offering AI-powered symptom guidance, OCR-based prescription digitization, and automated medication reminders.",
     fullDescription: "CareSentry AI is a comprehensive health management platform designed for elderly patients, caregivers, and health-conscious individuals. It bridges the gap between complex medical routines and accessible technology. The platform features a dual-AI system: an OCR engine for digitizing handwritten prescriptions and a machine learning model for analyzing symptoms to predict potential diseases and recommend specialist doctors. Integrated with Telegram and WhatsApp, it ensures reliable medication adherence through automated, cross-platform notifications. Secured with AES-256 and JWT-based role access, it handles sensitive health data with clinical-grade privacy.",
-    image: "/projects/ca1_0.png",
+    image: "/projects/caresentry-ai-cover.png",
     images: [
-      "/projects/ca1_0.png",
-      "/projects/cai_1.png"
+      "/projects/caresentry-ai-cover.png",
+      "/projects/caresentry-ai-1.png"
     ],
     tags: [
       "React",
@@ -441,14 +441,106 @@ npm run dev`,
     }
   },
   {
+    id: "dedup-backup-engine",
+    title: "Dedup Backup Engine",
+    description: "A C++17 content-addressed backup engine with FastCDC deduplication, WAL-backed crash safety, and verified restore achieving 72.1% storage reduction.",
+    fullDescription: "A high-performance, crash-safe, content-addressed deduplicating backup engine written from scratch in C++17. The engine splits files into content-defined chunks using FastCDC, stores each unique chunk exactly once keyed by its SHA-256 digest, and reconstructs snapshots as lightweight recipes of hashes. A strict write-ahead log guarantees that an interrupted backup can never corrupt the index, and a multi-threaded pipeline with a bounded queue provides backpressure for large source trees.",
+    image: "/projects/dedup-backup-engine-cover.png",
+    images: [
+      "/projects/dedup-backup-engine-cover.png",
+      "/projects/dedup-backup-engine-1.png"
+    ],
+    tags: ["C++17", "FastCDC", "Content-Addressed Storage", "WAL", "SHA-256", "CMake"],
+    techStack: ["C++17", "CMake", "OpenSSL", "POSIX", "Linux"],
+    category: "tools",
+    featured: false,
+    githubUrl: "https://github.com/prathamhanda/dedup-backup-engine",
+    features: [
+      "FastCDC content-defined chunking with gear hash rolling checksum",
+      "Write-ahead log with CRC32 integrity and torn-write recovery",
+      "Content-addressed storage keyed by SHA-256 digest",
+      "Multi-threaded pipeline with bounded queue backpressure",
+      "Append-only pack files for sequential write performance",
+      "Byte-exact restore with whole-file digest verification",
+      "Crash-safe by construction with strict fsync ordering",
+      "Normalized chunking with dual boundary-probability masks"
+    ],
+    challenges: [
+      "Designing a crash-safe persistence layer where an interrupted backup can never corrupt the index",
+      "Implementing FastCDC with a gear hash that realigns chunk boundaries after single-byte insertions",
+      "Balancing chunk size distribution with dual masks to avoid geometric spread",
+      "Coordinating multi-threaded workers with a single global mutex for store mutation without deadlocking",
+      "Ensuring deterministic on-disk formats with explicit little-endian serialization for cross-platform portability"
+    ],
+    metrics: [
+      {
+        value: "72.1%",
+        label: "Storage Reduction",
+        description: "Deduplication savings on a mix of identical and incrementally edited files"
+      },
+      {
+        value: "1 chunk",
+        label: "Insertion Resilience",
+        description: "FastCDC restricts single-byte insertions to exactly 1 chunk difference across 50 trials"
+      },
+      {
+        value: "3.59x",
+        label: "Space Efficiency",
+        description: "Effective storage multiplier achieved through content-defined deduplication"
+      }
+    ],
+    implementation: {
+      approach: "The engine uses a pipeline architecture: a walker thread traverses the source tree and feeds file paths into a bounded queue, while a pool of worker threads read files, apply FastCDC to chunk them, and compute SHA-256 hashes. A central repository manager synchronizes chunk storage, WAL appends, and index updates under a single global mutex. The on-disk format uses explicit little-endian serialization for portability, with a strict fsync ordering that guarantees crash safety.",
+      technologies: [
+        {
+          name: "C++17",
+          reason: "Provides the low-level memory management, zero-cost abstractions, and deterministic performance required for a systems-level storage engine"
+        },
+        {
+          name: "FastCDC",
+          reason: "Content-defined chunking algorithm that ensures robust deduplication even with data insertions or deletions, unlike fixed-size chunking which fails catastrophically on byte-level edits"
+        },
+        {
+          name: "OpenSSL SHA-256",
+          reason: "Cryptographic hashing guarantees chunk identity with zero collision risk, making the store fundamentally secure by design"
+        },
+        {
+          name: "CMake",
+          reason: "Cross-platform build system that handles dependency management and compilation across different environments"
+        }
+      ]
+    },
+    architecture: "Source Directory → Walker Thread → Bounded Queue → Worker Threads (FastCDC + SHA-256) → Repository Manager → Pack File + WAL + Index",
+    documentation: {
+      setup: "sudo apt install build-essential cmake libssl-dev\n\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release\ncmake --build build -j\"$(nproc)\"\nctest --test-dir build --output-on-failure",
+      usage: "Initialize a repository with `dedup-backup init <repo-path>`. Run backups using `dedup-backup backup <source-dir> --repo <repo>` with optional thread and chunk-size flags. List snapshots, restore to a destination directory, verify repository integrity, and view deduplication statistics through the `list`, `restore`, `verify`, and `stats` subcommands respectively.",
+      api: "dedup-backup init <repo-path>\ndedup-backup backup <source-dir> --repo <repo> [--threads N] [--avg-chunk-kb K]\ndedup-backup list --repo <repo>\ndedup-backup restore <snapshot-id> <dest-dir> --repo <repo>\ndedup-backup verify --repo <repo>\ndedup-backup stats --repo <repo>\ndedup-backup bench <source-dir> --repo <repo>"
+    },
+    repoNotes: {
+      homepage: "https://github.com/prathamhanda/dedup-backup-engine",
+      topics: [
+        "backup",
+        "content-addressed-storage",
+        "deduplication",
+        "fastcdc",
+        "systems-programming"
+      ],
+      license: "MIT",
+      language: "C++17",
+      buildSystem: "CMake 3.16+",
+      dependencies: ["OpenSSL"],
+      platform: "Linux (WSL2 recommended for Windows)"
+    }
+  },
+  {
   "id": "dot-ignorer",
   "title": "Dot Ignorer",
   "description": "A lightweight VS Code extension to quickly generate and manage .gitignore files from curated templates.",
   "fullDescription": "Dot Ignorer is a Visual Studio Code extension that speeds up creating and managing .gitignore files by providing a comprehensive, curated set of templates (sourced from the official gitignore repository and project-specific templates). The extension exposes a single, easy command that opens a quick-pick list of templates and writes the selected template into the workspace root, with overwrite confirmation when needed. The extension is designed to be zero-config, fast, and friendly for developers working across many languages and environments.",
-  "image": "/projects/Dot-ignorer.png",
+  "image": "/projects/dot-ignorer-cover.png",
   "images": [
-    "/projects/Dot-ignorer.png",
-    "/projects/a(1).png"
+    "/projects/dot-ignorer-cover.png",
+    "/projects/dot-ignorer-1.png"
   ],
   "tags": [
     "VSCode",
@@ -568,10 +660,10 @@ npm run dev`,
   "title": "Breast Cancer Predictor",
   "description": "AI-powered diagnostic tool that analyzes tumor cell measurements to classify breast masses as benign or malignant.",
   "fullDescription": "An AI-powered diagnostic tool that analyzes tumor cell measurements to classify breast masses as benign or malignant. This project uses multiple machine learning classifiers trained on the Wisconsin Breast Cancer Dataset and provides an interactive Streamlit web app for clinicians and researchers to explore and test predictions. The app includes visualization (radar charts), real-time predictions, and confusion-matrix based performance reporting for multiple models.",
-  "image": "/projects/1.png",
+  "image": "/projects/breast-cancer-predictor-cover.png",
   "images": [
-    "/projects/1.png",
-    "/projects/a3.png",
+    "/projects/breast-cancer-predictor-cover.png",
+    "/projects/breast-cancer-predictor-1.png",
   ],
   "tags": [
     "Python",
@@ -675,10 +767,10 @@ npm run dev`,
   title: "CHIP-8 Emulator",
   description: "A C++ emulator for the CHIP-8 interpreted programming language using SDL2 for graphics and input.",
   fullDescription: "A fully functional CHIP-8 emulator built with C++ and using the SDL2 library for graphics and input. It correctly interprets CHIP-8 opcodes, allowing classic games like Space Invaders and Pong to be played. The project demonstrates low-level system understanding, memory management, and C++ implementation skills. It includes 23 public domain ROMs for testing.",
-  image: "/projects/6.png",
+  image: "/projects/chip-8-emulator-cover.png",
   images: [
-    "/projects/6.png",
-    "/projects/a2.png",
+    "/projects/chip-8-emulator-cover.png",
+    "/projects/chip-8-emulator-1.png",
   ],
   tags: ["C++", "C", "Emulator", "SDL2", "CMake"],
   techStack: ["C++", "C", "SDL2", "CMake", "Makefile"],
@@ -755,10 +847,10 @@ $ make`,
     title: "MovieMania",
     description: "A MERN entertainment platform for discovering and tracking movies and TV, with watchlists, collections, analytics, and personalized recommendations.",
     fullDescription: "MovieMania is a comprehensive entertainment tracking ecosystem that transforms how users discover, organize, and analyze their viewing habits. Engineered with the MERN stack, the application serves as a centralized hub by integrating the TMDB API for rich media metadata and the Trakt API for cross-platform watch history synchronization. The platform distinguishes itself through its embedded AI suite, leveraging Google's Gemini API to power a semantic Smart Search Bar, predictive rating badges, and an interactive Review Assistant. Users can visualize their media consumption through an advanced Insights Dashboard that generates dynamic data visualizations, including viewing heatmaps, genre distributions, and watch streaks.",
-    image: "/projects/moviemania_0.png",
+    image: "/projects/moviemania-cover.png",
     images: [
-      "/projects/moviemania_0.png",
-      "/projects/moviemania_1.png"
+      "/projects/moviemania-cover.png",
+      "/projects/moviemania-1.png"
     ],
     tags: [
       "React",
@@ -854,10 +946,10 @@ $ make`,
     title: "DBuck Corporate Platform",
     description: "A high-performance, responsive corporate website built with React, Vite, and Node.js to showcase digital solutions and streamline client communications.",
     fullDescription: "The official digital storefront for DBuck, engineered to deliver a seamless and highly responsive user experience. This full-stack web application leverages Vite and React for a blazingly fast frontend, styled comprehensively with Tailwind CSS and Shadcn/ui components for a modern, accessible aesthetic. The backend is powered by Node.js and Express, featuring a secure, rate-limited REST API optimized for processing client inquiries via Nodemailer. The architecture emphasizes end-to-end type safety using TypeScript and robust data validation with Zod on the client and Joi on the server.",
-    image: "/projects/dbuck_0.png",
+    image: "/projects/dbuck-website-cover.png",
     images: [
-      "/projects/dbuck_0.png",
-      "/projects/dbuck_1.png"
+      "/projects/dbuck-website-cover.png",
+      "/projects/dbuck-website-1.png"
     ],
     tags: [
       "React",
@@ -946,10 +1038,10 @@ $ make`,
     title: "Better YouTube",
     description: "A productivity-focused browser extension that enhances YouTube with Focus Mode, granular speed controls, and automated sponsor skipping.",
     fullDescription: "Better YouTube is a comprehensive browser extension engineered to optimize the video consumption experience. It empowers users to reclaim their attention by offering a suite of powerful tools: a distraction-free Focus Mode that hides comments and recommendations, a Smart Speed manager for precise playback control, and seamless integration with the SponsorBlock API to automatically skip sponsored segments, intros, and outros. The repository features a vanilla JavaScript extension core optimized for YouTube's dynamic DOM, accompanied by a modern React and Tailwind CSS landing page.",
-    image: "/projects/by_0.png",
+    image: "/projects/better-youtube-cover.png",
     images: [
-      "/projects/by_0.png",
-      "/projects/by_1.png"
+      "/projects/better-youtube-cover.png",
+      "/projects/better-youtube-1.png"
     ],
     tags: [
       "Browser Extension",
@@ -1028,10 +1120,10 @@ $ make`,
     title: "StudyBud AI Ecosystem",
     description: "A comprehensive AI-powered ed-tech platform featuring dynamic study planning, CBSE/CUET exam simulators, and an automated Manim video generation engine.",
     fullDescription: "StudyBud (internal alias ElevenFolks) is a full-stack educational ecosystem combining a rapid Vite+React PWA frontend and a cross-platform React Native mobile app. At its core, it leverages Supabase for real-time data orchestration and a custom containerized Node.js/Python backend that automatically generates animated educational videos using the Manim framework. The platform integrates a sophisticated AI study buddy powered by Google Gemini, full CBSE and CUET exam simulators with intelligent fallback generation routines, and dedicated teacher portals for classroom management. The architecture isolates heavy video-rendering tasks from the low-latency interactive frontend to ensure high performance and scalability.",
-    image: "/projects/studybud_0.png",
+    image: "/projects/studybud-ai-ecosystem-cover.png",
     images: [
-      "/projects/studybud_0.png",
-      "/projects/studybud_1.png"
+      "/projects/studybud-ai-ecosystem-cover.png",
+      "/projects/studybud-ai-ecosystem-1.png"
     ],
     tags: ["React", "TypeScript", "Tailwind CSS", "Supabase", "Python", "Manim", "Gemini AI"],
     techStack: ["React 18", "Vite", "TypeScript", "Tailwind CSS", "Supabase (Auth/Postgres/Edge)", "Node.js", "Python", "Manim", "Docker", "Google Gemini API"],
@@ -1115,11 +1207,11 @@ $ make`,
     title: "this -> Portfolio",
     description: "A highly optimized, interactive personal portfolio built with React, Vite, and Tailwind CSS, featuring real-time competitive programming statistics.",
     fullDescription: "A modern, highly performant personal developer portfolio engineered to showcase projects, technical skills, and competitive programming achievements. Built on the React and Vite ecosystem, the application utilizes Tailwind CSS and Shadcn/ui for a bespoke, accessible design system. Key technical implementations include a globally accessible Command Palette for rapid keyboard-first navigation, hardware-accelerated scroll animations, and a dynamic Coding Dashboard. This dashboard leverages Vercel Serverless Functions and custom scraping scripts to aggregate and normalize real-time statistics from platforms including LeetCode, CodeChef, Codeforces, and GeeksforGeeks.",
-    image: "/projects/portfolio_0.png",
+    image: "/projects/portfolio-website-cover.png",
     images: [
-      "/projects/portfolio_0.png",
-      "/projects/portfolio_1.png",
-      "/projects/portfolio_2.png"
+      "/projects/portfolio-website-cover.png",
+      "/projects/portfolio-website-1.png",
+      "/projects/portfolio-website-2.png"
     ],
     tags: [
       "React",
@@ -1203,5 +1295,5 @@ $ make`,
       ],
       automation: "Includes a scheduled GitHub workflow (weekly-codolio-stats.yml) that executes scrape-codolio.js to keep coding statistics synchronized."
     }
-  }
+  },
 ];
