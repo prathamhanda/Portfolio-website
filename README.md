@@ -183,11 +183,30 @@ Open http://localhost:8080
 
 ### 🔐 Environment Variables
 
-Create `.env` in the project root:
+Copy `.env.example` to `.env.local` and fill in the values:
+
+```bash
+cp .env.example .env.local
+```
 
 ```env
-# Enables AI-powered command palette features
-VITE_GEMINI_API_KEY=your_key_here
+GEMINI_API_KEYS=your_key_here
+
+VITE_LEETCODE_USERNAME=prathamhanda
+VITE_GITHUB_USERNAME=prathamhanda
+```
+
+You can also pass multiple keys separated by commas; they are tried in
+round-robin order with automatic failover:
+
+```env
+GEMINI_API_KEYS=key_one,key_two,key_three
+```
+
+Verify the key works without starting the app:
+
+```bash
+node testing.js
 ```
 
 ### Production
@@ -196,6 +215,27 @@ VITE_GEMINI_API_KEY=your_key_here
 npm run build
 npm run preview
 ```
+
+### Deploying to Vercel
+
+The AI command palette runs as a Vercel serverless function in `api/chat.js`.
+Serverless functions only execute on Vercel, **not** under `vite dev` — the
+local Vite plugin in `vite-plugins/vercelFunctions.ts` runs it for you.
+
+Before deploying, add the secret in the Vercel dashboard under
+**Project → Settings → Environment Variables**:
+
+| Variable | Scope | Example |
+|---|---|---|
+| `GEMINI_API_KEYS` | Server only (do not prefix with `VITE_`) | `key_one,key_two` |
+| `VITE_LEETCODE_USERNAME` | Public | `prathamhanda` |
+| `VITE_GITHUB_USERNAME` | Public | `prathamhanda` |
+
+Apply them to **Production**, **Preview**, and **Development**. Never set the
+Gemini key with a `VITE_` prefix, or it will be inlined into the public bundle.
+
+`vercel.json` rewrites every route except `/api/*` to `index.html`, so the
+function is reachable while client-side routing still works.
 
 ---
 

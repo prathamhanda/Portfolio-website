@@ -72,23 +72,37 @@ const fallbackResponses: Record<string, string> = {
   "availability": "I am a Computer Science student at Thapar Institute with internship experience at Google and Samsung, interested in software engineering and applied AI.",
   "text": "You can reach me through my website (pratham.codes), LinkedIn (linkedin.com/in/prathamh), or email (prathamhanda10@gmail.com).",
   "contact information": "Feel free to reach out via email at prathamhanda10@gmail.com or connect with me on LinkedIn at linkedin.com/in/prathamh.",
+  "how are you": "I am doing well, thanks for asking. I am building AI and full stack projects and always up for learning something new.",
+  "hi": "Hello. Ask me anything about my projects, skills, internships, or experience.",
+  "hello": "Hello. Ask me anything about my projects, skills, internships, or experience.",
+  "hey": "Hey. Ask me anything about my projects, skills, internships, or experience.",
+  "who are you": "I am Pratham Handa, a Computer Science student at Thapar Institute and a full stack and AI engineer. Feel free to ask about my projects or internships.",
+  "what do you do": "I am a full stack and AI engineer. I build web platforms and machine learning systems, and I am currently focused on applied AI and developer tooling.",
 };
 
 function getFallbackResponse(query: string): string | null {
-  const normalizedQuery = query.toLowerCase().trim();
-  
-  // Check for exact matches first
+  const normalizedQuery = query.toLowerCase().trim().replace(/[?.!]+$/, "");
+
+  // Exact match first.
   if (fallbackResponses[normalizedQuery]) {
     return fallbackResponses[normalizedQuery];
   }
-  
-  // Check for partial matches
+
+  // Then substring match: the query contains a known key (e.g. "tell me about your skills").
   for (const [key, value] of Object.entries(fallbackResponses)) {
-    if (normalizedQuery.includes(key) || key.includes(normalizedQuery)) {
+    if (normalizedQuery.includes(key)) {
       return value;
     }
   }
-  
+
+  // Finally, a known key contains the query, but only for keys long enough
+  // to avoid very short queries matching unrelated topics.
+  for (const [key, value] of Object.entries(fallbackResponses)) {
+    if (normalizedQuery.length >= 4 && key.includes(normalizedQuery)) {
+      return value;
+    }
+  }
+
   return null;
 }
 
@@ -117,8 +131,13 @@ export async function queryAI(query: string): Promise<string> {
 
     if (!resp.ok) {
       const txt = await resp.text();
-      console.error("Server API failed:", resp.status, txt);
-      
+
+      // Server-side failures surface a real diagnostic; surface it in dev only
+      // so production users never see internal details or console noise.
+      if (import.meta.env.DEV) {
+        console.error("[ai] /api/chat failed:", resp.status, txt.slice(0, 300));
+      }
+
       const fallback = getFallbackResponse(query);
       if (fallback) return fallback;
       return "I apologize, but I'm having trouble processing your query at the moment. Please try again or rephrase your question.";
@@ -140,7 +159,7 @@ export async function queryAI(query: string): Promise<string> {
 
     return data.text;
   } catch (error) {
-    console.error("Error in queryAI:", error);
+    if (import.meta.env.DEV) console.error("[ai] queryAI error:", error);
     
     // Try to get a fallback response
     const fallback = getFallbackResponse(query);
@@ -149,6 +168,43 @@ export async function queryAI(query: string): Promise<string> {
     }
     
     return "I apologize, but I'm having trouble processing your request. Please try again in a moment.";
+  }
+}
+
+/**
+ * Real health check for the Gemini pipeline.
+ * queryAI() swallows errors and falls back to canned text, so it can never be
+ * used to detect a broken API. This talks to the server directly and reports
+ * the underlying status so misconfiguration is actually visible.
+ */
+export async function checkGeminiHealth(): Promise<{
+  ok: boolean;
+  status: number;
+  model?: string;
+  error?: string;
+}> {
+  try {
+    const resp = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: "ping", startIndex: 0 }),
+    });
+
+    const txt = await resp.text();
+    if (!resp.ok) {
+      let details = txt;
+      try {
+        details = JSON.parse(txt).details || JSON.parse(txt).error || txt;
+      } catch {
+        /* keep raw text */
+      }
+      return { ok: false, status: resp.status, error: String(details).slice(0, 200) };
+    }
+
+    const data = JSON.parse(txt);
+    return { ok: !!data.text, status: resp.status, model: data.model };
+  } catch (e: any) {
+    return { ok: false, status: 0, error: String(e?.message || e) };
   }
 }
 

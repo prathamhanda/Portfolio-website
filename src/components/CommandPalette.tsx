@@ -23,6 +23,14 @@ const loadQueryAI = async () => {
   return _queryAILib.queryAI;
 };
 
+// lazy wrapper for the health check (reuses the same cached module)
+const loadGeminiHealth = async () => {
+  if (!_queryAILib) {
+    _queryAILib = await import("@/lib/aiSearch");
+  }
+  return _queryAILib.checkGeminiHealth();
+};
+
 interface SearchResult {
   id: string;
   title: string;
@@ -114,12 +122,15 @@ const CommandPalette = () => {
     // Secret command to check Gemini API status
     if (lowerQuery === "!status gemini" || lowerQuery === "!gemini") {
       const checkAPI = async () => {
-        try {
-          const queryAI = await loadQueryAI();
-          await queryAI("test");
-          setAiResponse("✅ Gemini API is working correctly!");
-        } catch (error) {
-          setAiResponse("❌ Gemini API is not responding. Please check your configuration.");
+        setAiLoading(true);
+        const { ok, status, model, error } = await loadGeminiHealth();
+        setAiLoading(false);
+        if (ok) {
+          setAiResponse(`Gemini API is working correctly (model: ${model || "unknown"}).`);
+        } else {
+          setAiResponse(
+            `Gemini API is NOT responding (HTTP ${status}). ${error || "Check your server configuration."}`
+          );
         }
       };
       checkAPI();
