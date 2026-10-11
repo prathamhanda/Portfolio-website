@@ -163,8 +163,16 @@ All colors MUST be HSL.
   .glass-card {
     background: hsl(var(--glass-bg));
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid hsl(var(--glass-border));
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Only the properties that actually change on hover. Being explicit keeps
+       the browser from having to consider every other animatable property,
+       which matters on low-end GPUs. (Note: `transition: all` was not itself
+       re-blurring here, because nothing ever changes backdrop-filter on this
+       element. This is hygiene, not a performance fix.) */
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-card:hover {
@@ -286,7 +294,11 @@ All colors MUST be HSL.
     -webkit-backdrop-filter: blur(6px) saturate(1.03);
     box-shadow: 0 1px 0 rgba(0,0,0,0.02) inset;
     transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms cubic-bezier(.2,.8,.2,1), border-color 180ms ease;
-    will-change: transform;
+    /* No `will-change: transform` here on purpose. Promoting this element to
+       its own compositing layer makes backdrop-filter sample the element's own
+       layer instead of the page behind it, which on macOS/Chromium either
+       drops the blur or renders it inconsistently. The hover transform is
+       cheap enough without a permanent layer hint. */
   }
 
   .rounded-lg.border.bg-card:hover,
