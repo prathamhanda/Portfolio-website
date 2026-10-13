@@ -29,6 +29,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { spawnSync } from "child_process";
+import { fetchGitHubContributions, summarise } from "../lib/github-contribs.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -141,31 +142,9 @@ function fetchCodolioViaPuppeteer() {
 
 // ---------------------------------------------------------------------------
 // 2. GitHub  ->  contribution heatmap
+//    Uses the shared lib/github-contribs.mjs so the static file written here
+//    and the live /api/github-contribs/:user fallback can never disagree.
 // ---------------------------------------------------------------------------
-async function fetchGitHubContributions(username) {
-  const res = await fetch(`https://github.com/users/${username}/contributions`, {
-    headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
-  });
-  if (!res.ok) throw new Error(`GitHub contributions HTTP ${res.status}`);
-  const html = await res.text();
-
-  const days = [];
-  const tdRe = /<td[^>]*?data-date="([^"]+)"[^>]*?id="([^"]+)"[^>]*?data-level="([^"]+)"[^>]*?>/g;
-  let m;
-  while ((m = tdRe.exec(html)) !== null) {
-    const [, date, id, level] = m;
-    let count = 0;
-    const tt = new RegExp(`<tool-tip[^>]*?for="${id}"[^>]*?>([^<]+)</tool-tip>`).exec(html);
-    if (tt && !tt[1].toLowerCase().includes("no contributions")) {
-      const n = tt[1].match(/^(\d+)/);
-      if (n) count = parseInt(n[1], 10);
-    }
-    days.push({ date, count, contributionLevel: Number(level) });
-  }
-
-  if (days.length === 0) throw new Error("no contribution cells parsed from GitHub");
-  return days;
-}
 
 // ---------------------------------------------------------------------------
 // 3. Per-platform solved counts (informational; not rendered)
@@ -252,15 +231,19 @@ async function main() {
   try {
     log("fetching GitHub contributions...");
     const days = await fetchGitHubContributions(GITHUB_USERNAME);
-    const activeDays = days.filter((d) => d.count > 0).length;
-    const total = days.reduce((s, d) => s + d.count, 0);
+    const stats = summarise(days);
     // Guard: never overwrite a good heatmap with a degenerate one.
-    if (activeDays < 30) throw new Error(`only ${activeDays} active days, refusing to write`);
+    if (stats.activeDays < 30) {
+      throw new Error(`only ${stats.activeDays} active days, refusing to write`);
+    }
     writeJson(path.join(PUBLIC_DIR, "github-contribs", `${GITHUB_USERNAME}.json`), {
       contributions: days,
     });
-    results.github = { entries: days.length, activeDays, total, newest: days[days.length - 1]?.date };
-    log(`github ok: ${days.length} days, ${activeDays} active, newest=${results.github.newest}`);
+    results.github = stats;
+    log(
+      `github ok: ${stats.entries} days, ${stats.activeDays} active, ` +
+        `total=${stats.total}, range=${stats.oldest}..${stats.newest}`
+    );
   } catch (err) {
     failures.push(`github: ${err.message}`);
     log("github FAILED, keeping previous heatmap file");

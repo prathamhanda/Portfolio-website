@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import { fetchGitHubContributions, summarise } from '../../lib/github-contribs.mjs';
 
 export default async function handler(req, res) {
   // Basic CORS headers
@@ -49,73 +50,34 @@ export default async function handler(req, res) {
     // no cache or unreadable — continue to fetch
   }
 
-  const denoTarget = `https://github-contributions-api.deno.dev/${user}.json`;
-
+  // Parse GitHub's contributions calendar using the shared module.
+  //
+  // The previous implementation tried github-contributions-api.deno.dev first,
+  // which now returns 404 for every request, and then parsed the HTML looking
+  // for a `data-count` attribute that GitHub does not emit. It silently fell
+  // back to `data-level` (a 0-4 colour bucket) as the count, reporting a day
+  // with 7 contributions as 1. The shared module reads the real number from the
+  // <tool-tip> element and is the same code path the weekly scraper uses, so
+  // static and live data can no longer disagree.
   try {
-    // Try the original Deno API first
-    const r = await fetch(denoTarget);
-    if (r.ok) {
-      const body = await r.text();
-      // Write to cache for subsequent requests
-      try {
-        await fs.promises.writeFile(cacheFile, body, 'utf8');
-      } catch (e) {
-        // ignore cache write errors
-      }
-      res.statusCode = r.status || 200;
-      const contentType = r.headers.get('content-type') || 'application/json';
-      res.setHeader('Content-Type', contentType);
-      // prefer CDN caching at edge for a short TTL
-      res.setHeader('Cache-Control', `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60`);
-      res.end(body);
-      return;
-    }
-  } catch (e) {
-    // ignore and fallback to scraping GitHub
-  }
+    const days = await fetchGitHubContributions(user);
+    const body = JSON.stringify({ contributions: days });
 
-  // Fallback: scrape GitHub contributions page
-  try {
-    const svgUrl = `https://github.com/users/${user}/contributions`;
-    const svgRes = await fetch(svgUrl);
-    if (!svgRes.ok) {
-      res.statusCode = svgRes.status || 502;
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ error: `Failed to fetch fallback: ${svgRes.status}` }));
-      return;
-    }
-
-    const svg = await svgRes.text();
-    const contribs = [];
-
-    // Generic extraction: look for any element with data-date and optional data-count/data-level
-    const genericRe = /<[^>]+data-date="([^"]+)"([^>]*)>/gi;
-    let m;
-    while ((m = genericRe.exec(svg)) !== null) {
-      const date = m[1];
-      const rest = m[2] || '';
-      const countMatch = rest.match(/data-count="([^"]+)"/i);
-      const levelMatch = rest.match(/data-level="([^"]+)"/i);
-      const count = countMatch ? parseInt(countMatch[1], 10) || 0 : (levelMatch ? Number(levelMatch[1]) || 0 : 0);
-      const level = levelMatch ? levelMatch[1] : null;
-      contribs.push({ date, count, contributionLevel: level });
-    }
-
-    const out = JSON.stringify({ contributions: contribs });
     try {
-      await fs.promises.writeFile(cacheFile, out, 'utf8');
+      await fs.promises.writeFile(cacheFile, body, 'utf8');
     } catch (e) {
-      // ignore
+      // ignore cache write errors
     }
+
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Cache-Control', `public, s-maxage=${CACHE_TTL}, stale-while-revalidate=60`);
-    res.end(out);
+    res.end(body);
     return;
   } catch (err) {
     res.statusCode = 502;
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ error: String(err) }));
+    res.end(JSON.stringify({ error: String(err?.message || err) }));
     return;
   }
 };
