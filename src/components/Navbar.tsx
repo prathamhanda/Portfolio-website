@@ -166,7 +166,7 @@ const Navbar = () => {
           {/* Left - Logo */}
           <Link to="/" className="text-xl font-bold z-10 flex-shrink-0">
             <span className="text-foreground whitespace-nowrap">pratham</span>
-            <span className="text-muted-foreground whitespace-nowrap">.codes</span>
+            <span className="text-muted-foreground whitespace-nowrap">.me</span>
           </Link>
 
           {/* Center - Eyes */}

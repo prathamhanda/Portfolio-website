@@ -6,7 +6,7 @@ Education: B.Tech. Computer Science & Engineering, Thapar Institute of Engineeri
 Email: prathamhanda10@gmail.com
 LinkedIn: linkedin.com/in/prathamh
 GitHub: github.com/prathamhanda
-Portfolio: pratham.codes
+Portfolio: prathamhanda.me
 PROFESSIONAL SUMMARY:
 Computer Science student with experience in full stack development and AI-based projects. Strong academic record and competitive programming background.
 WORK EXPERIENCE:
@@ -70,7 +70,7 @@ const fallbackResponses: Record<string, string> = {
   "achievements": "I hold a LeetCode Knight Badge with a 1939 contest rating (top 3.5% globally), have solved 1400+ DSA problems, and was selected for Amazon ML Summer School 2026. I am a Merit I (twice) and III Scholar and Reliance UG Scholar.",
   "leadership": "As Joint Secretary of LEAD Society (Sep 2023–May 2026), I built its official website and mentored 250+ students in a two-hour DSA workshop. I also served as Technical Head for a seminar whose landing page served 500+ users and which featured six speaker presentations.",
   "availability": "I am a Computer Science student at Thapar Institute with internship experience at Google and Samsung, interested in software engineering and applied AI.",
-  "text": "You can reach me through my website (pratham.codes), LinkedIn (linkedin.com/in/prathamh), or email (prathamhanda10@gmail.com).",
+  "text": "You can reach me through my website (prathamhanda.me), LinkedIn (linkedin.com/in/prathamh), or email (prathamhanda10@gmail.com).",
   "contact information": "Feel free to reach out via email at prathamhanda10@gmail.com or connect with me on LinkedIn at linkedin.com/in/prathamh.",
   "how are you": "I am doing well, thanks for asking. I am building AI and full stack projects and always up for learning something new.",
   "hi": "Hello. Ask me anything about my projects, skills, internships, or experience.",

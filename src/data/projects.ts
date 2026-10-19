@@ -1232,7 +1232,7 @@ $ make`,
     category: "web",
     featured: false,
     githubUrl: "https://github.com/prathamhanda/portfolio-website",
-    liveUrl: "https://pratham.codes",
+    liveUrl: "https://www.prathamhanda.me",
     features: [
       "Globally accessible Command Palette interface for intuitive site navigation",
       "Dynamic coding statistics dashboard integrating multiple external platforms",
@@ -1285,7 +1285,7 @@ $ make`,
       usage: "Navigate to http://localhost:5173. Use CMD+K (or CTRL+K) to trigger the Command Palette for rapid navigation across the portfolio sections."
     },
     repoNotes: {
-      homepage: "https://pratham.codes",
+      homepage: "https://www.prathamhanda.me",
       topics: [
         "portfolio",
         "react",

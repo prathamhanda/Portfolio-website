@@ -1,9 +1,9 @@
 {
   "leetcode": {
-    "easySolved": 273,
+    "easySolved": 276,
     "mediumSolved": 500,
-    "hardSolved": 147,
-    "totalSolved": 920
+    "hardSolved": 149,
+    "totalSolved": 925
   },
   "codeforces": {
     "totalSolved": 24
@@ -14,6 +14,6 @@
   "geeksforgeeks": {
     "totalSolved": 333
   },
-  "totalSolved": 1485,
-  "lastUpdated": "2026-10-13T06:32:17.282Z"
+  "totalSolved": 1490,
+  "lastUpdated": "2026-10-19T13:31:56.410Z"
 }

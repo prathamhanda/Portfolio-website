@@ -68,7 +68,7 @@ Education: B.Tech. Computer Science & Engineering, Thapar Institute of Engineeri
 Email: prathamhanda10@gmail.com
 LinkedIn: linkedin.com/in/prathamh
 GitHub: github.com/prathamhanda
-Portfolio: pratham.codes
+Portfolio: prathamhanda.me
 PROFESSIONAL SUMMARY:
 Computer Science student with experience in full stack development and AI-based projects. Strong academic record and competitive programming background.
 WORK EXPERIENCE:
