@@ -144,7 +144,7 @@ const CodingDashboard = () => {
       if (cachedRaw) {
         const parsed = JSON.parse(cachedRaw);
         const age = Date.now() - (parsed.ts || 0);
-        const ttl = 1000 * 60 * 60; // 1 hour
+        const ttl = 1000 * 60 * 5; // 5 minutes
         if (age < ttl && Array.isArray(parsed.data)) {
           setContributions(parsed.data);
           setLoading(false);
