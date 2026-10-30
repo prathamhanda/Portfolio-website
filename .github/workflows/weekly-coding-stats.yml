@@ -49,7 +49,7 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: update coding stats [skip ci]"
+          commit_message: "chore: update coding stats"
           file_pattern: |
             public/codolio-stats.json
             public/github-contribs/*.json
