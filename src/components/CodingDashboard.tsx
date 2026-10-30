@@ -104,33 +104,33 @@ const CodingDashboard = () => {
     const fetchGitHubContributions = async () => {
       setGhError(null);
       try {
-        const staticUrl = `/github-contribs/${GITHUB_USER}.json`;
+        // Primary: live API route (fetches GitHub fresh on every request).
         const apiUrl = `/api/github-contribs/${GITHUB_USER}.json`;
-
-        // Try static first
-        let res = await fetch(staticUrl);
-        if (res.ok) {
-          const json = await res.json().catch(() => null);
-          if (json && Array.isArray(json.contributions)) {
-            const formatted = json.contributions.map((c: any) => ({ date: c.date, count: c.count ?? 0, color: c.color, contributionLevel: c.contributionLevel }));
-            try { localStorage.setItem(`ghContribs_v2:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
-            setContributions(formatted);
-            setLoading(false);
-            return;
-          }
-        }
-
-        // Fallback to same-origin API
-        res = await fetch(apiUrl);
+        let res = await fetch(apiUrl);
         if (!res.ok) throw new Error(`Status ${res.status}`);
         const data = await res.json();
         const raw = Array.isArray(data.contributions) ? data.contributions : [];
         const formatted = raw.map((c: any) => ({ date: c.date, count: c.count ?? 0, color: c.color, contributionLevel: c.contributionLevel }));
         try { localStorage.setItem(`ghContribs_v2:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
         setContributions(formatted);
-      } catch (err) {
-        if (isDev) console.error('Error fetching GitHub contributions:', err);
-        setGhError(String((err as any)?.message || err));
+        setLoading(false);
+        return;
+      } catch (apiErr) {
+        // Fallback: static JSON file (populated weekly by the workflow).
+        try {
+          const staticUrl = `/github-contribs/${GITHUB_USER}.json`;
+          const sres = await fetch(staticUrl);
+          const sjson = await sres.json().catch(() => null);
+          if (sjson && Array.isArray(sjson.contributions)) {
+            const formatted = sjson.contributions.map((c: any) => ({ date: c.date, count: c.count ?? 0, color: c.color, contributionLevel: c.contributionLevel }));
+            try { localStorage.setItem(`ghContribs_v2:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formatted })); } catch (e) {}
+            setContributions(formatted);
+            setLoading(false);
+            return;
+          }
+        } catch {}
+        if (isDev) console.error('Error fetching GitHub contributions:', apiErr);
+        setGhError(String((apiErr as any)?.message || apiErr));
       } finally {
         setLoading(false);
         setRetrying(false);
