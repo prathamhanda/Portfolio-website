@@ -1,0 +1,42 @@
+# =============================================================================
+# robots.txt — prathamh.com
+# Personal portfolio of Pratham Handa (Thapar CSE, Google &amp; Samsung intern)
+# =============================================================================
+
+# Allow all well-behaved crawlers to access the entire public site.
+User-agent: *
+Allow: /
+
+# =============================================================================
+# Sitemap — tells search engines where to find the full URL inventory.
+# =============================================================================
+Sitemap: https://www.prathamh.com/sitemap.xml
+
+# =============================================================================
+# Crawl hints
+# =============================================================================
+
+# Serverless API routes are dynamic endpoints, not pages — keep them out of the index.
+Disallow: /api/
+
+# Public assets are safe (and desirable) to crawl for image/video search.
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.png
+Allow: /*.svg
+Allow: /*.webp
+Allow: /*.gif
+Allow: /*.mp4
+Allow: /*.pdf
+Allow: /*.ico
+Allow: /*.json
+
+# =============================================================================
+# Notes
+# - This is a client-side React SPA: every route falls back to /index.html via
+#   vercel.json, so there is only one canonical URL (https://www.prathamh.com/).
+# - Internal anchor links (#projects, #about, etc.) are not separate URLs and
+#   do not need individual sitemap entries.
+# - If you add blog posts or project detail pages later, add them to sitemap.xml
+#   and list them here under Allow: rules as needed.
+# =============================================================================

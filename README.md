@@ -2,8 +2,8 @@
 
 #  Pratham Handa | Portfolio
 
-<a href="https://www.prathamhanda.me">
-<img src="https://img.shields.io/badge/Live%20Portfolio-prathamhanda.me-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Portfolio" />
+<a href="https://www.prathamh.com">
+<img src="https://img.shields.io/badge/Live%20Portfolio-prathamh.com-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Portfolio" />
 </a>
 
 ### **AI-powered navigation. Performance-first UI. A portfolio that feels like a product.**
@@ -274,7 +274,7 @@ Common update points:
 ## 📬 Contact
 
 **Pratham Handa**
-- Portfolio: https://www.prathamhanda.me
+- Portfolio: https://www.prathamh.com
 - LinkedIn: https://www.linkedin.com/in/prathamh/
 - GitHub: https://github.com/prathamhanda
 - Email: prathamhanda10@gmail.com

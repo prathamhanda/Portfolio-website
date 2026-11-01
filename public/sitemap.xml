@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- ========================================================================
+       HOMEPAGE — canonical URL for prathamh.com
+       This is a single-page portfolio; all sections (Hero, About, Timeline,
+       Projects, Coding Dashboard, FAQ, Contact) live under this one URL.
+       ======================================================================== -->
+  <url>
+    <loc>https://www.prathamh.com/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+
+    <!-- Image SEO: profile + hero screenshots boost Google Image & rich-result visibility -->
+    <image:image>
+      <image:loc>https://www.prathamh.com/Pratham-PFP.jpg</image:loc>
+      <image:title>Pratham Handa — Portfolio</image:title>
+      <image:caption>Pratham Handa, Thapar CSE student &amp; software engineer</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/ss/hero.png</image:loc>
+      <image:title>Hero section — Pratham Handa Portfolio</image:title>
+      <image:caption>Landing hero of the personal portfolio website</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/ss/projects.png</image:loc>
+      <image:title>Projects grid — Pratham Handa Portfolio</image:title>
+      <image:caption>Project cards showcasing AI and full-stack work</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/ss/command.png</image:loc>
+      <image:title>AI Command Palette — Pratham Handa Portfolio</image:title>
+      <image:caption>Ctrl+K AI-powered navigation interface</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/ss/coding.png</image:loc>
+      <image:title>Coding Dashboard — Pratham Handa Portfolio</image:title>
+      <image:caption>Live competitive-programming statistics dashboard</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/ss/modal.png</image:loc>
+      <image:title>Project Detail Modal — Pratham Handa Portfolio</image:title>
+      <image:caption>Project deep-dive modal with gallery and tech stack</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/ss/mobile.png</image:loc>
+      <image:title>Mobile view — Pratham Handa Portfolio</image:title>
+      <image:caption>Responsive mobile layout with floating action button</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/favicon.svg</image:loc>
+      <image:title>Favicon — prathamh.com</image:title>
+    </image:image>
+
+    <!-- Project cover images — indexed for image search under each project name -->
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/brain-tumor-detector-cover.png</image:loc>
+      <image:title>Brain Tumor Detector — AI medical imaging project</image:title>
+      <image:caption>YOLOv8 + SAM tumor detection and segmentation system</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/ai-road-intelligence-cover.png</image:loc>
+      <image:title>AI-RoadIntelligence — Real-time traffic optimization</image:title>
+      <image:caption>Computer-vision traffic management system with SUMO simulation</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/roomsonrent-cover.png</image:loc>
+      <image:title>RoomsOnRent — Student housing platform</image:title>
+      <image:caption>MERN full-stack student housing platform</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/caresentry-ai-cover.png</image:loc>
+      <image:title>CareSentry AI — Digital health companion</image:title>
+      <image:caption>AI symptom checker with prescription OCR and medication reminders</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/dedup-backup-engine-cover.png</image:loc>
+      <image:title>Dedup Backup Engine — Deduplication backup system</image:title>
+      <image:caption>FastCDC chunking with SHA-256 content-addressed storage</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/dot-ignorer-cover.png</image:loc>
+      <image:title>Dot Ignorer — VS Code extension</image:title>
+      <image:caption>VS Code extension for managing .gitignore templates</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/breast-cancer-predictor-cover.png</image:loc>
+      <image:title>Breast Cancer Predictor — ML classification</image:title>
+      <image:caption>Scikit-learn breast cancer prediction application</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/chip-8-emulator-cover.png</image:loc>
+      <image:title>CHIP-8 Emulator — Cross-platform emulator</image:title>
+      <image:caption>CMake-based CHIP-8 emulator</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/moviemania-cover.png</image:loc>
+      <image:title>MovieMania — MERN entertainment platform</image:title>
+      <image:caption>Movie and TV tracking with TMDB, Trakt, and Gemini AI</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/dbuck-website-cover.png</image:loc>
+      <image:title>DBuck — Corporate digital storefront</image:title>
+      <image:caption>React, Vite, Node.js corporate website with Nodemailer contact</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/better-youtube-cover.png</image:loc>
+      <image:title>Better YouTube — Browser extension</image:title>
+      <image:caption>Distraction-free YouTube with SponsorBlock integration</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/studybud-ai-ecosystem-cover.png</image:loc>
+      <image:title>StudyBud — AI-powered ed-tech platform</image:title>
+      <image:caption>Study planning, exam simulators, and Manim video generation</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.prathamh.com/projects/portfolio-website-cover.png</image:loc>
+      <image:title>Portfolio Website — This very site</image:title>
+      <image:caption>React + Vite personal portfolio with AI command palette</image:caption>
+    </image:image>
+  </url>
+
+</urlset>
