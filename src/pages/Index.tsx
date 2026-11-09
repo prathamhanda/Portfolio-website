@@ -49,14 +49,16 @@ const Index = () => {
     return (
       <div className="bg-background min-h-screen">
         <Navbar />
-        <Hero />
-        <TechStackScroller />
-        <About />
-        <Timeline />
-        <Projects />
-        <CodingDashboard />
-        <FAQ />
-        <Contact />
+        <main id="main-content">
+          <Hero />
+          <TechStackScroller />
+          <About />
+          <Timeline />
+          <Projects />
+          <CodingDashboard />
+          <FAQ />
+          <Contact />
+        </main>
         <Footer />
         <MobileFAB />
       </div>
@@ -71,6 +73,7 @@ const Index = () => {
         The margin-bottom allows you to scroll past the content just enough to reveal the footer.
       */}
       <main 
+        id="main-content"
         className="relative z-10 bg-background shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-b-[2.5rem] sm:rounded-b-[3rem] overflow-hidden"
         style={{ marginBottom: footerHeight }}
       >

@@ -20,6 +20,69 @@
     <meta name="twitter:title" content="Pratham Handa | Portfolio" />
     <meta name="twitter:description" content="Thapar CSE student and software engineer with internship experience at Google and Samsung, building full-stack and applied AI systems." />
     <meta name="twitter:image" content="https://www.prathamh.com/Pratham-PFP.jpg" />
+
+    <!-- Structured Data (JSON-LD) for Person & WebSite -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://www.prathamh.com/#website",
+          "url": "https://www.prathamh.com/",
+          "name": "Pratham Handa | Portfolio",
+          "description": "Thapar CSE student and software engineer with internship experience at Google and Samsung, building full-stack and applied AI systems.",
+          "publisher": {
+            "@id": "https://www.prathamh.com/#person"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.prathamh.com/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://www.prathamh.com/#person",
+          "name": "Pratham Handa",
+          "url": "https://www.prathamh.com/",
+          "image": "https://www.prathamh.com/Pratham-PFP.jpg",
+          "sameAs": [
+            "https://linkedin.com/in/prathamh",
+            "https://github.com/prathamhanda",
+            "https://leetcode.com/u/prathamhanda/",
+            "https://www.geeksforgeeks.org/user/prathamhanda/",
+            "https://codeforces.com/profile/prathamhanda",
+            "https://www.codechef.com/users/prathamhanda"
+          ],
+          "jobTitle": "Software Engineer & AI/ML Engineer",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Google",
+            "url": "https://google.com"
+          },
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Thapar Institute of Engineering and Technology",
+            "url": "https://www.thapar.edu/"
+          },
+          "description": "Thapar CSE student (9.83 CGPA) and software engineer with internship experience at Google and Samsung PRISM. Building full-stack and applied AI systems. LeetCode Knight badge holder with 1400+ DSA problems solved.",
+          "knowsAbout": [
+            "Full-Stack Development",
+            "Machine Learning",
+            "Computer Vision",
+            "Large Language Models",
+            "RAG Systems",
+            "Competitive Programming",
+            "System Design"
+          ]
+        }
+      ]
+    }
+    </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

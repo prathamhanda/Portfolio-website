@@ -473,9 +473,9 @@ const CodingDashboard = () => {
     const src = logo ? (logo.startsWith('/') ? logo : `/icons/${logo}`) : `/icons/${slug}.png`;
     const placeholder = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" rx="4" fill="%23e5e7eb"/></svg>';
     return (
-      // eslint-disable-next-line jsx-a11y/alt-text
       <img
         src={src}
+        alt={`${name} logo`}
         onError={(e) => {
           try {
             const img = e.currentTarget as HTMLImageElement;
@@ -655,7 +655,7 @@ const CodingDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="w-full md:w-2/3">
+                <div className="w-full md:w-2/3" role="img" aria-label={`Problem difficulty breakdown: ${problemData.map(d => `${d.name} ${d.value}`).join(', ')}`}>
                   <ResponsiveContainer width="100%" height={200}>
                     <PieChart>
                       <Pie

@@ -14,9 +14,9 @@ type PreloaderProps = {
 };
 
 export default function Preloader({
-  enterDurationMs = 1500,
+  enterDurationMs = 800,
   exitAfterMs,
-  exitDurationMs = 800,
+  exitDurationMs = 400,
   onDone,
   className,
 }: PreloaderProps) {
@@ -27,13 +27,26 @@ export default function Preloader({
     return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
   }, []);
 
+  // Detect if we're likely in a bot/crawler environment
+  const isBot = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent.toLowerCase();
+    return /bot|crawler|spider|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|discordbot|slackbot|applebot/.test(ua) || navigator.webdriver === true;
+  }, []);
+
   useEffect(() => {
+    // Skip preloader entirely for bots and reduced motion users
+    if (isBot || prefersReducedMotion) {
+      onDone?.();
+      return;
+    }
+
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const resolvedEnterMs = prefersReducedMotion ? 0 : enterDurationMs;
+    const resolvedEnterMs = enterDurationMs;
     const resolvedExitAfterMs = exitAfterMs ?? resolvedEnterMs;
-    const resolvedExitDurationMs = prefersReducedMotion ? 0 : exitDurationMs;
+    const resolvedExitDurationMs = exitDurationMs;
 
     const startExit = window.setTimeout(() => {
       setExiting(true);
@@ -48,7 +61,12 @@ export default function Preloader({
       window.clearTimeout(startExit);
       window.clearTimeout(done);
     };
-  }, [enterDurationMs, exitAfterMs, exitDurationMs, onDone, prefersReducedMotion]);
+  }, [enterDurationMs, exitAfterMs, exitDurationMs, onDone, prefersReducedMotion, isBot]);
+
+  // Don't render preloader at all for bots/reduced motion
+  if (isBot || prefersReducedMotion) {
+    return null;
+  }
 
   return (
     <div
@@ -59,7 +77,6 @@ export default function Preloader({
         "fixed inset-0 z-[10000] bg-white",
         "flex items-center justify-center",
         "transform-gpu transition-transform ease-in-out",
-        prefersReducedMotion ? "duration-0" : "duration-700",
         exiting ? "-translate-y-full" : "translate-y-0",
         className
       )}

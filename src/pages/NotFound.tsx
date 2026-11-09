@@ -83,7 +83,7 @@ const NotFound = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center max-w-2xl px-6 animate-in fade-in zoom-in duration-500">
+      <main id="main-content" className="relative z-10 text-center max-w-2xl px-6 animate-in fade-in zoom-in duration-500">
         {/* 404 Number */}
         <div className="mb-8">
           <h1 className="text-[120px] md:text-[180px] font-bold leading-none bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-2xl">
@@ -119,7 +119,7 @@ const NotFound = () => {
             Explore Projects
           </Button>
         </div>
-      </div>
+      </main>
 
       {/* Error Code Watermark */}
       <div className="absolute bottom-8 right-8 text-right opacity-20 pointer-events-none">
